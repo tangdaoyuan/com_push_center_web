@@ -1,0 +1,244 @@
+
+// 过滤项组件
+.filter-option {
+  .item {
+    display: inline-block;
+    margin-right: 24px;
+    > span {
+      margin-right: 4px;
+      color: rgba(#051021, 0.34);
+    }
+
+    .el-input {
+      &.el-input--prefix {
+        &.el-input--suffix {
+          width: 180px;
+
+          .el-input__inner {
+            border-width: 0 0 1px 0;
+            box-shadow: none;
+            border-radius: 0;
+            height: 32px;
+            border-color: rgba(41, 121, 255, .5);
+            text-indent: 22px;
+          }
+
+          .el-input__prefix {
+            left: 0;
+            line-height: 32px;
+            display: flex;
+            align-items: center;
+
+            .el-input__icon {
+              line-height: 32px;
+            }
+          }
+        }
+      }
+    }
+    .el-input__inner {
+      padding-left: 0;
+      padding-right: 0;
+      color: rgba(#051021, 0.72);
+      background-color: transparent;
+    }
+    .el-select {
+      .el-input__inner {
+          width: 130px;
+      }
+      .el-input__suffix {
+          right: 0;
+          top: 3px;
+      }
+    }
+  }
+}
+
+// .ivu-modal {
+//   top: 30px;
+// }
+
+// 数据统计组件
+.statistic-wrap {
+	display: flex;
+	.statistic-item {
+		height: 96px;
+		width: 100%;
+		background-color: #fff;
+		padding-left: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 72px 72px;
+    cursor: pointer;
+    &.total {
+      background-image: url(../imgs/status-all.png);
+    }
+    &.normal {
+      background-image: url(../imgs/status-normal.png);
+    }
+    &.abnormal {
+      background-image: url(../imgs/status-abnormal.png);
+    }
+    &.failed {
+      background-image: url(../imgs/status-failed.png);
+    }
+    &.closed {
+      background-image: url(../imgs/status-closed.png);
+    }
+		&.blue {
+      border-color: rgba(41, 121, 255, 0.72);
+    }
+		+ div {
+			margin-left: 8px;
+		}
+		label {
+			font-weight: bold;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(#051021, .34);
+      display: inline-block;
+			&.abnormal {
+				position: relative;
+				&:after {
+					@include afterIcon("info-sign.svg", 16px, 16px);
+					position: absolute;
+					top: 2px;
+          margin-left: 30px;
+          cursor: pointer;
+				}
+			}
+		}
+		span {
+      font-size: 24px;
+      line-height: 32px;
+      color: rgba(#051021, .72);
+      display: inline-block;
+		}
+	}
+}
+
+// 异常原因model组件
+.abnormal-detail {
+  .ivu-modal {
+    width: 720px !important;
+    .ivu-modal-close {
+      display: block;
+    }
+    .ivu-modal-header {
+      height: 32px;
+      p {
+        font-size: 14px;
+        line-height: 32px;
+        color: rgba(#051021, 0.72);
+        display: inline-block;
+        height: 32px;
+      }
+    }
+    .ivu-modal-content {
+      border-radius: 8px;
+    }
+    .ivu-modal-body {
+      padding: 16px 0;
+       // 表格
+      .el-table {
+        font-size: 12px;
+        thead {
+          .cell {
+            font-weight: bold;
+            color: rgba(#051021, 0.87);
+          }
+        }
+        .cell {
+          @include text-ellipsis;
+          line-height: 20px;
+          color: rgba(#051021, 0.72);
+        }
+        td,
+        th {
+          padding: 6px 0;
+        }
+      }
+      .el-table--striped .el-table__body tr.el-table__row--striped td {
+        background: rgba(#4A525E, 0.04)
+      }
+      .el-table__body tr.hover-row>td {
+        background: rgba(#4A525E, 0.04)
+      }
+    }
+    .ivu-modal-footer {
+      padding-right: 0;
+      .btn {
+        background-color: rgba(#182B4D, 0.05);
+        border-color: rgba(#182B4D, 0.05);
+        color: #2979FF;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.pc-card-main {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 15px;
+  overflow: hidden;
+  .ivu-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  .pc-card-row {
+    margin-bottom: 20px;
+
+    .pc-card-col {
+      height: 100%;
+
+      .pc-card {
+        width: 100%;
+        background-color: #fff;
+        cursor: pointer;
+
+        &:hover {
+          box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+        }
+
+        .pc-card-h {
+          display: flex;
+          padding: 24px;
+
+          .h-left {
+            margin-right: 12px;
+
+            > img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .h-right {
+            width: calc(100% - 108px);
+          }
+        }
+
+        .pc-card-v {
+          padding: 24px;
+        }
+      }
+    }
+  }
+}
+.wm-body {
+  display: none;
+  .wm-con {
+    transform: rotate(-30deg);
+  }
+}
+

@@ -1,0 +1,16 @@
+// 按钮样式
+.btn {
+  padding: 4px 16px;
+  background-color: #2979FF;
+  border-radius: 4px;
+  border: 1px solid #2979FF;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  &.no-bg {
+      background-color: unset;
+      color: #2979FF;
+  }
+}

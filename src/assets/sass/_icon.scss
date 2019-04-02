@@ -1,0 +1,253 @@
+@mixin bg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@mixin icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+$root_url: '../imgs';
+
+@mixin login-bg {
+  @include bg;
+  background-image: url('#{$root_url}/login-bg.jpg');
+}
+
+@mixin logo {
+  @include icon;
+  background-image: url('#{$root_url}/logo.png');
+}
+
+@mixin setting-icon {
+  @include icon;
+  background-image: url('#{$root_url}/setting.png');
+}
+
+@mixin logout {
+  @include icon;
+  background-image: url('#{$root_url}/logout.png');
+}
+
+@mixin li-h {
+  @include bg;
+  background-image: url('#{$root_url}/li_h.png');
+}
+
+@mixin adm-item1 {
+  @include icon;
+  background-image: url('#{$root_url}/adm_pic1.png');
+}
+
+@mixin adm-item2 {
+  @include icon;
+  background-image: url('#{$root_url}/adm_pic2.png');
+}
+
+@mixin adm-item3 {
+  @include icon;
+  background-image: url('#{$root_url}/adm_pic3.png');
+}
+
+@mixin adm-item4 {
+  @include icon;
+  background-image: url('#{$root_url}/adm_pic4.png');
+}
+
+@mixin adm-item5 {
+  @include icon;
+  background-image: url('#{$root_url}/adm_pic5.png');
+}
+
+@mixin refresh {
+  @include icon;
+  background-image: url('#{$root_url}/refresh.png');
+}
+
+@mixin folder-icon {
+  @include icon;
+  background-image: url('#{$root_url}/folder.png');
+}
+
+@mixin folder-open-icon {
+  @include icon;
+  background-image: url('#{$root_url}/folder_open.png');
+}
+
+@mixin file-excel-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_excel.png');
+}
+
+@mixin file-public-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_public.png');
+}
+
+@mixin file-ds-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_ds.png');
+}
+
+@mixin file-aggr-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_aggr.png');
+}
+
+@mixin file-mysql-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_mysql.png');
+}
+
+@mixin file-oracle-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_oracle.png');
+}
+
+@mixin more-icon {
+  @include icon;
+  background-image: url('#{$root_url}/more.png');
+}
+
+@mixin type-t {
+  @include icon;
+  background-image: url('#{$root_url}/type_t.png');
+}
+
+@mixin home-item-bg  {
+  @include bg;
+  background-image: url('#{$root_url}/home-item-bg.png');
+}
+
+@mixin th-th {
+  @include icon;
+  background-image: url('#{$root_url}/th_th.png');
+}
+
+@mixin th-td {
+  @include icon;
+  background-image: url('#{$root_url}/th_td.png');
+}
+
+@mixin file-seting {
+  @include icon;
+  background-image: url('#{$root_url}/file_set.png')
+}
+
+@mixin text-icon {
+  @include icon;
+  background-image: url('#{$root_url}/text_icon.png');
+}
+
+@mixin date-icon {
+  @include icon;
+  background-image: url('#{$root_url}/date_icon.png');
+}
+
+@mixin number-icon {
+  @include icon;
+  background-image: url('#{$root_url}/number_icon.png');
+}
+
+@mixin order {
+  @include icon;
+  background-image: url('#{$root_url}/order.png');
+}
+
+@mixin delete-icon {
+  @include icon;
+  background-image: url('#{$root_url}/delete_icon.png');
+}
+
+@mixin more-btn {
+  @include icon;
+  background-image: url('#{$root_url}/more.png');
+}
+
+@mixin link-icon {
+  @include icon;
+  background-image: url('#{$root_url}/link_icon.png');
+}
+
+@mixin img-icon {
+  @include icon;
+  background-image: url('#{$root_url}/img_icon.png');
+}
+
+@mixin add-icon {
+  @include icon;
+  background-image: url('#{$root_url}/add.png');
+}
+
+@mixin home-icon {
+  @include icon;
+  background-image: url('#{$root_url}/home.png');
+}
+
+@mixin user-icon {
+  @include icon;
+  background-image: url('#{$root_url}/user.png');
+}
+
+@mixin group-icon {
+  @include icon;
+  background-image: url('#{$root_url}/group.png');
+}
+
+@mixin dm-table-icon {
+  @include icon;
+  background-image: url('#{$root_url}/dm-table.png');
+}
+
+@mixin table-more-icon {
+  @include icon;
+  background-image: url('#{$root_url}/table_more.png');
+}
+
+@mixin add-table-icon {
+  @include icon;
+  background-image: url('#{$root_url}/add_table.png');
+}
+
+@mixin edit-table-icon {
+  @include icon;
+  background-image: url('#{$root_url}/title-edit.png');
+}
+
+@mixin dic-type {
+  @include icon;
+  background-image: url('#{$root_url}/dic-type.png');
+}
+
+@mixin dic-con {
+  @include icon;
+  background-image: url('#{$root_url}/dic-con.png');
+}
+
+@mixin dic-type-blue {
+  @include icon;
+  background-image: url('#{$root_url}/dic-type-blue.png');
+}
+
+@mixin dic-con-blue {
+  @include icon;
+  background-image: url('#{$root_url}/dic-con-blue.png');
+}
+
+@mixin option-icon {
+  @include icon;
+  background-image: url('#{$root_url}/option-icon.svg');
+}
+
+$comp_root_url: '../../assets/imgs';
+@mixin afterIcon($background, $width: 16px, $height: 16px) {
+  content: '';
+  display: inline-block;
+  width: $width;
+  height: $height;
+  @include icon;
+  background-image: url('#{$comp_root_url}/#{$background}');
+}

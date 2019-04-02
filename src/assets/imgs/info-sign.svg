@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>light/chartarea/info-sign</title>
+    <desc>Created with Sketch.</desc>
+    <g id="light/chartarea/info-sign" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-opacity="0.64">
+        <path d="M8,14 C11.3137085,14 14,11.3137085 14,8 C14,4.6862915 11.3137085,2 8,2 C4.6862915,2 2,4.6862915 2,8 C2,11.3137085 4.6862915,14 8,14 Z" id="Path" stroke="#5F6166" stroke-width="2"></path>
+        <path d="M6.50000018,7.5 L8.00000015,6.5 L7.62488137,11.001424 C7.55591129,11.8290647 7.92414858,11.9698143 8.44143611,11.3232049 L9.50000012,10 M8.5,4 L7,5" id="Path-257" stroke="#5F6166" stroke-width="1.2"></path>
+    </g>
+</svg>

@@ -1,0 +1,286 @@
+.nm-main {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 16px;
+
+  .nd-main-default {
+    width: 100%;
+    height: 100%;
+
+    .nm-header {
+      width: 100%;
+      height: 150px;
+      .operation-wrap {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .select-box {
+        width: 300px;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        label {
+          width: 80px;
+          text-align: left;
+        }
+
+        .el-select {
+          width: 206px;
+        }
+      }
+    }
+
+    .nm-body {
+      width: 100%;
+      height: calc(100% - 158px);
+      margin-top: 8px;
+      overflow-y: auto;
+      box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+
+      .pc-card-h {
+        .h-left {
+          width: 72px;
+          height: 72px;
+        }
+        .h-right {
+          height: 72px;
+        }
+      }
+      
+      .r-header-title {
+        width: 100%;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .header-box {
+          width: calc(100% - 22px);
+          display: flex;
+          align-items: center;
+
+          .header-title {
+            display: inline-block;
+            height: 100%;
+            max-width: calc(100% - 60px);
+            margin-right: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .ivu-tag {
+            margin: 0;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 4px;
+            background: none;
+            &.abnormal {
+              border: 1px solid #E45151;
+              .ivu-tag-text {
+                color: #E45151;
+              }
+            }
+            &.closed {
+              border: 1px solid #5F6166;
+              .ivu-tag-text {
+                color: #5F6166;
+              }
+            }
+          }
+        }
+
+        .header-op {
+          width: 16px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .op-menu-icon {
+            display: block;
+            width: 16px;
+            height: 16px;
+            @include option-icon;
+          }
+        }
+      }
+
+      .body-con {
+        margin-top: 8px;
+
+        .con-item {
+          line-height: 20px;
+          > span {
+            &:first-child {
+              color: rgba(5, 16, 33, .34);
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+}
+
+.nd-modal-main {
+  .ivu-modal {
+    width: 600px !important;
+  }
+
+  .nd-body {
+    .nd-item {
+      line-height: 20px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: flex-start;
+
+      label {
+        width: 80px;
+        text-align: right;
+        margin-right: 16px;
+        color: rgba(5, 16, 33, .34);
+        font-weight: 600;
+      }
+
+      span {
+        display: inline-block;
+        width: calc(100% - 100px);
+        color: rgba(5, 16, 33, .72);
+        word-break: break-all;
+      }
+    }
+  }
+}
+
+.nm-modal-body {
+  width: 100%;
+  .base-box {
+    margin-top: 16px;
+    width: 100%;
+    width: 100%;
+    box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+    .box-header {
+      width: 100%;
+      height: 36px;
+      background-color: rgba(41, 121, 255, .08);
+      text-indent: 16px;
+      span {
+        line-height: 36px;
+        font-weight: 600;
+        color: rgba(5, 16, 33, .72);
+      }
+    }
+    .box-body {
+      width: 100%;
+      padding: 16px 32px;
+      background-color: #fff;
+
+      .box-item {
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: flex-start;
+
+
+        .item-title {
+          width: 50px;
+          font-size: 12px;
+          margin-right: 17px;
+          line-height: 32px;
+        }
+        .item-con {
+          width: calc(100% - 70px);
+          display: flex;
+          align-items: center;
+
+          &.seq {
+            width: calc(30% - 100px);
+            margin-right: 60px;
+          }
+
+          .item-area {
+            height: 72px;
+            .ivu-input {
+              height: 100%;
+              resize: none;
+              font-size: 12px;
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+  .expand-box {
+    margin-top: 16px;
+    width: 100%;
+    width: 100%;
+    box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+    .box-header {
+      width: 100%;
+      height: 36px;
+      background-color: rgba(41, 121, 255, .08);
+      text-indent: 16px;
+
+      span {
+        line-height: 36px;
+        font-weight: 600;
+        color: rgba(5, 16, 33, .72);
+      }
+    }
+
+    .box-body {
+      width: 100%;
+      padding: 16px 32px;
+      background-color: #fff;
+
+      .box-item {
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: flex-start;
+
+        .item-title {
+          width: 80px;
+          text-align: right;
+          font-size: 12px;
+          margin-right: 16px;
+          line-height: 32px;
+        }
+
+        .item-con {
+          width: calc(50% - 150px);
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+
+          .ivu-input-wrapper {
+            width: calc(100% - 80px);
+            margin-right: 20px;
+          }
+
+          .refresh-icon {
+            display: block;
+            width: 16px;
+            height: 16px;
+            @include refresh;
+            cursor: pointer;
+          }
+        }
+
+        .item-tip {
+          color: rgba(5, 16, 33, .5);
+        }
+      }
+
+    }
+  }
+}

@@ -1,0 +1,368 @@
+.step-box {
+  width: 100%;
+  height: 48px;
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+
+  .ivu-steps {
+    align-items: center;
+
+    .ivu-steps-item {
+
+      &.ivu-steps-status-process {
+        .ivu-steps-head {
+          .ivu-steps-head-inner {
+            background-color: #fff;
+            span {
+              color: #2d8cf0;
+            }
+          }
+        }
+      }
+
+      &.ivu-steps-status-wait {
+        .ivu-steps-head-inner {
+          span {
+            color: #ccc;
+          }
+        }
+      }
+
+      &.ivu-steps-status-finish {
+        .ivu-steps-tail {
+          i {
+            border-color: #2d8cf0;
+          }
+        }
+
+        .ivu-steps-head {
+          .ivu-steps-head-inner {
+            background-color: #2d8cf0;
+
+            span {
+              color: #fff;
+            }
+          }
+        }
+      }
+
+      .ivu-steps-tail {
+        height: 1px;
+
+        i {
+          border-width: 1px;
+          border-style: dashed;
+          background: transparent;
+          border-color: #e8eaec;
+        }
+      }
+    }
+
+    .ivu-steps-title {
+      font-size: 12px;
+      margin: 0;
+      height: 26px;
+      line-height: 26px;
+    }
+  }
+}
+
+.ivu-input {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(41, 121, 255, .5);
+  box-shadow: none;
+}
+
+.ivu-input-number {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(41, 121, 255, .5);
+  box-shadow: none;
+}
+
+.ivu-input[disabled],
+fieldset[disabled] .ivu-input {
+  background-color: transparent;
+}
+
+.ivu-cascader-rel {
+  .ivu-input {
+    background-color: transparent;
+  }
+}
+
+.ivu-input-wrapper {
+  .ivu-input {
+    background-color: transparent;
+  }
+}
+
+.ivu-date-picker {
+  .ivu-input {
+    background-color: transparent;
+  }
+}
+
+.ivu-select-disabled .ivu-select-selection {
+  background-color: transparent;
+}
+
+.ivu-input-wrapper {
+  textarea {
+    resize: none;
+    border: 1px solid rgba(41, 121, 255, 0.5);
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+  }
+}
+
+.el-select {
+  height: 100%;
+  box-shadow: none;
+  font-size: 12px;
+  .el-input {
+    height: 100%;
+  }
+  .el-input__suffix {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+  .el-input__inner {
+    font-size: 12px;
+    border-color: rgba(41, 121, 255, .5);
+    outline: 0;
+    height: 32px;
+    line-height: 32px;
+    box-shadow: none;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(41, 121, 255, .5);
+    background-color: transparent !important;
+  }
+}
+
+.el-input {
+  font-size: 12px;
+}
+
+.el-date-editor {
+  .el-range-separator {
+    line-height: 25px;
+  }
+  &.el-input__inner,
+  .el-input__inner {
+    box-shadow: none;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(41, 121, 255, .5);
+    background-color: transparent !important;
+    height: 32px;
+  }
+}
+
+.el-cascader {
+  height: 32px;
+  line-height: 32px;
+
+  .el-input--suffix {
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+
+    .el-input__inner {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+}
+
+.ivu-select-selection {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(41, 121, 255, .5);
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.ivu-select-visible .ivu-select-selection {
+  border-color: rgba(41, 121, 255, .5);
+  outline: none;
+  box-shadow: none;
+}
+
+.ivu-form-item {
+  .ivu-form-item-content {
+    .ivu-form-item-error-tip {
+      color: a(244, 102, 102, 0.8);
+    }
+  }
+}
+
+.ivu-input:focus {
+  border-color: rgba(41, 121, 255, .5);
+  outline: 0;
+  box-shadow: none;
+}
+
+.ivu-menu {
+  height: 100%;
+  background: transparent;
+
+  .ivu-menu-item {
+    position: relative;
+    height: 100%;
+    transition: 500ms;
+
+    i {
+      display: block;
+      margin-right: 0;
+      width: 100%;
+      height: 7px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      @include li_h;
+      opacity: 0;
+      transition: 500ms;
+    }
+  }
+}
+
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item,
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu {
+  color: rgba(255, 255, 255, .5);
+}
+
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item-active,
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item:hover,
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu-active,
+.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu:hover {
+  background-color: transparent;
+  color: #fff;
+
+  i {
+    opacity: 1;
+  }
+}
+
+.modal-full {
+  .ivu-modal-content {
+
+    .ivu-modal-close {
+      display: none;
+    }
+
+    .ivu-modal-header {
+      width: 100%;
+      height: 64px;
+      padding: 0;
+      border-bottom: 1px solid rgba(24, 43, 77, .05);
+      box-shadow: 0 0 8px 0 rgba(16, 48, 102, .08);
+    }
+
+    .ivu-modal-body {
+      background-color: #e5e5e5;
+    }
+
+    .ivu-modal-footer {
+      padding: 0;
+    }
+  }
+}
+
+.ivu-modal-content {
+  padding: 10px 32px;
+
+  .ivu-modal-close {
+    display: none;
+  }
+
+  .ivu-modal-header {
+    width: 100%;
+    padding: 0;
+    border-bottom: 0;
+    line-height: 32px;
+
+    .modal-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        font-size: 14px;
+        color: rgba(5, 16, 33, .72);
+        font-weight: 600;
+      }
+
+      .ivu-icon {
+        display: block;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .ivu-modal-body {
+    width: 100%;
+    height: calc(100% - 64px);
+    top: 64px;
+  }
+
+  .ivu-modal-footer {
+    border-top: 0;
+
+    .modal-footer {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+
+      .ivu-btn {
+        color: #2979FF;
+        font-size: 14px;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+
+.el-tree-node {
+  .item-con {
+    display: flex;
+    width: calc(100% - 44px);
+    align-items: center;
+
+    & > span {
+      width: calc(100% - 20px);
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    i {
+      width: 16px;
+      height: 16px;
+      margin-right: 5px;
+    }
+
+    .user-icon {
+      @include user-icon;
+    }
+
+    .group-icon {
+      @include group-icon;
+    }
+
+    .home-icon {
+      @include home-icon;
+    }
+
+  }
+}
