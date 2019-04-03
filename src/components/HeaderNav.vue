@@ -19,35 +19,35 @@
       </el-dropdown>
     </div>
     <div class="header-con">
-      <Menu mode="horizontal" theme="primary" :active-name="chooseType">
-        <MenuItem name="home" @click.native="chooseMenu($event, 'home')">
+      <el-menu mode="horizontal" :default-active="chooseType">
+        <el-menu-item index="home" @click.native="chooseMenu($event, 'home')">
           <span>首页</span>
           <i></i>
-        </MenuItem>
-        <MenuItem v-if="userData.role === 1" name="dm" @click.native="chooseMenu($event, 'dm')">
+        </el-menu-item>
+        <el-menu-item  v-if="userData.role === 1" index="dm" @click.native="chooseMenu($event, 'dm')">
           <span>数据源管理</span>
           <i></i>
-        </MenuItem>
-        <MenuItem v-if="userData.role === 1" name="wt" @click.native="chooseMenu($event, 'wt')">
+        </el-menu-item>
+        <el-menu-item  v-if="userData.role === 1" index="wt" @click.native="chooseMenu($event, 'wt')">
           <span>工作表管理</span>
           <i></i>
-        </MenuItem>
-        <MenuItem name="tc" @click.native="chooseMenu($event, 'tc')">
+        </el-menu-item>
+        <el-menu-item  index="tc" @click.native="chooseMenu($event, 'tc')">
           <span>推送任务管理</span>
           <i></i>
-        </MenuItem>
-        <MenuItem name="nw" @click.native="chooseMenu($event, 'nw')">
+        </el-menu-item>
+        <el-menu-item  index="nw" @click.native="chooseMenu($event, 'nw')">
           <span>推送任务监控</span>
           <i></i>
-        </MenuItem>
-        <MenuItem v-if="userData.role === 1" name="nm" @click.native="chooseMenu($event, 'nm')">
+        </el-menu-item>
+        <el-menu-item  v-if="userData.role === 1" index="nm" @click.native="chooseMenu($event, 'nm')">
           <span>推送通道管理</span>
           <i></i>
-        </MenuItem>
-      </Menu>
+        </el-menu-item>
+      </el-menu>
     </div>
     <div class="header-right">
-      <Dropdown trigger="custom" style="margin-left: 20px" :visible="shouldShowDicMenu" >
+      <el-dropdown trigger="click" style="margin-left: 20px" :disabled="shouldShowDicMenu" >
         <a href="javascript:void(0)" @click='toogleShow' >
           <div class="user-con">
             <div class="user-icon">
@@ -56,13 +56,13 @@
             <span>{{username}}</span>
           </div>
         </a>
-        <DropdownMenu slot="list">
-          <DropdownItem  @click.native="chooseMenu($event, 'system')">反馈字典</DropdownItem>
-          <DropdownItem  @click.native="chooseMenu($event, 'root')">权限管理</DropdownItem>
-          <DropdownItem  @click.native="chooseMenu($event, 'role')">角色管理</DropdownItem>
-          <DropdownItem  @click.native="chooseMenu($event, 'rt')">权限字典</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item  @click.native="chooseMenu($event, 'system')">反馈字典</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'root')">权限管理</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'role')">角色管理</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'rt')">权限字典</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <div class="setting">
         <i @click="goOut($event)"></i>
       </div>

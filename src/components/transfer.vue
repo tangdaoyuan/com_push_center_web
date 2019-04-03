@@ -43,7 +43,9 @@
         <ul class="tm-right-ul">
           <li v-for="(item, index) in triggerList" :key="index">
             <Checkbox label="twitter" v-model="item.isChoose">
-              <span>{{item.name}}</span>
+              <span :title="item.name">{{item.name}}</span>
+              <Icon type="ios-star-outline" @click="changeFav($event, item, 1)" v-show="tKey && !utils.checkListInner(favList, item, 'id')" />
+              <Icon type="ios-star" @click="changeFav($event, item, 0)" v-show="tKey && utils.checkListInner(favList, item, 'id')" />
             </Checkbox>
             <Icon type="ios-close-circle" @click="removeItem(item, index)" />
           </li>
@@ -72,7 +74,9 @@ export default {
     value: Array,
     pushList: Array,
     prKey: String,
-    showText: String
+    showText: String,
+    tKey: String,
+    favList: Array
   },
   watch: {
     triggerList () {
@@ -83,6 +87,54 @@ export default {
     }
   },
   methods: {
+    changeFav (e, item, type) {
+      e.stopPropagation()
+      if (type === 1) {
+        const tmp = [...this.favList, item].map(n => {
+          return {
+            origin_id: n.id,
+            type: n.type,
+            name: n.name
+          }
+        })
+        this.tcService.saveFavList({ collect_user_list: tmp }).then(res => {
+          if (res.status === 0) {
+            this.$message.success('关注成功')
+            this.favList.push({
+              ...item,
+              checked: true
+            })
+          } else {
+            this.$message.error(res.msg || '关注失败')
+          }
+        })
+      } else {
+        let indexL = -1
+        let tmp = null
+        this.favList.forEach((n, index) => {
+          if (n.id === item.id) {
+            indexL = index
+            tmp = [...this.favList].splice(index, 1)
+          }
+        })
+        if (indexL !== -1) {
+          this.tcService.saveFavList({ collect_user_list: tmp.map(n => {
+            return {
+              origin_id: n.id,
+              type: n.type,
+              name: n.name
+            }
+          }) }).then(res => {
+            if (res.status === 0) {
+              this.$message.success('取消关注成功')
+              this.favList.splice(indexL, 1)
+            } else {
+              this.$message.error(res.msg || '取消失败')
+            }
+          })
+        }
+      }
+    },
     choose (data, node, event) {
       node.checked = !node.checked
     },

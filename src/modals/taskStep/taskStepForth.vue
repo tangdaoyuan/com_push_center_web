@@ -1,16 +1,16 @@
 <template>
   <div class="step-body" v-show="step === 3">
     <task-user-push
-        v-model="taskUserModal"
-        @changePushUserList="changePushUserList"
-        @changeTarget="changeTarget"
-        :tb-list="tbList"
-        :tag-list="tagList"
-        :group-list="groupList"
-        :push-user-list="pushUserList"
-        :index="chooseIndex"
-        :filter-list="filterList"
-        @ok="ok"/>
+      v-model="taskUserModal"
+      @changePushUserList="changePushUserList"
+      @changeTarget="changeTarget"
+      :tb-list="tbList"
+      :tag-list="tagList"
+      :group-list="groupList"
+      :push-user-list="pushUserList"
+      :index="chooseIndex"
+      :filter-list="filterList"
+      @ok="ok"/>
     <task-fav-user :edit-id="editId" :filter-list="filterList" :fav-list="favList" @saveFav="saveFav" v-model="taskFavUserModal"/>
     <div class="step-push-body">
       <div class="step-push-header">
@@ -316,7 +316,7 @@ export default {
         if (data.traList) {
           tmp.traList = data.traList
           data.traList.forEach(item => {
-            if (item.type === 3) {
+            if (item && item.type === 3) {
               user_list.push(item.name)
               tmp.push_target[0].target.user_list.push(item)
               tmp.push_target[0].target.user_id_list.push(item.id)
