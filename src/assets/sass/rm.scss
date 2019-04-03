@@ -11,8 +11,16 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 20px;
-    opacity: .5;
+    & > span {
+      opacity: .5;
+    }
+
+    & > .el-button {
+      padding: 0;
+      padding: 10px;
+    }
   }
 
   .rm-body {
@@ -24,7 +32,17 @@
     .tag-box {
       .el-tag {
         display: inline-block;
-        margin: 5px;
+        margin: 0 5px;
+        line-height: 24px;
+        height: 24px;
+        padding: 0 5px;
+      }
+    }
+    .op-box {
+      display: flex;
+      .el-button {
+        padding: 8px 0;
+        font-size: 12px;
       }
     }
   }
