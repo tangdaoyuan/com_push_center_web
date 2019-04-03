@@ -204,6 +204,18 @@ class TcService {
       Service.TEMPLATE_DELETE('/api/task/del', data, resolve)
     })
   }
+
+  getFavList (data) {
+    return new Promise((resolve) => {
+      Service.TEMPLATE_GET('/api/account/user/collect_list', data, resolve)
+    })
+  }
+
+  saveFavList (data) {
+    return new Promise((resolve) => {
+      Service.TEMPLATE_POST('/api/account/user/collect/save', data, resolve)
+    })
+  }
 }
 
 export default new TcService()

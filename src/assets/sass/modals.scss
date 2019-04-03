@@ -1611,6 +1611,33 @@
           }
         }
 
+        .fav-ul {
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+
+          .fav-li {
+            width: 100%;
+            height: 30px;
+            line-height: 32px;
+            padding: 0 10px;
+            display: flex;
+            justify-content: space-between;
+
+            &:hover {
+              background-color: #e9f1ff;
+            }
+
+            & > span {
+              &:nth-child(2) {
+                font-size: 16px;
+                cursor: pointer;
+                color: #999;
+              }
+            }
+          }
+        }
+
       }
     }
 
@@ -1758,3 +1785,108 @@
   }
 }
 
+.add-role-modal {
+  .modal-body {
+    .item-main {
+      width: 100%;
+      display: flex;
+      margin-top: 20px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        .item-title {
+          line-height: 40px;
+        }
+      }
+
+      .item-title {
+        width: 60px;
+        text-align: right;
+        margin-right: 10px;
+        line-height: 30px;
+      }
+
+      .item-con {
+        width: calc(100% - 70px);
+        display: flex;
+
+        .group-item {
+          width: calc(100% - 20px);
+          min-height: 30px;
+          max-height: 400px;
+          overflow: auto;
+          border-bottom: 1px solid rgba(41, 121, 255, 0.5);
+
+          & > .el-tag {
+            margin: 0 5px 5px 0;
+          }
+        }
+
+        & > .ivu-icon {
+          font-size: 16px;
+          line-height: 30px;
+          cursor: pointer;
+        }
+
+        .item-radio {
+          line-height: 40px;
+          width: 50px;
+          margin-right: 15px;
+
+          &:last-child {
+            width: calc(100% - 65px);
+            display: flex;
+            margin-right: 0;
+
+            .el-radio__input {
+              padding-top: 13px;
+            }
+
+            .el-radio__label {
+              width: calc(100% - 20px);
+            }
+
+            .el-select {
+              width: 100%;
+              .el-input__inner {
+                line-height: 30px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.group-allot-modal {
+  .modal-body {
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.user-allot-modal {
+  .modal-body {
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.edit-role-modal {
+  .modal-body {
+    .ivu-transfer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+
+      .ivu-transfer-list {
+        height: 100%;
+      }
+    }
+  }
+}

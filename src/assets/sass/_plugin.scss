@@ -71,6 +71,26 @@
   }
 }
 
+.el-input {
+  .el-input__inner {
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(41, 121, 255, .5);
+    box-shadow: none;
+    line-height: 30px;
+    height: 30px;
+  }
+}
+
+.el-table {
+  font-size: 12px;
+
+  td,
+  th {
+    padding: 8px 0;
+  }
+}
+
 .ivu-input {
   border-radius: 0;
   border: 0;
@@ -209,6 +229,52 @@ fieldset[disabled] .ivu-input {
   border-color: rgba(41, 121, 255, .5);
   outline: 0;
   box-shadow: none;
+}
+
+.el-menu {
+  height: 100%;
+  background: transparent;
+
+  .el-menu-item {
+    position: relative;
+    height: 100%;
+    transition: 500ms;
+
+    i {
+      display: block;
+      margin-right: 0;
+      width: 100%;
+      height: 7px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      @include li_h;
+      opacity: 0;
+      transition: 500ms;
+    }
+  }
+}
+
+.el-menu {
+  &.el-menu--horizontal {
+    border-bottom:  0;
+
+    .el-menu-item,
+    .el-menu-submenu  {
+      color: rgba(255, 255, 255, .5);
+      border-bottom: 0;
+
+      &:hover,
+      &.is-active {
+        background-color: transparent;
+        color: #fff;
+
+        i {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
 .ivu-menu {
