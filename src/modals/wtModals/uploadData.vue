@@ -302,8 +302,8 @@ export default {
     prev () {
       switch (this.currentStep) {
         case 1:
-          this.files = []
-          this.uploadStart = false
+          // this.files = []
+          // this.uploadStart = false
           if (this.addId) {
             this.$router.push(`/wt?type=data_upload&add_id=${this.addId}&step=0`)
           } else {

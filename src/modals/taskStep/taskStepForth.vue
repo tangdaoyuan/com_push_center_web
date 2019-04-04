@@ -1,16 +1,16 @@
 <template>
   <div class="step-body" v-show="step === 3">
     <task-user-push
-        v-model="taskUserModal"
-        @changePushUserList="changePushUserList"
-        @changeTarget="changeTarget"
-        :tb-list="tbList"
-        :tag-list="tagList"
-        :group-list="groupList"
-        :push-user-list="pushUserList"
-        :index="chooseIndex"
-        :filter-list="filterList"
-        @ok="ok"/>
+      v-model="taskUserModal"
+      @changePushUserList="changePushUserList"
+      @changeTarget="changeTarget"
+      :tb-list="tbList"
+      :tag-list="tagList"
+      :group-list="groupList"
+      :push-user-list="pushUserList"
+      :index="chooseIndex"
+      :filter-list="filterList"
+      @ok="ok"/>
     <task-fav-user :edit-id="editId" :filter-list="filterList" :fav-list="favList" @saveFav="saveFav" v-model="taskFavUserModal"/>
     <div class="step-push-body">
       <div class="step-push-header">
@@ -180,7 +180,7 @@ export default {
                       if (n.children && n.children.length > 0) {
                         n.children.forEach(m => {
                           if (m.value === item.push_target[0].target[tmp[0]]) {
-                            item.showStr = `${item.showStr}${m.label}<em>${item.push_target[0].op ? '向下检索' : '等于'}</em>`
+                            item.showStr = `${item.showStr}${m.label}<em>${item.push_target[0].op ? '等于并向下检索' : '等于'}</em>`
                           }
                         })
                       }
@@ -282,7 +282,7 @@ export default {
               if (item.children && item.children.length > 0) {
                 item.children.forEach(n => {
                   if (n.value === data.userFilter.filter2[1]) {
-                    tmp.showStr = `${tmp.showStr}${n.label}<em>${data.op ? '向下检索' : '等于'}</em>`
+                    tmp.showStr = `${tmp.showStr}${n.label}<em>${data.op ? '等于并向下检索' : '等于'}</em>`
                   }
                 })
               }
@@ -316,7 +316,7 @@ export default {
         if (data.traList) {
           tmp.traList = data.traList
           data.traList.forEach(item => {
-            if (item.type === 3) {
+            if (item && item.type === 3) {
               user_list.push(item.name)
               tmp.push_target[0].target.user_list.push(item)
               tmp.push_target[0].target.user_id_list.push(item.id)

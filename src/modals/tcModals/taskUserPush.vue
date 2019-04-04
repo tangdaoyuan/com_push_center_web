@@ -17,6 +17,9 @@
               <MenuItem :name="2" @click.native="chooseMenu = 2">
                 直接推送
               </MenuItem>
+              <MenuItem :name="3" @click.native="chooseMenu = 3">
+                常用推送
+              </MenuItem>
             </Menu>
           </div>
           <div class="left-con" v-show="chooseMenu === 1">
@@ -40,7 +43,33 @@
             </div>
           </div>
           <div class="left-con" v-show="chooseMenu === 2">
-            <transfer v-model="pushUserList" @changeList="changeList" pr-key="id" show-text="name" @changeTarget="changeTarget" :push-list="groupList" />
+            <transfer
+              v-model="pushUserList"
+              @changeList="changeList"
+              pr-key="id"
+              show-text="name"
+              @changeTarget="changeTarget"
+              :fav-list="favList"
+              t-key="push"
+              :push-list="groupList" />
+          </div>
+          <div class="left-con" v-show="chooseMenu === 3">
+            <ul class="fav-ul">
+              <li class="fav-li" v-for="(item, index) in favList" :key="item.id" >
+                <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+                <el-popover
+                  placement="top"
+                  width="160"
+                  v-model="item.deleteStatus">
+                  <p>您确定删该么</p>
+                  <div class="pop-delete-con">
+                    <el-button size="mini" type="text" @click="item.deleteStatus = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="deleteFavItem($event, item, index)">确定</el-button>
+                  </div>
+                  <i class="el-icon-circle-close" @click.native="item.deleteStatus = true" slot="reference"></i>
+                </el-popover>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="right-body">
@@ -75,6 +104,7 @@ export default {
   },
   data () {
     return {
+      deleteStatus: false,
       trigger: false,
       chooseMenu: 1,
       mapData: [],
@@ -84,12 +114,30 @@ export default {
         filter1: '',
         filter2: []
       },
-      traList: []
+      traList: [],
+      favList: []
     }
   },
   created () {
   },
   methods: {
+    deleteFavItem (e, item, index) {
+      const tmp = [...this.favList].splice(index, 1)
+      this.tcService.saveFavList({ collect_user_list: tmp.map(n => {
+        return {
+          origin_id: n.id,
+          type: n.type,
+          name: n.name
+        }
+      }) }).then(res => {
+        if (res.status === 0) {
+          this.$message.success('删除成功')
+          this.favList.splice(index, 1)
+        } else {
+          this.$message.error(res.msg || '删除失败')
+        }
+      })
+    },
     changeValue () {
       if (this.lodash.isArray(this.userFilter.filter2) && this.userFilter.filter2.length > 0) {
         if (this.lodash.difference(this.userFilter.filter2, ['org_prop', 'code']).length === 0) {
@@ -110,6 +158,7 @@ export default {
       this.$emit('changeTarget', list)
     },
     ok () {
+      let tmpList = []
       if (this.chooseMenu === 1) {
         if (!this.userFilter.filter1) {
           this.$message.error('匹配字段不能为空')
@@ -121,14 +170,31 @@ export default {
         }
       }
 
-      console.log(this.traList)
+      if (this.chooseMenu === 2) {
+        if (this.traList.length === 0) {
+          this.$message.error('推送不能为空')
+          return
+        }
+      }
+
+      if (this.chooseMenu === 3) {
+        this.favList.forEach(item => {
+          if (item.checked) {
+            tmpList.push(item)
+          }
+        })
+        if (tmpList.length === 0) {
+          this.$message.error('推送不能为空')
+          return
+        }
+      }
 
       this.trigger = false
       this.$message.success('保存成功')
       this.$emit('ok', {
         userFilter: this.userFilter,
-        chooseMenu: this.chooseMenu,
-        traList: this.traList,
+        chooseMenu: this.chooseMenu !== 1 ? 2 : 1,
+        traList: this.chooseMenu === 3 ? tmpList : this.traList,
         mapData: this.mapData,
         op: (this.op && this.op === 'like') ? ('like') : (undefined)
       }, this.index)
@@ -138,6 +204,18 @@ export default {
     value () {
       this.trigger = this.value
       if (this.value) {
+        this.tcService.getFavList().then(res => {
+          if (res.status === 0) {
+            this.favList = res.data.map(item => {
+              return {
+                ...item,
+                id: item.origin_id,
+                user_id: undefined,
+                checked: true
+              }
+            })
+          }
+        })
         if (!this.mapData || this.mapData.length === 0) {
           this.tcService.getTaskDict().then(res => {
             if (res.status === 0) {
