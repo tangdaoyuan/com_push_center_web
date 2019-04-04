@@ -22,4 +22,4 @@ yarn-error.log*
 
 #owner config files
 yarn.lock
-proxy.conf.json
+proxy.conf.js

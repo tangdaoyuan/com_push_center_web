@@ -180,7 +180,7 @@ export default {
                       if (n.children && n.children.length > 0) {
                         n.children.forEach(m => {
                           if (m.value === item.push_target[0].target[tmp[0]]) {
-                            item.showStr = `${item.showStr}${m.label}<em>${item.push_target[0].op ? '向下检索' : '等于'}</em>`
+                            item.showStr = `${item.showStr}${m.label}<em>${item.push_target[0].op ? '等于并向下检索' : '等于'}</em>`
                           }
                         })
                       }
@@ -282,7 +282,7 @@ export default {
               if (item.children && item.children.length > 0) {
                 item.children.forEach(n => {
                   if (n.value === data.userFilter.filter2[1]) {
-                    tmp.showStr = `${tmp.showStr}${n.label}<em>${data.op ? '向下检索' : '等于'}</em>`
+                    tmp.showStr = `${tmp.showStr}${n.label}<em>${data.op ? '等于并向下检索' : '等于'}</em>`
                   }
                 })
               }
