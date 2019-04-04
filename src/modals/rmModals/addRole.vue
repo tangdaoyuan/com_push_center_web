@@ -56,7 +56,7 @@
     <group-allot
       v-model="modals.groupAllot"
       @close="closeGroupAllot"
-      pr-key="id"
+      pr-key="code"
       show-text="name"
       @ok="changeTarget"
       :change-list="sourceList"></group-allot>
@@ -106,7 +106,7 @@ export default {
         type: 1,
         task_type_list: (this.roleData.type === 'all') ? ([]) : (this.roleData.typeList),
         task_type_choosed: this.roleData.type,
-        organization_code_list: this.sourceList.map(item => item.id)
+        organization_code_list: this.sourceList.map(item => item.code)
       }
 
       this.userService.saveRoleData(putData).then(res => {
@@ -155,7 +155,7 @@ export default {
 
           this.sourceList = editData.organization_code_list.map((item, index) => {
             return {
-              id: item,
+              code: item,
               name: editData.organization_name_list[index],
               type: 1
             }

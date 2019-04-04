@@ -115,7 +115,7 @@ export default {
         tmpData.push(treeData.getNode(item).data)
       })
       tmpData.forEach(item => {
-        if (!this.utils.checkListInner(this.triggerList, item, 'id')) {
+        if (!this.utils.checkListInner(this.triggerList, item, this.prKey)) {
           this.triggerList.push(item)
         }
       })

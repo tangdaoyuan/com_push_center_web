@@ -1,4 +1,4 @@
-const devProxy = require('./proxy.conf.json')
+const devProxy = require('./proxy.conf.js')
 
 const proEnv = require('./config/pro.env') // 生产环境
 const uatEnv = require('./config/uat.env') // 测试环境

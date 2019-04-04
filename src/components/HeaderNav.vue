@@ -58,7 +58,7 @@
         </a>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item  @click.native="chooseMenu($event, 'system')">反馈字典</el-dropdown-item>
-          <el-dropdown-item  @click.native="chooseMenu($event, 'root')">权限管理</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'root')">用户管理</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'role')">角色管理</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'rt')">权限字典</el-dropdown-item>
         </el-dropdown-menu>
