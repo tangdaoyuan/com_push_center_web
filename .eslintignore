@@ -2,7 +2,3 @@
 /config/
 /dist/
 /*.js
-/src/modals/tcModals/taskDetail.vue
-/src/modals/tcModals/shortcutTask.vue
-/src/modals/tcModals/pushSetting.vue
-/src/modals/dicModals/addDicCon.vue
