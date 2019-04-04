@@ -122,7 +122,8 @@ export default {
   },
   methods: {
     deleteFavItem (e, item, index) {
-      const tmp = [...this.favList].splice(index, 1)
+      const tmp = [...this.favList]
+      tmp.splice(index, 1)
       this.tcService.saveFavList({ collect_user_list: tmp.map(n => {
         return {
           origin_id: n.id,
