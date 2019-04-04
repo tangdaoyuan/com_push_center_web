@@ -32,7 +32,7 @@ export default class CONSTANT {
       value: 'eq'
     },
     {
-      name: '向下检索',
+      name: '等于并向下检索',
       value: 'like'
     }
   ]

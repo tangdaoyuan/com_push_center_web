@@ -19,9 +19,9 @@
           </el-option>
         </el-select>
       </div>
-      <div class="adc-item" v-if="!editData" v-for="(item, index) in conList" :key="index">
-        <span class="item-title" v-if="index === 0">字典内容</span>
-        <span class="item-title" v-else></span>
+      <div class="adc-item" v-show="!editData" v-for="(item, index) in conList" :key="index">
+        <span class="item-title" v-show="index === 0">字典内容</span>
+        <span class="item-title" v-show="index !== 0"></span>
         <Input class="item-con"
           type="text"
           v-model="item.content"
@@ -30,7 +30,7 @@
         <Icon type="md-add" size="18" @click="addCon(index)"/>
         <Icon type="md-remove" size="18" @click="deleteCon(index)"/>
       </div>
-      <div class="adc-item" v-else>
+      <div class="adc-item" v-show="editData">
         <span class="item-title" >字典内容</span>
         <Input class="item-con"
           type="text"
