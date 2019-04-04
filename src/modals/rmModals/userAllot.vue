@@ -247,6 +247,8 @@ export default {
             }
           })
         }
+      } else {
+        Object.assign(this.$data, this.$options.data())
       }
     }
   }

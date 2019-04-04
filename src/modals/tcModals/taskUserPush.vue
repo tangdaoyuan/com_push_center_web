@@ -55,7 +55,7 @@
           </div>
           <div class="left-con" v-show="chooseMenu === 3">
             <ul class="fav-ul">
-              <li class="fav-li" v-for="(item, index) in favList" :key="item.id" >
+              <li class="fav-li" v-show="favList && favList.length > 0" v-for="(item, index) in favList" :key="item.id" >
                 <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
                 <el-popover
                   placement="top"
@@ -69,6 +69,7 @@
                   <i class="el-icon-circle-close" @click.native="item.deleteStatus = true" slot="reference"></i>
                 </el-popover>
               </li>
+              <li></li>
             </ul>
           </div>
         </div>
@@ -122,7 +123,8 @@ export default {
   },
   methods: {
     deleteFavItem (e, item, index) {
-      const tmp = [...this.favList].splice(index, 1)
+      const tmp = [...this.favList]
+      tmp.splice(index, 1)
       this.tcService.saveFavList({ collect_user_list: tmp.map(n => {
         return {
           origin_id: n.id,

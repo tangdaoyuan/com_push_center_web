@@ -5,7 +5,7 @@
     :mask-closable="false"
     :closable="false">
     <div class="modal-header" slot="header">
-      <span>新增角色</span>
+      <span>{{$store.state.user.roleEditData ? '编辑' : '新增'}}角色</span>
       <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
@@ -40,7 +40,7 @@
                 <el-option
                   v-for="(item, index) in options.typeList"
                   :key="index"
-                  :label="item.type_name"
+                  :label="item.content"
                   :value="item.id">
                 </el-option>
               </el-select>
@@ -141,7 +141,7 @@ export default {
   watch: {
     value () {
       if (this.value) {
-        this.$store.dispatch('getDicData').then(res => {
+        this.$store.dispatch('getDicData', this.CONSTANT.DIC_TYPE_PARAMS).then(res => {
           this.options.typeList = res
         })
         if (this.$store.state.user.roleEditData) {
@@ -161,6 +161,8 @@ export default {
             }
           })
         }
+      } else {
+        Object.assign(this.$data, this.$options.data())
       }
     }
   }
