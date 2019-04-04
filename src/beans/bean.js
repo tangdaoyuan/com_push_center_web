@@ -26,6 +26,10 @@ export default class CONSTANT {
     }
   ]
 
+  static DIC_TYPE_PARAMS = {
+    type_id: 'dic_t_task_type'
+  }
+
   static taskOpVal = [
     {
       name: '等于',
