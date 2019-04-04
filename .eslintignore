@@ -2,7 +2,6 @@
 /config/
 /dist/
 /*.js
-/src/modals/tcModals/taskUserPush.vue
 /src/modals/tcModals/taskDetail.vue
 /src/modals/tcModals/shortcutTask.vue
 /src/modals/tcModals/pushSetting.vue
