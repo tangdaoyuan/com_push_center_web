@@ -168,7 +168,7 @@ export default {
           this.sourceList = res
         })
       } else {
-        this.triggerList = []
+        Object.assign(this.$data, this.$options.data())
       }
     }
   }
