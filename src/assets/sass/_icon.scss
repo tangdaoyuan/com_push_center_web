@@ -242,6 +242,11 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/option-icon.svg');
 }
 
+@mixin empty-fav-user {
+  @include icon;
+  background-image: url('#{$root_url}/empty_fav_user.png');
+}
+
 $comp_root_url: '../../assets/imgs';
 @mixin afterIcon($background, $width: 16px, $height: 16px) {
   content: '';

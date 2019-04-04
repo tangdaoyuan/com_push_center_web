@@ -69,7 +69,10 @@
                   <i class="el-icon-circle-close" @click.native="item.deleteStatus = true" slot="reference"></i>
                 </el-popover>
               </li>
-              <li></li>
+              <li class="empty" v-show="!favList || favList.length === 0">
+                <div class="empty-data"></div>
+                <span>暂无常用推送，请到直接推送设置</span>
+              </li>
             </ul>
           </div>
         </div>
