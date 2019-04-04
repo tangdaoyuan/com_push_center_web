@@ -1,22 +1,22 @@
 const devProxy = require('./proxy.conf.js')
 
-const proEnv = require('./config/pro.env') // 生产环境
-const uatEnv = require('./config/uat.env') // 测试环境
-const devEnv = require('./config/dev.env') // 本地环境
-const env = process.env.NODE_ENV
-let target = ''
+// const proEnv = require('./config/pro.env') // 生产环境
+// const uatEnv = require('./config/uat.env') // 测试环境
+// const devEnv = require('./config/dev.env') // 本地环境
+// const env = process.env.NODE_ENV
+// let target
 
-switch (env) {
-  case 'production':
-    target = proEnv.hosturl
-    break
-  case 'test':
-    target = uatEnv.hosturl
-    break
-  case 'development':
-    target = devEnv.hosturl
-    break
-}
+// switch (env) {
+//   case 'production':
+//     target = proEnv.hosturl
+//     break
+//   case 'test':
+//     target = uatEnv.hosturl
+//     break
+//   case 'development':
+//     target = devEnv.hosturl
+//     break
+// }
 
 // 生成代理配置对象
 let proxyObj = {}

@@ -48,7 +48,7 @@ export default {
       e.stopPropagation()
       let str = ''
       if (this.chooseMenu === 2) {
-        str = $(this.$refs.at_box).val()
+        str = window.$(this.$refs.at_box).val()
         if (!str) {
           this.$message.error('消息模板不能为空')
           return null
@@ -94,9 +94,8 @@ export default {
             }
           }
         }
-        /* eslint-disable */
-        $(this.$refs.at_box).suggest('@', {
-          data: (this.$store.state.task.tableData && this.$store.state.task.tableData.title_list || []).map(item => {
+        window.$(this.$refs.at_box).suggest('@', {
+          data: (this.$store.state.task.tableData ? this.$store.state.task.tableData.title_list : []).map(item => {
             return {
               ...item,
               text: item.name,
@@ -104,7 +103,6 @@ export default {
             }
           })
         })
-        /* eslint-enable */
       } else {
         this.isError = false
         Object.assign(this.$data, this.$options.data())

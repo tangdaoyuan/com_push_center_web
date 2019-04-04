@@ -145,7 +145,7 @@
             <span>推送通道</span>
           </div>
           <div class="item-main">
-            <div v-for="(v, k) in detail.task_channels" :key="k" v-if="k !== 'push_end_time' && k !== 'push_start_time'">
+            <div v-for="(v, k) in detail.task_channels" :key="k" v-show="k !== 'push_end_time' && k !== 'push_start_time'">
               <div class="item-box" >
                 <div class="item-title">{{CONSTANT.tsTdMap[k]}}</div>
                 <div class="item-con">
@@ -161,9 +161,9 @@
               <div class="item-box line">
                 <div class="item-title">推送周期</div>
                 <div class="item-con">
-                  <span v-if="v.period_type === 1">及时推送</span>
-                  <span v-if="v.period_type === 2">工作日推送</span>
-                  <span v-if="v.period_type === 3"
+                  <span v-show="v.period_type === 1">及时推送</span>
+                  <span v-show="v.period_type === 2">工作日推送</span>
+                  <span v-show="v.period_type === 3"
                     class="time"
                     v-for="(item, index) in v.period_list"
                     :key="index">

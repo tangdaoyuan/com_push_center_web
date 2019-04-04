@@ -374,19 +374,18 @@ export default {
       })
     },
     initAt (id) {
-      console.log(this.$refs)
     },
     changeText (n, index) {
-      n.msgText = $(this.$refs.at_box[index]).val()
+      n.msgText = window.$(this.$refs.at_box[index]).val()
     },
     chooseField (item, n, index) {
-      const tmp = $(this.$refs.at_box[index]).val()
+      const tmp = window.$(this.$refs.at_box[index]).val()
       if (this.keyFieldList.filter(a => a.name === n.name).length === 0) {
         this.keyFieldList.push(this.schemaData.title_map[n.name])
       }
       setTimeout(() => {
-        $(this.$refs.at_box[index]).val(tmp + ` @${n.name} `)
-        item.msgText = $(this.$refs.at_box[index]).val()
+        window.$(this.$refs.at_box[index]).val(tmp + ` @${n.name} `)
+        item.msgText = window.$(this.$refs.at_box[index]).val()
       }, 300)
     },
     deleteKeyField (index) {
@@ -466,28 +465,28 @@ export default {
           this.chooseTableItem = item.id
           this.chooseTableName = item.name
           this.$refs.at_box.forEach((n, index) => {
-            /* eslint-disable */
-            $(n).suggest({ '@': {
-              data: this.schemaData.title_list,
-              map: (item) => {
-                return {
-                  text: item.name,
-                  value: item.name
-                }
-              },
-              onselect: (e, item, callback) => {
-                const tmp = $(n).val()
-                if (this.schemaData.title_map[`${item.text}`]) {
-                  if (this.keyFieldList.filter(n => n.name === item.text).length === 0) {
-                    this.keyFieldList.push(this.schemaData.title_map[item.text])
+            window.$(n).suggest({
+              '@': {
+                data: this.schemaData.title_list,
+                map: (item) => {
+                  return {
+                    text: item.name,
+                    value: item.name
                   }
+                },
+                onselect: (e, item, callback) => {
+                  const tmp = window.$(n).val()
+                  if (this.schemaData.title_map[`${item.text}`]) {
+                    if (this.keyFieldList.filter(n => n.name === item.text).length === 0) {
+                      this.keyFieldList.push(this.schemaData.title_map[item.text])
+                    }
+                  }
+                  setTimeout(() => {
+                    window.$(n).val(tmp)
+                  }, 300)
                 }
-                setTimeout(() => {
-                  $(n).val(tmp)
-                }, 300)
               }
-            }})
-            /* eslint-enable */
+            })
           })
           this.reset(true)
         }

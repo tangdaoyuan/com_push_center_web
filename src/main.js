@@ -10,16 +10,14 @@ import echarts from 'echarts'
 
 import './libs/assets/bootstrap-suggest.css'
 import 'iview/dist/styles/iview.css'
-import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css'
 import './assets/sass/main.scss'
 import './pwa/registerServiceWorker'
 import Img from './assets/getImg'
 
-/* eslint-disable */
 import './libs/js/jquery.min'
 import './libs/js/highlight'
 import './libs/js/bootstrap-suggest'
-/* eslint-enable */
 
 import store from './stores'
 import axios from './config/http'

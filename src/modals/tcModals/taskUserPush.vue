@@ -92,7 +92,6 @@
   </Modal>
 </template>
 <script>
-import { normalize } from 'path'
 export default {
   props: {
     value: Boolean,
