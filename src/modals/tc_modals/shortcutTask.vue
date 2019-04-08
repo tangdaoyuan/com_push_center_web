@@ -1,6 +1,10 @@
 <template>
-  <Modal class="manage-modal task-manage short-manage" v-model="trigger" fullscreen>
-    <choose-table-task v-model="ctModal" @chooseTable="chooseTableFn" :table-data="ctData"></choose-table-task>
+  <Modal class="manage-modal task-manage short-manage" v-model="value" fullscreen>
+    <choose-table-task
+      v-model="ctModal"
+      @chooseTable="chooseTableFn"
+      @close="closeCtModal"
+      :table-data="ctData"></choose-table-task>
     <task-filter
       v-model="taskFilterModal"
       :choose-index="chooseIndex"
@@ -257,7 +261,7 @@
       </div>
     </div>
     <div class="manage-footer" slot="footer">
-      <el-button @click="trigger = false">取消</el-button>
+      <el-button @click="close">取消</el-button>
       <el-button type="primary" @click="ok">确认</el-button>
     </div>
   </Modal>
@@ -270,7 +274,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       sValue: true,
       taskFilterModal: false,
       treeList: [],
@@ -337,7 +340,6 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
       if (this.value) {
         if (!this.mapData || this.mapData.length === 0) {
           this.tcService.getTaskDict().then(res => {
@@ -347,11 +349,8 @@ export default {
           })
         }
       }
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       }
     },
     schemaData () {
@@ -368,8 +367,14 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
+    closeCtModal () {
+      this.ctModal = false
+    },
     goTaskSet () {
-      this.trigger = false
+      this.close()
       this.$emit('input')
       this.$emit('goTaskSet')
     },
@@ -435,7 +440,7 @@ export default {
     },
     back (e) {
       e.stopPropagation()
-      this.trigger = false
+      this.close()
     },
     addFilter (res) {
       if (res.chooseIndex > -1) {
@@ -659,7 +664,7 @@ export default {
           this.$emit('refresh')
           this.reset()
           this.$message('添加成功')
-          this.trigger = false
+          this.close()
         } else {
           this.$message.error(res.msg || '保存失败')
         }

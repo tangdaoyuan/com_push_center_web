@@ -1,7 +1,7 @@
 <template>
   <Modal class="add-task-user"
     title="配置推送用户规则"
-    v-model="trigger">
+    v-model="value">
     <div class="step-push-body">
       <div class="step-header">
         <span>当下列条件满足时发送消息</span>
@@ -91,7 +91,7 @@
     </div>
     <div class="modal-footer" slot="footer">
       <el-button type="text" @click="ok">确定</el-button>
-      <el-button type="text" @click="trigger = false">取消</el-button>
+      <el-button type="text" @click="close">取消</el-button>
     </div>
   </Modal>
 </template>
@@ -109,7 +109,6 @@ export default {
   data () {
     return {
       deleteStatus: false,
-      trigger: false,
       chooseMenu: 1,
       mapData: [],
       showEqSel: false,
@@ -125,6 +124,9 @@ export default {
   created () {
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     deleteFavItem (e, item, index) {
       const tmp = [...this.favList]
       tmp.splice(index, 1)
@@ -194,7 +196,7 @@ export default {
         }
       }
 
-      this.trigger = false
+      this.close()
       this.$message.success('保存成功')
       this.$emit('ok', {
         userFilter: this.userFilter,
@@ -207,7 +209,6 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
       if (this.value) {
         this.tcService.getFavList().then(res => {
           if (res.status === 0) {
@@ -276,9 +277,7 @@ export default {
           }
         }
       }
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
         this.$emit('input')
       }

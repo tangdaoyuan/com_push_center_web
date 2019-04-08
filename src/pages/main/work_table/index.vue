@@ -1,10 +1,34 @@
 <template>
   <div class="wt-main">
-    <create-new-folder @refresh="init" :folder-list="folderList" v-model="modals.cnfModal" />
-    <move-folder @refresh="init" :folder-list="folderList" :wt-data="rnwtData" v-model="modals.mfModal" />
-    <detele-file @refresh="init" :wt-id="wtId" v-model="modals.dfModal" />
-    <upload-data @refresh="init" :folder-list="folderList" :step="uploadStep" :choose-menu="chooseMenu" :field-id="chooseItem.id" v-model="modals.udModal" />
-    <rename-wt :wt-data="rnwtData" @refresh="init" v-model="modals.rnwtModal"/>
+    <create-new-folder
+      @refresh="init"
+      @close="closeCnFile"
+      :folder-list="folderList"
+      v-model="modals.cnfModal" />
+    <move-folder
+      @refresh="init"
+      @close="closeMoFile"
+      :folder-list="folderList"
+      :wt-data="rnwtData"
+      v-model="modals.mfModal" />
+    <detele-file
+      @refresh="init"
+      @close="closeDefile"
+      :wt-id="wtId"
+      v-model="modals.dfModal" />
+    <upload-data
+      @refresh="init"
+      @close="closeUpData"
+      :folder-list="folderList"
+      :step="uploadStep"
+      :choose-menu="chooseMenu"
+      :field-id="chooseItem.id"
+      v-model="modals.udModal" />
+    <rename-wt
+      :wt-data="rnwtData"
+      @refresh="init"
+      @close="closeRnwtData"
+      v-model="modals.rnwtModal"/>
     <div class="wt-left">
       <div class="wt-left-header">
         <Menu mode="horizontal" theme="light" :active-name="chooseMenu">
@@ -225,6 +249,21 @@ export default {
         }
       }
     },
+    closeCnFile () {
+      this.modals.cnfModal = false
+    },
+    closeDefile () {
+      this.modals.dfModal = false
+    },
+    closeMoFile () {
+      this.modals.mfModal = false
+    },
+    closeUpData () {
+      this.modals.udModal = false
+    },
+    closeRnwtData () {
+      this.modals.rnwtModal = false
+    },
     reset () {
       this.chooseTag = []
       this.chooseItem = ''
@@ -246,19 +285,20 @@ export default {
       })
     },
     seacrhFolder (type) {
-      let queryService
+      let queryService = {}
       switch (type) {
         case 'data':
-          queryService = this.wtService.getDataSource
+          queryService = this.wtService.getDataSource()
           break
         case 'table':
-          queryService = this.wtService.getFolder
+          queryService = this.wtService.getFolder()
           break
         default:
-          queryService = this.wtService.getFolder
+          queryService = this.wtService.getFolder()
           break
       }
-      queryService().then(res => {
+
+      queryService.then(res => {
         if (res.status === 0) {
           this.treeList = res.data
           if (this.chooseItemId) {
@@ -403,16 +443,18 @@ export default {
                 let itemService
                 switch (this.utils.getType(data.id)) {
                   case 'folder':
-                    itemService = this.wtService.getFolderItem
+                    itemService = this.wtService.getFolderItem({
+                      id: data.id
+                    })
                     break
                   case 'field':
-                    itemService = this.wtService.getTableItem
+                    itemService = this.wtService.getTableItem({
+                      id: data.id
+                    })
                     break
                 }
 
-                itemService({
-                  id: data.id
-                }).then(res => {
+                itemService.then(res => {
                   if (res.status === 0) {
                     this.rnwtData = res.data
                     this.modals.rnwtModal = true

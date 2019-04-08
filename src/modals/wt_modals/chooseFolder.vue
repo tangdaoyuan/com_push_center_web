@@ -1,8 +1,8 @@
 <template>
-  <Modal class="mf-modal-main" v-model="trigger">
+  <Modal class="mf-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>选择文件夹</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="mf-body">
       <div class="mf-b-title">
@@ -28,7 +28,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -41,7 +41,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       filterText: '',
       chooseTag: []
     }
@@ -53,26 +52,22 @@ export default {
           this.chooseTag = [this.folderId]
         }
       }
-      this.trigger = this.value
-    },
-    trigger () {
-      if (this.trigger) {
+      if (this.value) {
         if (this.folderId) {
           this.chooseTag = [this.folderId]
         }
       } else {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     },
     filterText (val) {
       this.$refs.treeList.filter(val)
     }
   },
-  created () {
-    this.trigger = this.value
-  },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     filterNode (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
@@ -128,7 +123,7 @@ export default {
       })
       this.$emit('changeFolder', pushData)
       this.chooseTag = []
-      this.trigger = false
+      this.close()
     }
   }
 }

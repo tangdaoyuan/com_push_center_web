@@ -1,8 +1,8 @@
 <template>
-  <Modal class="ct-modal-main" v-model="trigger">
+  <Modal class="ct-modal-main" v-model="value">
     <div class="ct-header" slot="header">
       <span>增量设置</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="is-body">
       <div class="item-form">
@@ -149,7 +149,7 @@
     </div>
     <div slot="footer" class="ct-footer">
       <Button @click="save">确定</Button>
-      <Button @click="trigger = false">取消</Button>
+      <Button @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -165,7 +165,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       dataEndmode: 0,
       relativeStartmode: 0,
       relativeEndmode: 0,
@@ -214,11 +213,7 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
-        this.$emit('input', this.trigger)
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       } else {
         if (this.increaseData !== {}) {
@@ -246,6 +241,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     save () {
       if (this.increase.field !== '') {
         if (this.fieldType !== 'date' && this.increase.type === 'maximum') {
@@ -277,7 +275,7 @@ export default {
         }
         this.$emit('showIncreaseSetting', this.increase)
       }
-      this.trigger = false
+      this.close()
     },
     getEndmode () {
       if (this.relativeEndmode === 0) {

@@ -68,8 +68,14 @@
         </pc-card>
       </div>
     </div>
-    <watch-detail @refresh="init" :choose-item="chooseItem" :show-menu="showMenu" :table-data="tableData" v-model="wdModal" />
-    <abnormal-reason type="data" v-model="modals.abnormalVisible"></abnormal-reason>
+    <watch-detail
+      @refresh="init"
+      @close="closeWdModal"
+      :choose-item="chooseItem"
+      :show-menu="showMenu"
+      :table-data="tableData"
+      v-model="wdModal" />
+    <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
   </div>
 </template>
 <script>
@@ -161,6 +167,12 @@ export default {
       this.searchCount()
       this.search()
       this.initTaskTypeList()
+    },
+    closeWdModal () {
+      this.wdModal = false
+    },
+    closeAbnReason () {
+      this.modals.abnormalVisible = false
     },
     showAbnormalList () {
       this.modals.abnormalVisible = true
@@ -264,16 +276,16 @@ export default {
         case '0':
         case '1':
           putData.type = this.matchPushData.type
-          detailService = this.nwService.matchList
+          detailService = this.nwService.matchList(putData)
           break
         case '2':
         case '3':
           putData.status = this.matchPushData.status
-          detailService = this.nwService.pushList
+          detailService = this.nwService.pushList(putData)
           break
       }
 
-      detailService(putData).then(res => {
+      detailService.then(res => {
         if (res.status === 0) {
           this.detailPageParams.total = res.data.total
           this.tableData.headList = res.data.schema

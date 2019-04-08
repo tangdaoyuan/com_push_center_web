@@ -1,5 +1,5 @@
 <template>
-  <Modal class="dm-main-detail" v-model="trigger">
+  <Modal class="dm-main-detail" v-model="value">
     <div class="modal-header" slot="header">
       <span>{{`${detailListInfo.dataSource.name} -- 详情信息`}}</span>
       <Icon type="md-close" @click="back($event)" />
@@ -64,7 +64,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       detailListInfo: {
         dataSource: {},
         setting: []
@@ -72,6 +71,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     search () {
       this.dmService.openDetail({
         id: this.detailID
@@ -82,16 +84,12 @@ export default {
     },
     back (e) {
       e.stopPropagation()
-      this.trigger = false
+      this.close()
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      this.$emit('input', this.trigger)
-      if (this.trigger) {
+      if (this.value) {
         this.search()
       } else {
         Object.assign(this.$data, this.$options.data())

@@ -1,8 +1,8 @@
 <template>
-  <Modal class="ws-modal-main" v-model="trigger">
+  <Modal class="ws-modal-main" v-model="value">
     <div class="ws-header" slot="header">
       <span>字段与主键设置</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="ws-body">
       <span>备注预览与同步限制255字</span>
@@ -55,12 +55,8 @@ export default {
     value: Boolean,
     tableInfo: Object
   },
-  created () {
-    this.trigger = this.value
-  },
   data () {
     return {
-      trigger: false,
       multipleSelection: [],
       schema: {},
       input: '',
@@ -74,10 +70,7 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (this.trigger) {
+      if (this.value) {
         this.setkeyData = {
           keys: [],
           fields: [],
@@ -93,7 +86,6 @@ export default {
       } else {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   },
   methods: {
@@ -116,7 +108,7 @@ export default {
         })
         this.$message.success('配置成功')
         this.$emit('finish', this.setkeyData)
-        this.trigger = false
+        this.$emit('close')
       } else {
         this.$message.error('请设置字段与主键')
       }
@@ -125,7 +117,7 @@ export default {
       this.multipleSelection = val
     },
     close () {
-      this.trigger = false
+      this.$emit('close')
       // this.save()
       this.$emit('finish', this.setkeyData)
     }

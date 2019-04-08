@@ -1,8 +1,8 @@
 <template>
-  <Modal class="cnf-modal-main" v-model="trigger">
+  <Modal class="cnf-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>创建文件夹</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="cnf-body">
       <div class="cnf-b-title">所属文件夹：<span>（默认选择根目录）</span></div>
@@ -31,7 +31,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -43,7 +43,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       folderName: '',
       filterText: '',
       chooseTag: []
@@ -51,22 +50,18 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     },
     filterText (val) {
       this.$refs.treeList.filter(val)
     }
   },
-  created () {
-    this.trigger = this.value
-  },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     filterNode (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
@@ -126,8 +121,7 @@ export default {
             type: 'success'
           })
           this.$emit('refresh')
-          this.trigger = false
-          this.$emit('input', this.trigger)
+          this.close()
           this.folderName = ''
         } else {
           this.$message({

@@ -1,5 +1,5 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-back" @click="back($event)" />
       <span>{{(manageId !== '')?('编辑'):('新增')}}推送通道</span>
@@ -103,12 +103,14 @@ export default {
   },
   data () {
     return {
-      trigger: false
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     back () {
-      this.trigger = false
+      this.close()
       this.$emit('clear')
     },
     getAccKey (e) {
@@ -157,7 +159,7 @@ export default {
           this.$message.success(sMsg)
           this.$emit('refresh')
           this.$emit('clear')
-          this.trigger = false
+          this.$emit('close')
         } else {
           this.$message.error(res.msg)
         }
@@ -166,10 +168,7 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
         this.$emit('input')
       }

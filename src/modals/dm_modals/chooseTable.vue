@@ -1,8 +1,8 @@
 <template>
-  <Modal class="ct-modal-main" v-model="trigger">
+  <Modal class="ct-modal-main" v-model="value">
     <div class="ct-header" slot="header">
       <span>选择数据表</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="ct-body">
       <div class="body-list">
@@ -37,7 +37,7 @@
     </div>
     <div slot="footer" class="ct-footer">
       <Button @click="nextSyncbdp2()">保存</Button>
-      <Button @click="trigger = false">取消</Button>
+      <Button @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -51,7 +51,6 @@ export default {
   created () {},
   data () {
     return {
-      trigger: false,
       radio2: 3,
       bdpTreeList: [],
       chooseTag: [],
@@ -67,12 +66,8 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input', this.trigger)
       }
     },
     connectId () {
@@ -80,7 +75,9 @@ export default {
     }
   },
   methods: {
-    init () {
+    init () {},
+    close () {
+      this.$emit('close')
     },
     nextSyncbdp2 () {
       if (this.table.length === 0) {
@@ -98,7 +95,7 @@ export default {
           table_list: chooseTables
         }).then(res => {
           if (res.status === 0) {
-            this.trigger = false
+            this.close()
             this.tableInfo = res.data
             this.$emit('saveBdptableData', this.tableInfo, this.table)
           } else {

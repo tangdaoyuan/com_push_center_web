@@ -1,8 +1,8 @@
 <template>
-  <Modal class="psd-modal-main" v-model="trigger">
+  <Modal class="psd-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>定时推送</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="psd-body">
       <div class="ts-radio-box">
@@ -49,7 +49,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -62,7 +62,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       chooseType: 1,
       period_list: [
         {
@@ -78,6 +77,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     changeChoose () {
       switch (this.chooseType) {
         case 1:
@@ -149,12 +151,11 @@ export default {
       console.log(putData)
       this.$emit('changeMsgDate', putData)
       this.$message.success('设置成功')
-      this.trigger = false
+      this.close()
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
       if (this.value) {
         if (this.putData[this.type] && Object.keys(this.putData[this.type]).length > 0) {
           this.chooseType = this.putData[this.type].period_type
@@ -172,12 +173,9 @@ export default {
           }
         }
       }
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   }
 }

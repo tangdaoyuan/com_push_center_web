@@ -2,13 +2,13 @@
   <Modal
     class="tfu-modal"
     title="配置关注用户"
-    v-model="trigger">
+    v-model="value">
     <div class="modal-body">
       <transfer v-model="traList" @changeList="changeViewList" pr-key="id" show-text="name" @changeTarget="changeTarget" :push-list="viewGroupList" />
     </div>
     <div class="modal-footer" slot="footer">
       <el-button type="text" @click="ok">确定</el-button>
-      <el-button type="text" @click="trigger = false">取消</el-button>
+      <el-button type="text" @click="close">取消</el-button>
     </div>
   </Modal>
 </template>
@@ -22,12 +22,14 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       traList: [],
       viewGroupList: []
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     changeViewList (list) {
       this.traList = list
     },
@@ -50,7 +52,7 @@ export default {
       })
 
       if (this.shortType) {
-        this.trigger = false
+        this.close()
         this.$emit('saveFav', this.traList)
       } else {
         const service = (this.$store.state.task.taskData) ? (this.tcService.edit4FavUser) : (this.tcService.saveTask4Setting)
@@ -61,7 +63,7 @@ export default {
           if (res.status === 0) {
             this.$emit('saveFav', this.traList)
             this.$message.success('保存成功')
-            this.trigger = false
+            this.close()
           } else {
             this.$message.error(res.msg || '保存失败')
           }
@@ -70,14 +72,10 @@ export default {
     }
   },
   watch: {
-    trigger () {
-      if (!this.trigger) {
-        Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
-      }
-    },
     value () {
-      this.trigger = this.value
+      if (!this.value) {
+        Object.assign(this.$data, this.$options.data())
+      }
       if (this.value) {
         if (this.favList) {
           this.traList = this.favList

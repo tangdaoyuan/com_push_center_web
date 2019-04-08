@@ -63,11 +63,11 @@
         </div>
       </div>
     </div>
-    <adm-syncbdp v-model="modals.admSyncbdpModal" :bdp-id="dataID" />
-    <adm-mysql v-model="modals.admMysqlModal" :mysql-id="dataID" />
-    <adm-oracle v-model="modals.admOracleModal" :oracle-id="dataID"/>
-    <adm-msg v-model="modals.admMsgModal" :msg-id="dataID"/>
-    <adm-api v-model="modals.admApiModal" :api-item="apiData" />
+    <adm-syncbdp v-model="modals.admSyncbdpModal" :bdp-id="dataID" @close="closeSyncBdp"/>
+    <adm-mysql v-model="modals.admMysqlModal" :mysql-id="dataID"  @close="closeAdmMysql"/>
+    <adm-oracle v-model="modals.admOracleModal" :oracle-id="dataID" @close="closeAdmOracle"/>
+    <adm-msg v-model="modals.admMsgModal" :msg-id="dataID" @close="closeAdmMsg"/>
+    <adm-api v-model="modals.admApiModal" :api-item="apiData" @close="closeAdmApi" />
   </div>
 </template>
 <script>
@@ -87,6 +87,21 @@ export default {
     }
   },
   methods: {
+    closeSyncBdp () {
+      this.modals.admSyncbdpModal = false
+    },
+    closeAdmOracle () {
+      this.modals.admOracleModal = false
+    },
+    closeAdmMysql () {
+      this.modals.admMysqlModal = false
+    },
+    closeAdmMsg () {
+      this.modals.admMsgModal = false
+    },
+    closeAdmApi () {
+      this.modals.admApiModal = false
+    },
     chooseType (e, type) {
       switch (type) {
         case 'syncbdp':

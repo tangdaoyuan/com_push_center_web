@@ -1,7 +1,7 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
-      <Icon type="md-arrow-round-back" @click="trigger = false"/>
+      <Icon type="md-arrow-round-back" @click="close"/>
       <span>{{(mysqlId) ? ('编辑') : ('新增')}}Mysql数据源</span>
     </div>
     <div class="manage-body">
@@ -70,7 +70,12 @@
         </div>
       </div>
       <div class="adm-step-mysql adm-step2" v-show="currentStep === 1">
-        <word-setting :datas="chooseWords" :dataSchema="mysqlSchema" @finish="finishWordSetting" v-model="wsModal" />
+        <word-setting
+         :datas="chooseWords"
+         :dataSchema="mysqlSchema"
+         @finish="finishWordSetting"
+         @close="closeWoSetting"
+         v-model="wsModal" />
         <div class="step-body">
           <div class="item-body">
             <div class="item-form item-form1">
@@ -146,7 +151,6 @@ export default {
   data () {
     return {
       currentStep: 0,
-      trigger: false,
       mysqlList: {},
       sync_fields: [],
       mysqlData: {
@@ -191,6 +195,12 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
+    closeWoSetting () {
+      this.wsModal = false
+    },
     changeStep (step) {
       if (this.mysqlId) {
         this.currentStep = step
@@ -347,7 +357,7 @@ export default {
             // this.$router.push('/dm')
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.trigger = false
+            this.close()
           } else {
             this.$message.error(res.msg)
           }
@@ -373,12 +383,8 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       } else {
         this.currentStep = 0
         if (this.mysqlId) {

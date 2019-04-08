@@ -1,7 +1,7 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
-      <Icon type="md-arrow-round-back" @click="trigger = false"/>
+      <Icon type="md-arrow-round-back" @click="close"/>
       <span>{{(oracleId) ? ('编辑') : ('新增')}}Oracle数据源</span>
     </div>
     <div class="manage-body">
@@ -170,7 +170,6 @@ export default {
   data () {
     return {
       currentStep: 0,
-      trigger: false,
       chooseWords: [],
       mysqlSchema: {},
       oracleList: {},
@@ -219,6 +218,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     changeStep (step) {
       if (this.oracleId) {
         this.currentStep = step
@@ -391,7 +393,7 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.trigger = false
+            this.close()
           } else {
             this.$message.error(res.msg)
           }
@@ -417,12 +419,8 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       } else {
         this.currentStep = 0
         if (this.oracleId) {

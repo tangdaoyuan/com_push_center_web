@@ -1,7 +1,19 @@
 <template>
   <div class="step-body" v-show="step === 4">
-    <push-setting :list="choosePushMsgList" :putData="tdPutData" @changeSetting="changeMsgSetting" :field-list="tbList" :type="choosePushType" v-model="psModal" />
-    <push-setting-date v-model="psdModal" :putData="tdPutData" :type="choosePushType" @changeMsgDate="changeMsgDateSetting" />
+    <push-setting
+      :list="choosePushMsgList"
+      :putData="tdPutData"
+      @changeSetting="changeMsgSetting"
+      @close="closePsModal"
+      :field-list="tbList"
+      :type="choosePushType"
+      v-model="psModal" />
+    <push-setting-date
+      v-model="psdModal"
+      :putData="tdPutData"
+      :type="choosePushType"
+      @close="closePsdModal"
+      @changeMsgDate="changeMsgDateSetting" />
     <div class="step-module-body">
       <div class="step-item" >
         <div class="item-title">推送通道</div>
@@ -160,6 +172,12 @@ export default {
           ]
         }
       })
+    },
+    closePsModal () {
+      this.psModal = false
+    },
+    closePsdModal () {
+      this.psdModal = false
     },
     changeMsgSetting (data) {
       this.tdPutData[this.choosePushType] = {

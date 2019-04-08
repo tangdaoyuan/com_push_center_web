@@ -1,5 +1,5 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="cancel()"/>
       <span>{{(msgId) ? ('编辑') : ('新增')}}消息队列</span>
@@ -73,13 +73,13 @@
               <Row class="item-box"
                 v-for="(item, index) in msgData2.params.table_fields"
                 :key="index">
-                <Col class="item-con" span="8">
+                <i-col class="item-con" span="8">
                   <label class="item-title">参数名称</label>
                   <FormItem>
                     <Input type="text" v-model="item.name" />
                   </FormItem>
-                </Col>
-                <Col class="item-con" span="8">
+                </i-col>
+                <i-col class="item-con" span="8">
                   <label class="item-title">参数类型</label>
                   <el-form>
                     <el-select v-model="item.type" filterable>
@@ -91,11 +91,11 @@
                       </el-option>
                     </el-select>
                   </el-form>
-                </Col>
-                <Col class="item-btn-box" span="4">
+                </i-col>
+                <i-col class="item-btn-box" span="4">
                   <Button shape="circle" @click="addItem($event, index)" icon="ios-add"></Button>
                   <Button shape="circle" @click="removeItem($event, index)" v-show="msgData2.params.table_fields && msgData2.params.table_fields.length > 1" icon="ios-remove"></Button>
-                </Col>
+                </i-col>
               </Row>
             </Form>
           </div>
@@ -120,7 +120,6 @@ export default {
   data () {
     return {
       currentStep: 0,
-      trigger: false,
       ak: '',
       sk: '',
       tbID: '',
@@ -150,6 +149,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     changeStep (step) {
       if (this.msgId) {
         this.currentStep = step
@@ -253,7 +255,7 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑消息队列成功')
             this.$emit('refresh')
-            this.trigger = false
+            this.close()
           } else {
             this.$message.error(res.msg)
           }
@@ -286,7 +288,7 @@ export default {
       this.clear()
     },
     cancel () {
-      this.trigger = false
+      this.close()
       this.clear()
     },
     clear () {
@@ -308,12 +310,8 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       } else {
         this.currentStep = 0
         if (this.msgId) {

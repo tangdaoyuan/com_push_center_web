@@ -1,13 +1,23 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
-    <set-keys v-model="skModal" @finish="finishSetkey" :table-info="showTableInfo" />
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
+    <set-keys
+      v-model="skModal"
+      @finish="finishSetkey"
+      @close="closeSetKeys"
+      :table-info="showTableInfo" />
     <choose-table v-model="ctModal"
       :tables="tables"
       :connect-id="bdpData3.params.connect_id"
-      @saveBdptableData="saveBdptableData" />
-    <increase-setting v-model="synMode" @showIncreaseSetting="showIncreaseSetting" :table-info="showTableInfo" :increase-data="increaseData" />
+      @saveBdptableData="saveBdptableData"
+      @close="closeCtable" />
+    <increase-setting
+      v-model="synMode"
+      @showIncreaseSetting="showIncreaseSetting"
+      @close="closeIncSetting"
+      :table-info="showTableInfo"
+      :increase-data="increaseData" />
     <div class="manage-header" slot="header">
-      <Icon type="md-arrow-round-back" @click="trigger = false"/>
+      <Icon type="md-arrow-round-back" @click="close"/>
       <span>{{(bdpId) ? ('编辑') : ('新增')}}同步客户端</span>
     </div>
     <div class="manage-body">
@@ -385,7 +395,6 @@ export default {
       ctModal: false,
       skModal: false,
       synMode: false,
-      trigger: false,
       currentStep: 0,
       choosed: -1,
       ref: '',
@@ -551,6 +560,18 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
+    closeSetKeys () {
+      this.skModal = false
+    },
+    closeIncSetting () {
+      this.synMode = false
+    },
+    closeCtable () {
+      this.ctModal = false
+    },
     changeStep (step) {
       if (this.bdpId) {
         if (step === 0) {
@@ -849,7 +870,7 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.trigger = false
+            this.close()
           } else {
             this.$message.error(res.msg)
           }
@@ -1022,12 +1043,8 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       } else {
         this.currentStep = 0
         if (this.bdpId) {

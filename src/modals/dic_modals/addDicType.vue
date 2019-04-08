@@ -1,8 +1,8 @@
 <template>
-  <Modal class="adt-modal-main" v-model="trigger">
+  <Modal class="adt-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>新增字典类型</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="adt-con">
       <div class="adt-item">
@@ -18,7 +18,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -32,7 +32,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       chooseTag: [],
       name: '',
       description: ''
@@ -40,25 +39,19 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-      if (this.value) {
-        this.editData && (() => {
-          this.name = this.editData.name
-          this.description = this.editData.description
-        })()
-      }
-    },
-    trigger () {
-      if (!this.trigger) {
+      this.value && this.editData && (() => {
+        this.name = this.editData.name
+        this.description = this.editData.description
+      })()
+      this.value && (() => {
         Object.assign(this.$data, this.$options.data())
-      }
-      this.$emit('input', this.trigger)
+      })()
     }
   },
-  created () {
-    this.trigger = this.value
-  },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     ok (e) {
       e.stopPropagation()
       if (!this.name) {
@@ -72,7 +65,7 @@ export default {
       }).then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
-          this.trigger = false
+          this.$emit('close')
           this.$emit('init')
         }
       })

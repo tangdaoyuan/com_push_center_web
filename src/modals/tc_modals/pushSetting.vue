@@ -1,8 +1,8 @@
 <template>
-  <Modal class="ps-modal-main" v-model="trigger">
+  <Modal class="ps-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>提示</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="ps-body">
       <div class="menu-box">
@@ -23,7 +23,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -37,13 +37,15 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       chooseMenu: 1,
       msgText: '',
       isError: false
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     ok (e) {
       e.stopPropagation()
       let str = ''
@@ -73,16 +75,13 @@ export default {
 
       this.$message.success('设置成功')
 
-      this.trigger = false
+      this.close()
       this.$emit('changeSetting', putData)
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (this.trigger) {
+      if (this.value) {
         if (this.putData[this.type].msg) {
           this.msgText = this.putData[this.type].msg
           this.chooseMenu = this.putData[this.type].tpl_type
@@ -107,7 +106,6 @@ export default {
         this.isError = false
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <Modal class="nd-modal-main" v-model="trigger">
+  <Modal class="nd-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>推送通道详情</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="nd-body">
       <div class="nd-item">
@@ -44,12 +44,8 @@ export default {
     value: Boolean,
     detailID: String
   },
-  created () {
-    this.trigger = this.value
-  },
   data () {
     return {
-      trigger: false,
       detailData: {
         params: {
           access_key: '',
@@ -59,6 +55,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     search () {
       this.nmService.detailData({
         id: this.detailID
@@ -71,11 +70,7 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      this.$emit('input', this.trigger)
-      if (this.trigger) {
+      if (this.value) {
         this.search()
       }
     }

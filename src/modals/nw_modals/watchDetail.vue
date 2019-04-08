@@ -1,5 +1,5 @@
 <template>
-  <Modal class="nwd-main" v-model="trigger">
+  <Modal class="nwd-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>{{`${chooseItem.name} -- ${utils.getNwMatch(showMenu)}`}}</span>
       <Icon type="md-close" @click="back($event)" />
@@ -38,21 +38,19 @@ export default {
   },
   data () {
     return {
-      trigger: false
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     renderHeader (h, data) {
       const header = this.tableData.headList[data.$index]
       const headerText = header.alias || header.name
@@ -88,7 +86,7 @@ export default {
     },
     back (e) {
       e.stopPropagation()
-      this.trigger = false
+      this.close()
     }
   }
 }

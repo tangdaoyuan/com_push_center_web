@@ -1,5 +1,5 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="back($event)"/>
       <span>{{($store.state.task.taskId) ? '编辑' : '新建'}}任务</span>
@@ -28,20 +28,19 @@ export default {
   props: {
     value: Boolean
   },
-  created () {
-    this.trigger = this.value
-  },
   data () {
     return {
-      trigger: false,
       currentStep: -1
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     back () {
       this.$store.commit('resetTaskEdit')
       this.currentStep = -1
-      this.trigger = false
+      this.close()
     },
     next (type, data) {
       this.currentStep++
@@ -63,7 +62,7 @@ export default {
       this.currentStep--
     },
     finish () {
-      this.trigger = false
+      this.close()
       this.currentStep = -1
       this.$store.commit('resetTaskEdit')
       this.$emit('refresh')
@@ -71,7 +70,6 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
       if (this.value) {
         if (this.$store.state.task.taskId) {
           this.$store.dispatch('getEditDetail', {
@@ -83,11 +81,8 @@ export default {
           this.currentStep = 0
         }
       }
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       }
     }
   }

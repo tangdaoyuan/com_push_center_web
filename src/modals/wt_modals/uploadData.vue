@@ -1,6 +1,11 @@
 <template>
-  <Modal class="ud-modal-main modal-full" v-model="trigger" fullscreen>
-    <choose-folder @changeFolder="chooseFolderItem" :folder-id="chooseFileSetData.folder_id" :folder-list="folderList" v-model="cfModal"/>
+  <Modal class="ud-modal-main modal-full" v-model="value" fullscreen>
+    <choose-folder
+      @changeFolder="chooseFolderItem"
+      @close="closeCfModal"
+      :folder-id="chooseFileSetData.folder_id"
+      :folder-list="folderList"
+      v-model="cfModal"/>
     <div class="ud-header" slot="header">
       <div class="header-btn">
         <Icon type="md-arrow-round-back" @click="closeModal"/>
@@ -224,7 +229,7 @@
         <div class="ud-right">
           <div class="step3-item">
             <label>工作表</label>
-            <Input type="text" v-model="chooseFileSetData.name" :maxlength="16"></Input>
+            <Input type="text" v-model="chooseFileSetData.name" :maxlength="16" />
           </div>
           <div class="step3-item">
             <label>文件夹</label>
@@ -235,7 +240,7 @@
           </div>
           <div class="step3-item">
             <label>备注</label>
-            <Input type="textarea" v-model="chooseFileSetData.desc" class="item-area" :maxlength="200" placeholder="请输入工作表备注信息(最多200字)"></Input>
+            <Input type="textarea" v-model="chooseFileSetData.desc" class="item-area" :maxlength="200" placeholder="请输入工作表备注信息(最多200字)" />
           </div>
         </div>
       </div>
@@ -263,7 +268,6 @@ export default {
     return {
       uploadStart: false,
       cfModal: false,
-      trigger: false,
       currentStep: 0,
       csvSize: 200 * 1024 * 1024,
       xlsSize: 100 * 1024 * 1024,
@@ -299,6 +303,12 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
+    closeCfModal () {
+      this.cfModal = false
+    },
     prev () {
       switch (this.currentStep) {
         case 1:
@@ -375,7 +385,7 @@ export default {
             if (res.status === 0) {
               if (this.addId) {
                 this.$message.success('保存成功')
-                this.trigger = false
+                this.close()
                 this.uploadStart = false
                 localStorage.removeItem('excel_tmp')
                 this.$router.push('/wt')
@@ -416,7 +426,7 @@ export default {
       this.wtService.saveExcelData(putData).then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
-          this.trigger = false
+          this.close()
           this.files = []
           this.uploadStart = false
           localStorage.removeItem('excel_tmp')
@@ -430,7 +440,6 @@ export default {
       this.excelMapList[this.chooseExcelId].row = item
     },
     init () {
-      this.trigger = this.value
       this.fileHead = {
         'Authorization': 'Bearer ' + this.$cookies.get('pc_token'),
         'userId': this.$cookies.get('pc_user_id')
@@ -653,7 +662,7 @@ export default {
     },
     back () {
       this.currentStep = 0
-      this.trigger = false
+      this.close()
       this.files = []
       this.uploadStart = false
       this.$router.push(`/wt`)
@@ -677,13 +686,9 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     },
     '$route' (to, from) {
       this.init()

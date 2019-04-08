@@ -1,8 +1,8 @@
 <template>
-  <Modal class="rnwt-modal-main" v-model="trigger">
+  <Modal class="rnwt-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>编辑工作表</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close"/>
     </div>
     <div class="rnwt-body">
       <div class="rnwt-item">
@@ -15,7 +15,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -25,30 +25,24 @@ export default {
     value: Boolean,
     wtData: Object
   },
-  created () {
-    this.trigger = this.value
-  },
   data () {
     return {
-      trigger: false
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     refresh () {
       this.$emit('refresh')
-      this.trigger = false
-      this.$emit('input', this.trigger)
+      this.close()
     },
     ok (e) {
       e.stopPropagation()

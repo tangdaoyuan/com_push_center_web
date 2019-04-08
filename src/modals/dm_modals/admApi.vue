@@ -1,5 +1,5 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="trigger" fullscreen>
+  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="cancel($event)"/>
       <span>{{(apiItem.id) ? ('编辑') : ('新建')}}API数据源</span>
@@ -26,10 +26,10 @@
                 </div>
                 <div class="item-form">
                   <label class="item-form-title">数据源名称</label>
-                  <Input class="item-input" v-model="apiData.name" :maxlength="16"></Input>
+                  <Input class="item-input" v-model="apiData.name" :maxlength="16"/>
                 </div>
                 <div class="item-form-area">
-                  <Input class="item-input" v-model="apiData.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200"></Input>
+                  <Input class="item-input" v-model="apiData.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200"/>
                 </div>
                 <div class="item-form-tip">
                   最多支持200字输入
@@ -43,13 +43,13 @@
               <div class="item-body">
                 <div class="item-form">
                   <label class="item-form-title">Secret Key</label>
-                  <Input class="item-input right" disabled v-model="apiData.params.secret_key" placeholder="点击刷新按钮自动生成"></Input>
+                  <Input class="item-input right" disabled v-model="apiData.params.secret_key" placeholder="点击刷新按钮自动生成"/>
                   <i @click="getSecret($event)"></i>
                   <Icon type="ios-copy" @click="copyKey($event, 'Secret Key', apiData.params.secret_key)"/>
                 </div>
                 <div class="item-form">
                   <label class="item-form-title">来访IP列表</label>
-                  <Input class="item-input right" v-model="apiData.params.ip" placeholder="多个IP间以逗号分隔"></Input>
+                  <Input class="item-input right" v-model="apiData.params.ip" placeholder="多个IP间以逗号分隔"/>
                 </div>
                 <div class="item-form-tip right">
                   API数据说明：创建工作表方式请参照开发者中心。
@@ -76,7 +76,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       apiData: {
         type: 3,
         desc: '',
@@ -89,6 +88,9 @@ export default {
     }
   },
   methods: {
+    closeAdmApi () {
+      this.$emit('close')
+    },
     apiFinish () {
       if (!this.apiData.params.secret_key) {
         this.$message.error('secret_key不能为空')
@@ -106,7 +108,7 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑api成功')
             this.$emit('refresh')
-            this.trigger = false
+            this.closeAdmApi()
           } else {
             this.$message.error(res.msg)
           }
@@ -116,8 +118,7 @@ export default {
           if (res.status === 0) {
             this.$message.success('新增api成功')
             this.$router.push('/dm')
-            this.trigger = false
-            this.$emit('input', this.trigger)
+            this.closeAdmApi()
           } else {
             this.$message.error(res.msg)
           }
@@ -157,17 +158,13 @@ export default {
           ip: this.apiItem.ip
         }
       }
-      this.trigger = false
+      this.closeAdmApi()
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
-        this.$emit('input')
       } else {
         this.apiData = {
           desc: this.apiItem.desc,

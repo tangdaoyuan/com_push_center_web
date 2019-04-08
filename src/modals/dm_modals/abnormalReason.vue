@@ -1,8 +1,9 @@
-<template lang='html'>
-  <Modal v-model="trigger" class="abnormal-detail">
-    <p slot="header">
+<template>
+  <Modal v-model="value" class="abnormal-detail">
+    <div class="modal-header" slot="header">
       <span>异常原因</span>
-    </p>
+      <Icon type="md-close" @click="close" />
+    </div>
     <div class="abnormal-list">
       <el-table
         :data="abnormalData"
@@ -30,7 +31,7 @@
       </el-table>
     </div>
     <div slot="footer" class="right">
-      <button class="btn" @click="closeDetail()">关闭</button>
+      <button class="btn" @click="close">关闭</button>
     </div>
   </Modal>
 </template>
@@ -43,7 +44,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       pageParams: {
         type: 1
       },
@@ -69,17 +69,13 @@ export default {
         }
       })
     },
-    closeDetail () {
-      this.trigger = false
+    close () {
+      this.$emit('close')
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      this.$emit('input', this.trigger)
-      if (this.trigger) {
+      if (this.value) {
         this.searchData()
       } else {
         Object.assign(this.$data, this.$options.data())
@@ -87,7 +83,4 @@ export default {
     }
   }
 }
-
 </script>
-<style lang='css'>
-</style>

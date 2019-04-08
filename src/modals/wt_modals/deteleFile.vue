@@ -1,15 +1,15 @@
 <template>
-  <Modal class="df-modal-main" v-model="trigger">
+  <Modal class="df-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>提示</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="df-body">
         <span>您确定要删除吗？</span>
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -21,21 +21,19 @@ export default {
   },
   data () {
     return {
-      trigger: false
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         Object.assign(this.$data, this.$options.data())
       }
-      this.$emit('input', this.trigger)
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     ok (e) {
       e.stopPropagation()
       let serv
@@ -60,15 +58,13 @@ export default {
             type: 'success'
           })
           this.$emit('refresh')
-          this.trigger = false
-          this.$emit('input', this.trigger)
+          this.close()
         } else {
           this.$message({
             message: res.msg,
             type: 'error'
           })
-          this.trigger = false
-          this.$emit('input', this.trigger)
+          this.close()
         }
       })
     }

@@ -1,8 +1,8 @@
 <template>
-  <Modal class="adc-modal-main" v-model="trigger">
+  <Modal class="adc-modal-main" v-model="value">
     <div class="modal-header" slot="header">
       <span>新增字典</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="adc-con">
       <div class="adc-item">
@@ -41,7 +41,7 @@
     </div>
     <div slot="footer" class="modal-footer">
       <Button type="text" @click="ok($event)">确定</Button>
-      <Button type="text" @click="trigger = false">取消</Button>
+      <Button type="text" @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -54,7 +54,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       dicType: '',
       content: '',
       conList: [
@@ -64,10 +63,10 @@ export default {
       ]
     }
   },
-  created () {
-    this.trigger = this.value
-  },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     ok (e) {
       e.stopPropagation()
       const contentList = this.conList.filter(res => res.content)
@@ -95,7 +94,7 @@ export default {
         if (res.status === 0) {
           this.$message.success('保存成功')
           this.$emit('init')
-          this.trigger = false
+          this.$emit('close')
         }
       })
     },
@@ -108,17 +107,14 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
       this.value && this.editData && (() => {
         this.dicType = this.editData.type_id
         this.content = this.editData.content
       })()
-    },
-    trigger () {
-      if (!this.trigger) {
+
+      !this.value && (() => {
         Object.assign(this.$data, this.$options.data())
-      }
-      this.$emit('input', this.trigger)
+      })()
     }
   }
 }

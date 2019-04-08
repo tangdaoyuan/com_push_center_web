@@ -1,5 +1,5 @@
 <template>
-  <Modal class="td-main-home" v-model="trigger">
+  <Modal class="td-main-home" v-model="value">
     <div class="modal-header" slot="header">
       <span>任务详情</span>
       <Icon type="md-close" @click="back($event)" />
@@ -217,7 +217,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       dic_name: '',
       detail: {
         task_fields: {
@@ -266,6 +265,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     searchDetail () {
       this.tcService.getTaskDetail({
         id: this.detailId
@@ -277,16 +279,12 @@ export default {
     },
     back (e) {
       e.stopPropagation()
-      this.trigger = false
+      this.close()
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      this.$emit('input', this.trigger)
-      if (this.trigger) {
+      if (this.value) {
         this.searchDetail()
       }
     }

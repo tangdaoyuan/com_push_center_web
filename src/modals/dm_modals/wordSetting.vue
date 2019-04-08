@@ -1,8 +1,8 @@
 <template>
-  <Modal class="ws-modal-main" v-model="trigger">
+  <Modal class="ws-modal-main" v-model="value">
     <div class="ws-header" slot="header">
       <span>字段设置</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="ws-body">
       <span>备注预览与同步限制255字</span>
@@ -41,7 +41,7 @@
     </div>
     <div slot="footer" class="ws-footer">
       <Button @click="save">保存</Button>
-      <Button @click="trigger = false">取消</Button>
+      <Button @click="close">取消</Button>
     </div>
   </Modal>
 </template>
@@ -52,36 +52,27 @@ export default {
     datas: Array,
     dataSchema: Object
   },
-  created () {
-    this.trigger = this.value
-  },
   data () {
     return {
-      trigger: false,
       single: '',
       multipleSelection: []
     }
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (this.trigger) {
-        setTimeout(() => {
-          this.dataSchema.fields.forEach((item, index) => {
-            if (this.utils.checkListInner(this.datas, item.name)) {
-              this.$refs.schema_table.toggleRowSelection(this.dataSchema.fields[index], true)
-            }
-          })
+      (this.value && setTimeout(() => {
+        this.dataSchema.fields.forEach((item, index) => {
+          if (this.utils.checkListInner(this.datas, item.name)) {
+            this.$refs.schema_table.toggleRowSelection(this.dataSchema.fields[index], true)
+          }
         })
-      } else {
-        Object.assign(this.$data, this.$options.data())
-      }
-      this.$emit('input', this.trigger)
+      })) || Object.assign(this.$data, this.$options.data())
     }
   },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     save () {
       const putData = {
         sync_fields: []
@@ -92,7 +83,7 @@ export default {
         })
         this.$message.success('配置成功')
         this.$emit('finish', putData)
-        this.trigger = false
+        this.close()
       } else {
         this.$message.error('请选择同步字段')
       }

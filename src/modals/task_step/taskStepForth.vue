@@ -10,8 +10,15 @@
       :push-user-list="pushUserList"
       :index="chooseIndex"
       :filter-list="filterList"
-      @ok="ok"/>
-    <task-fav-user :edit-id="editId" :filter-list="filterList" :fav-list="favList" @saveFav="saveFav" v-model="taskFavUserModal"/>
+      @ok="ok"
+      @close="closeTaskUser"/>
+    <task-fav-user
+      :edit-id="editId"
+      :filter-list="filterList"
+      :fav-list="favList"
+      @saveFav="saveFav"
+      @close="closeTaskFavUser"
+      v-model="taskFavUserModal"/>
     <div class="step-push-body">
       <div class="step-push-header">
         <span class="title-text">配置推送条件</span>
@@ -230,6 +237,12 @@ export default {
           this.editId = ''
         }
       })
+    },
+    closeTaskFavUser () {
+      this.taskFavUserModal = false
+    },
+    closeTaskUser () {
+      this.taskUserModal = false
     },
     saveFav (data) {
       this.favList = data
