@@ -1,5 +1,5 @@
 import userService from '../../service/user_service'
-import router from '../router'
+import router from '../../router'
 
 const state = {
   isLogin: false,
