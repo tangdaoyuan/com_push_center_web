@@ -66,15 +66,15 @@
         </pc-card>
       </div>
     </div>
-    <detail-api v-model="modals.daModal" :detailID="detailID"></detail-api>
-    <detail-info v-model="modals.diModal" :detailID="detailID"></detail-info>
-    <detail-oracle v-model="modals.doModal" :detailID="detailID"></detail-oracle>
-    <abnormal-reason type="data" v-model="modals.abnormalVisible"></abnormal-reason>
+    <detail-api v-model="modals.daModal" :detailID="detailID" @close="closeDaApi"></detail-api>
+    <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo"></detail-info>
+    <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle"></detail-oracle>
+    <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
     <adm-syncbdp v-model="modals.admBdpModal" @refresh="init" :bdp-id="datasourceID.bdpID"/>
-    <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID"/>
-    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID" />
-    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID"/>
-    <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" />
+    <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID" @close="closeAdmMysql"/>
+    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle"/>
+    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg"/>
+    <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" @close="closeAdmApi"/>
   </div>
 </template>
 <script>
@@ -153,6 +153,30 @@ export default {
       this.tableData = []
       this.searchData()
       this.searchCount()
+    },
+    closedoOracle () {
+      this.modals.doModal = false
+    },
+    closeDaInfo () {
+      this.modals.diModal = false
+    },
+    closeDaApi () {
+      this.modals.daModal = false
+    },
+    closeAdmOracle () {
+      this.modals.admOracleModal = false
+    },
+    closeAdmMysql () {
+      this.modals.admMysqlModal = false
+    },
+    closeAdmMsg () {
+      this.modals.admMsgModal = false
+    },
+    closeAdmApi () {
+      this.modals.admApiModal = false
+    },
+    closeAbnReason () {
+      this.modals.abnormalVisible = false
     },
     searchData () {
       this.dmService.getWorktableData({
