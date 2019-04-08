@@ -74,10 +74,20 @@
         </pc-card>
       </div>
     </div>
-    <task-manage @refresh="refresh" v-model="modals.taskManageModal" />
-    <shortcut-task @goTaskSet="addPush" v-model="modals.shortcutTaskModal" :type-list="filterTypeList" />
-    <abnormal-reason type="task" v-model="modals.abnormalVisible"></abnormal-reason>
-    <task-detail :detail-id="detailId" v-model="modals.tdModal" />
+    <task-manage
+      @refresh="refresh"
+      @close="closeTaskManage"
+      v-model="modals.taskManageModal" />
+    <shortcut-task
+      @goTaskSet="addPush"
+      @close="closeShortcutTask"
+      v-model="modals.shortcutTaskModal"
+      :type-list="filterTypeList" />
+    <abnormal-reason type="task" v-model="modals.abnormalVisible" @close="closeAbnReason" ></abnormal-reason>
+    <task-detail
+      :detail-id="detailId"
+      @close="closeTdModal"
+      v-model="modals.tdModal" />
   </div>
 </template>
 <script>
@@ -138,6 +148,18 @@ export default {
       this.initTaskTypeList()
       this.searchData()
       this.searchStatusCount()
+    },
+    closeShortcutTask () {
+      this.modals.shortcutTaskModal = false
+    },
+    closeAbnReason () {
+      this.modals.abnormalVisible = false
+    },
+    closeTdModal () {
+      this.modals.tdModal = false
+    },
+    closeTaskManage () {
+      this.modals.taskManageModal = false
     },
     deleteTask (e, item) {
       this.$confirm(`是否删除   ${item.data.name}`, '提示', {

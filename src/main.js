@@ -20,7 +20,6 @@ import './libs/js/highlight'
 import './libs/js/bootstrap-suggest'
 
 import store from './stores'
-import axios from './config/http'
 import CONSTANT from './beans/bean'
 import Utils from './utils'
 import router from './router'
@@ -73,6 +72,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  axios,
   render: h => h(App)
 }).$mount('#app')

@@ -1,9 +1,9 @@
 <template>
   <Modal class="tf-modal"
-    v-model="trigger">
+    v-model="value">
     <div class="tf-header" slot="header">
       <span>配置匹配规则</span>
-      <Icon type="md-close" @click="trigger = false" />
+      <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
       <div class="item-select-box">
@@ -55,7 +55,7 @@
     </div>
     <div class="modal-footer" slot="footer">
       <el-button type="text" @click="ok">确定</el-button>
-      <el-button type="text" @click="trigger = false">取消</el-button>
+      <el-button type="text" @click="close">取消</el-button>
     </div>
   </Modal>
 </template>
@@ -70,7 +70,6 @@ export default {
   },
   data () {
     return {
-      trigger: false,
       filter: {
         field_id: '',
         op: '',
@@ -80,10 +79,10 @@ export default {
       }
     }
   },
-  created () {
-    this.trigger = this.value
-  },
   methods: {
+    close () {
+      this.$emit('close')
+    },
     changeField () {
       this.filter = {
         ...this.filter,
@@ -101,7 +100,7 @@ export default {
               field_id,
               op
             } = this.filter
-            this.trigger = false
+            this.$emit('close')
             this.$emit('ok', {
               field_id,
               op,
@@ -129,7 +128,7 @@ export default {
                 value,
                 chooseIndex: this.chooseIndex
               })
-              this.trigger = false
+              this.$emit('close')
             }
           } else {
             if (!this.filter.value) {
@@ -140,7 +139,7 @@ export default {
                 op,
                 value
               } = this.filter
-              this.trigger = false
+              this.$emit('close')
               this.$emit('ok', {
                 field_id,
                 op,
@@ -159,10 +158,7 @@ export default {
   },
   watch: {
     value () {
-      this.trigger = this.value
-    },
-    trigger () {
-      if (!this.trigger) {
+      if (!this.value) {
         if (this.chooseIndex > -1) {} else {
           Object.assign(this.$data, this.$options.data())
         }

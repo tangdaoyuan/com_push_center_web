@@ -1,4 +1,5 @@
 import userService from '../../service/user_service'
+import router from '../../router'
 
 const state = {
   isLogin: false,
@@ -86,7 +87,13 @@ const mutations = {
     state.loginUrl = url
   },
   backLogin (state) {
-    window.location.href = state.loginUrl
+    if (process.env.NODE_ENV === 'development') {
+      router.replace({
+        path: '/login?status=1'
+      })
+    } else {
+      window.location.href = state.loginUrl
+    }
   },
   setRoleId (state, data) {
     state.chooseRoleId = data

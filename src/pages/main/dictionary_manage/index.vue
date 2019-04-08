@@ -1,7 +1,16 @@
 <template>
   <div class="dic-main">
-    <add-dic-type :edit-data="editTypeData" @init="searchData" v-model="adtModal" />
-    <add-dic-con :edit-data="editConData" @init="searchConData" :type-list="typeList" v-model="adcModal" />
+    <add-dic-type
+      :edit-data="editTypeData"
+      @init="searchData"
+      @close="closeDicType"
+      v-model="adtModal" />
+    <add-dic-con
+      :edit-data="editConData"
+      @init="searchConData"
+      @close="closeDicCon"
+      :type-list="typeList"
+      v-model="adcModal" />
     <div class="dic-left">
       <div class="left-title">系统管理</div>
       <ul>
@@ -133,6 +142,12 @@ export default {
   methods: {
     init () {
       this.searchData()
+    },
+    closeDicCon () {
+      this.adcModal = false
+    },
+    closeDicType () {
+      this.adtModal = false
     },
     searchData () {
       this.dicService.getDicData(this.params).then(res => {

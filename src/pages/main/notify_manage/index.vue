@@ -61,8 +61,17 @@
         </pc-card>
       </div>
     </div>
-    <add-notify-manage v-model="modals.addModal" :manage-id="manageId" @refresh="init" @clear="clear" :push-pass-data="pushPassData"></add-notify-manage>
-    <notify-detail :detailID="detailID" v-model="modals.ndModal" />
+    <add-notify-manage
+      v-model="modals.addModal"
+      :manage-id="manageId"
+      @refresh="init"
+      @clear="clear"
+      @close="closeAddManage"
+      :push-pass-data="pushPassData"></add-notify-manage>
+    <notify-detail
+      :detailID="detailID"
+      @close="closeNdDetail"
+      v-model="modals.ndModal" />
   </div>
 </template>
 <script>
@@ -143,6 +152,12 @@ export default {
       this.manageData = []
       this.search()
       this.searchCount()
+    },
+    closeAddManage () {
+      this.modals.addModal = false
+    },
+    closeNdDetail () {
+      this.modals.ndModal = false
     },
     changeSearch (data) {
       this.searchData = {
