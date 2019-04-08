@@ -262,7 +262,7 @@ export default {
             this.tdPutData[item].period_type = 1
           }
           if (this.tdPutData[item].period_list && this.tdPutData[item].period_list.length > 0) {
-            if (!this.tdPutData[item].period_list[0].time && !this.tdPutData[item].period_list[0].period_time) {
+            if (!this.tdPutData[item].period_list[0] || (!this.tdPutData[item].period_list[0].time && !this.tdPutData[item].period_list[0].period_time)) {
               this.tdPutData[item].period_list = [
                 {
                   period_time: 'current_time',
