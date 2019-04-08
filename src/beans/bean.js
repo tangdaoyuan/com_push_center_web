@@ -1,5 +1,5 @@
-export default class CONSTANT {
-  static dmTypeList = [
+class CONSTANT {
+  dmTypeList = [
     {
       label: 'BDP同步客户端',
       value: 1
@@ -26,11 +26,11 @@ export default class CONSTANT {
     }
   ]
 
-  static DIC_TYPE_PARAMS = {
+  DIC_TYPE_PARAMS = {
     type_id: 'dic_t_task_type'
   }
 
-  static taskOpVal = [
+  taskOpVal = [
     {
       name: '等于',
       value: 'eq'
@@ -41,7 +41,7 @@ export default class CONSTANT {
     }
   ]
 
-  static pushTypeList = [
+  pushTypeList = [
     {
       name: '实时',
       type: 1
@@ -72,7 +72,7 @@ export default class CONSTANT {
     }
   ]
 
-  static weekDayList = [
+  weekDayList = [
     {
       name: '星期一',
       value: 'monday'
@@ -104,7 +104,7 @@ export default class CONSTANT {
   ]
 
   // 数据源排序方式
-  static dmOrderBy = [
+  dmOrderBy = [
     {
       label: '按同步次数升序',
       value: 'count_asc'
@@ -131,7 +131,7 @@ export default class CONSTANT {
     }
   ]
   // 任务管理排序方式
-  static tcOrderBy = [
+  tcOrderBy = [
     {
       label: '按今日推送次数升序',
       value: 'today_asc'
@@ -158,7 +158,7 @@ export default class CONSTANT {
     }
   ]
   // 任务监控排序方式
-  static nwOrderBy = [
+  nwOrderBy = [
     {
       label: '按最近推送时间升序',
       value: 'push_asc'
@@ -201,7 +201,7 @@ export default class CONSTANT {
     }
   ]
   // 通道管理排序方式
-  static nmOrderBy = [
+  nmOrderBy = [
     {
       label: '按最近同步时间升序',
       value: 'time_asc'
@@ -220,7 +220,7 @@ export default class CONSTANT {
     }
   ]
   // 数据源统计数据
-  static dmStatistics = {
+  dmStatistics = {
     'total': '全部',
     'open': '正常',
     'failed': '异常',
@@ -228,7 +228,7 @@ export default class CONSTANT {
   }
 
   // 推送任务统计
-  static tcStatistics = {
+  tcStatistics = {
     'total': '全部',
     'normal': '正常',
     'error': '异常',
@@ -237,7 +237,7 @@ export default class CONSTANT {
   }
 
   // 任务监控统计数据
-  static nwStatistics = {
+  nwStatistics = {
     'total': '全部',
     'closed': '停用',
     'error': '异常',
@@ -245,14 +245,14 @@ export default class CONSTANT {
     'normal': '正常'
   }
 
-  static nmStatistics = {
+  nmStatistics = {
     'total': '全部',
     'normal': '正常',
     'error': '异常',
     'closed': '停用'
   }
 
-  static connectList = [
+  connectList = [
     {
       label: 'BASIC',
       value: 0
@@ -263,7 +263,7 @@ export default class CONSTANT {
     }
   ]
 
-  static timeList = [
+  timeList = [
     {
       label: '秒',
       value: 0
@@ -290,7 +290,7 @@ export default class CONSTANT {
     }
   ]
 
-  static incrementList = [
+  incrementList = [
     {
       label: '序列',
       value: 0
@@ -301,7 +301,7 @@ export default class CONSTANT {
     }
   ]
 
-  static dmFiledTypeList = [
+  dmFiledTypeList = [
     {
       label: '数值',
       value: 0
@@ -316,7 +316,7 @@ export default class CONSTANT {
     }
   ]
 
-  static nmTypeList = [
+  nmTypeList = [
     {
       label: '手机短信',
       value: '1'
@@ -347,7 +347,7 @@ export default class CONSTANT {
     }
   ]
 
-  static nmRadioList = [
+  nmRadioList = [
     {
       name: '手机短信',
       value: 1
@@ -378,7 +378,7 @@ export default class CONSTANT {
     }
   ]
 
-  static taskTypeList = [
+  taskTypeList = [
     {
       label: '涉恐预警',
       value: 1
@@ -397,7 +397,7 @@ export default class CONSTANT {
     }
   ]
 
-  static statusList = [
+  statusList = [
     {
       label: '正常',
       id: '1',
@@ -420,7 +420,7 @@ export default class CONSTANT {
     }
   ]
 
-  static tsTypeList = [
+  tsTypeList = [
     {
       name: '等于',
       value: 'eq'
@@ -447,7 +447,7 @@ export default class CONSTANT {
     }
   ]
 
-  static tsTypeListAll = [
+  tsTypeListAll = [
     [
       {
         name: '等于',
@@ -524,7 +524,7 @@ export default class CONSTANT {
     ]
   ]
 
-  static tsFilterTypeList = [
+  tsFilterTypeList = [
     {
       name: '全部条件',
       value: 1
@@ -535,7 +535,7 @@ export default class CONSTANT {
     }
   ]
 
-  static tsTdMap = {
+  tsTdMap = {
     'api': '开放API',
     'app': 'APP应用',
     'bs': '业务系统',
@@ -545,7 +545,7 @@ export default class CONSTANT {
     'web': '推送中心'
   }
 
-  static filterTypeList = [
+  filterTypeList = [
     {
       value: '=',
       name: '等于'
@@ -580,7 +580,7 @@ export default class CONSTANT {
     }
   ]
 
-  static filterType = [
+  filterType = [
     {
       label: '全部条件',
       value: 'and'
@@ -591,7 +591,7 @@ export default class CONSTANT {
     }
   ]
 
-  static compareType = [
+  compareType = [
     {
       value: '>',
       label: '>'
@@ -602,7 +602,7 @@ export default class CONSTANT {
     }
   ]
 
-  static dateType = [
+  dateType = [
     {
       value: 'before',
       label: '前'
@@ -613,7 +613,7 @@ export default class CONSTANT {
     }
   ]
 
-  static increaseType = [
+  increaseType = [
     {
       value: 'maximum',
       label: '上次同步最大值'
@@ -625,7 +625,7 @@ export default class CONSTANT {
     }
   ]
 
-  static dataDic = {
+  dataDic = {
     'api': '开放API',
     'bdp': '同步客户端',
     'excel': 'excel导入',
@@ -634,14 +634,14 @@ export default class CONSTANT {
     'queue': '消息队列'
   }
 
-  static taskDic = {
+  taskDic = {
     'terrorist': '涉恐预警',
     'stable': '涉稳预警',
     'porn': '涉黄预警',
     'drug': '涉毒预警'
   }
 
-  static channelDic = {
+  channelDic = {
     'sms': '短信通道',
     'web': 'web消息中心',
     'wechat': '警务微信',
@@ -651,7 +651,7 @@ export default class CONSTANT {
     'api': '开放API'
   }
 
-  static dictionary = [
+  dictionary = [
     {
       value: 'zidian1',
       label: '字典1'
@@ -666,3 +666,5 @@ export default class CONSTANT {
     }
   ]
 }
+
+export default new CONSTANT()
