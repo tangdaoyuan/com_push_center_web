@@ -1,7 +1,14 @@
 <template>
   <Modal class="manage-modal task-manage short-manage" v-model="trigger" fullscreen>
     <choose-table-task v-model="ctModal" @chooseTable="chooseTableFn" :table-data="ctData"></choose-table-task>
-    <task-filter v-model="taskFilterModal" :choose-index="chooseIndex" :filter-data="chooseFilter" :table-data="schemaData" :table-map="tableMap" @ok="addFilter" />
+    <task-filter
+      v-model="taskFilterModal"
+      :choose-index="chooseIndex"
+      :filter-data="chooseFilter"
+      :table-data="schemaData"
+      :table-map="tableMap"
+      @ok="addFilter"
+      @close="closeTaskFilter" />
     <task-fav-user short-type="short" v-model="taskFavUserModal" @saveFav="saveFav"/>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="back($event)"/>
@@ -365,6 +372,9 @@ export default {
       this.trigger = false
       this.$emit('input')
       this.$emit('goTaskSet')
+    },
+    closeTaskFilter () {
+      this.taskFilterModal = false
     },
     changeField (id) {
       this.ctData.forEach(item => {

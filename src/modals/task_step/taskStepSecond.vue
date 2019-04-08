@@ -1,6 +1,13 @@
 <template>
   <div class="step-body" v-show="step === 1">
-    <task-filter v-model="taskFilterModal" :choose-index="chooseIndex" :filter-data="chooseFilter" :table-data="tableData" :table-map="tableMap" @ok="addFilter" />
+    <task-filter
+      v-model="taskFilterModal"
+      :choose-index="chooseIndex"
+      :filter-data="chooseFilter"
+      :table-data="tableData"
+      :table-map="tableMap"
+      @ok="addFilter"
+      @close="closeTaskFilter" />
     <div class="step-filter-body">
       <div class="ts-left">
         <div class="ts-step-header">
@@ -172,6 +179,9 @@ export default {
           }
         })
       }
+    },
+    closeTaskFilter () {
+      this.taskFilterModal = false
     },
     choose (node) {
       if (this.utils.getType(node.id) === 'field') {
