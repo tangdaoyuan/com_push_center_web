@@ -297,7 +297,7 @@ export default {
         })
       }
 
-      ((this.$store.state.task.taskData) ? (this.tcService.editstep4) : (this.tcService.saveTask5Setting))(pushOverData).then(res => {
+      ((this.$store.state.task.taskData) ? (this.tcService.editstep4(pushOverData)) : (this.tcService.saveTask5Setting(pushOverData))).then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
           this.trigger = false

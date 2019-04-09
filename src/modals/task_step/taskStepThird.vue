@@ -487,8 +487,8 @@ export default {
           })
         }
       })
-      const service = (this.$store.state.task.taskData) ? (this.tcService.editStep2Filter) : (this.tcService.saveTask2Seting)
-      service(pushData).then(res => {
+      const service = (this.$store.state.task.taskData) ? (this.tcService.editStep2Filter(pushData)) : (this.tcService.saveTask2Seting(pushData))
+      service.then(res => {
         if (res.status === 0) {
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 2)

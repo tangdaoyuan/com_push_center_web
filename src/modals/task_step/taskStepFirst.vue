@@ -68,10 +68,13 @@ export default {
         return
       }
 
-      ((this.$store.state.task.taskData) ? (this.tcService.saveTaskEdit) : (this.tcService.addTask))({
+      const putData = {
         ...this.taskData,
         id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
-      }).then(res => {
+      }
+
+      const service = this.$store.state.task.taskData ? this.tcService.saveTaskEdit(putData) : this.tcService.addTask(putData)
+      service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
           if (!this.$store.state.task.taskData) {
