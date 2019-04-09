@@ -312,12 +312,15 @@ export default {
         })
       }
 
-      ((this.$store.state.task.taskData) ? (this.tcService.editStep2) : (this.tcService.saveTask1Seting))({
+      const putData = {
         id: this.$store.state.task.taskId,
         table_id: this.tbId,
         filter_list: this.filterList,
         filter_logic: this.chooseFilterType
-      }).then(res => {
+      }
+
+      const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
+      service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
           if (!this.$store.state.task.taskData) {
