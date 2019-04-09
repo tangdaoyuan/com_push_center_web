@@ -20,11 +20,11 @@
               <label>企业域</label>
             </FormItem> -->
             <FormItem prop="user">
-              <Input ref="login-input" class="item-input my-input" type="text" v-model="loginForm.user" @keyup.enter.native="sigin('loginForm')" required></Input>
+              <Input ref="login-input" class="item-input my-input" type="text" v-model="loginForm.user" @keyup.enter.native="sigin('loginForm')" required/>
               <label>用户名</label>
             </FormItem>
             <FormItem prop="password">
-              <Input ref="login-input" class="item-input" type="password" v-model="loginForm.password" @keyup.enter.native="sigin('loginForm')" required></Input>
+              <Input ref="login-input" class="item-input" type="password" v-model="loginForm.password" @keyup.enter.native="sigin('loginForm')" required/>
               <label>密码</label>
             </FormItem>
             <FormItem>
