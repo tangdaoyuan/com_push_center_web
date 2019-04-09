@@ -1,5 +1,3 @@
-git checkout wlmq_master
-git pull origin wlmq_master
-yarn
-yarn run lint
-yarn run build
+git checkout wlmq_master &&git pull origin wlmq_master
+cnpm install
+cnpm run lint && cnpm run build

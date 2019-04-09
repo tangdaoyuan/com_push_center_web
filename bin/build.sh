@@ -1,5 +1,3 @@
-git checkout master
-git pull origin master
-yarn
-yarn run lint
-yarn run build
+git checkout master &&git pull origin master
+cnpm install
+cnpm run lint && cnpm run build
