@@ -385,12 +385,16 @@ export default {
           })
         })
       }
-      ((this.$store.state.task.taskData) ? (this.tcService.editstep3) : (this.tcService.saveTask3Seting))({
+
+      const putData = {
         task_id: this.$store.state.task.taskId,
         rule_logic: this.chooseFilterType,
         id: (this.$store.state.task.taskData) ? (this.$store.state.task.taskData.task_users.id) : (undefined),
         push_rule_list
-      }).then(res => {
+      }
+
+      const service = this.$store.state.task.taskData ? this.tcService.editstep3(putData) : this.tcService.saveTask3Seting(putData)
+      service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
           if (this.$store.state.task.taskData) {
