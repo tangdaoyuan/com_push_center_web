@@ -7,7 +7,6 @@
 export default {
   name: 'App',
   created () {
-    console.log(this.$store)
     this.loginService.getBackUrl({
       type: 'push-center'
     }).then(res => {
