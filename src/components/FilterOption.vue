@@ -1,4 +1,4 @@
-<template lang='html'>
+<template>
   <div class="filter-option">
     <div class="item"
       v-for="(item, index) in filterItems"
@@ -47,7 +47,4 @@ export default {
     }
   }
 }
-
 </script>
-<style lang='scss'>
-</style>
