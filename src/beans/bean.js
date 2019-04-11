@@ -25,7 +25,12 @@ class CONSTANT {
       value: 6
     }
   ]
-
+  SYS_TYPE = 1
+  TM_TYPE_MAP = [
+    '',
+    '推送中心',
+    '消息中心'
+  ]
   DIC_TYPE_PARAMS = {
     type_id: 'dic_t_task_type'
   }
