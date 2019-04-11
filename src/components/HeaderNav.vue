@@ -2,7 +2,7 @@
 <template>
   <div class="header-main">
     <div class="logo-main">
-      <div class="logo-i"></div>
+      <div ref="logo" class="logo-i"></div>
       <div class="logo-text">
         <span>智能推送中心</span>
         <span>Intelligent Push Center</span>
@@ -61,6 +61,7 @@
           <el-dropdown-item  @click.native="chooseMenu($event, 'root')">用户管理</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'role')">角色管理</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'rt')">权限字典</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'tm/lm')">页面设置</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="setting">
@@ -82,6 +83,20 @@ export default {
       menuList: [],
       shouldShowDicMenu: false
     }
+  },
+  mounted () {
+    console.log(this.$refs.logo)
+    const params = {
+      sys_type: this.CONSTANT.SYS_TYPE
+    }
+    this.tmService.currentLogoTitle(params).then(res => {
+      if (res.status === 0) {
+        if (res.data.logo) {
+          this.$(this.$refs.logo).css('backgroundImage', `url(${res.data.logo})`)
+          window.document.title = res.data.title
+        }
+      }
+    })
   },
   created () {
     if (this.$cookies.get('pc_token')) {

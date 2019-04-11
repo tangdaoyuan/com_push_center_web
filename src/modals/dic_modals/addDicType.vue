@@ -1,5 +1,9 @@
 <template>
-  <Modal class="adt-modal-main" v-model="value">
+  <Modal
+    class="adt-modal-main"
+    v-model="value"
+    :mask-closable="false"
+    :closable="false">
     <div class="modal-header" slot="header">
       <span>新增字典类型</span>
       <Icon type="md-close" @click="close" />
