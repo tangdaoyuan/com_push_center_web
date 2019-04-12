@@ -13,9 +13,9 @@ import dictionary from '@/pages/main/dictionary_manage'
 import root from '@/pages/main/root_manage'
 import role from '@/pages/main/role_manage'
 import rt from '@/pages/main/root_dic'
-import tm from '@/pages/main/title_manage'
-import lm from '@/pages/main/title_manage/logo_manage'
-import titlem from '@/pages/main/title_manage/title_manage'
+const tm = () => import('@/pages/main/title_manage')
+const lm = () => import('@/pages/main/title_manage/logo_manage')
+const titlem = () => import('@/pages/main/title_manage/title_manage')
 
 Vue.use(Router)
 

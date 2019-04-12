@@ -148,13 +148,13 @@ export default {
       if (this.manageId) {
         putData.id = this.manageId
         sMsg = '编辑成功'
-        saveService = this.nmService.editData
+        saveService = this.nmService.editData(putData)
       } else {
         sMsg = '创建成功'
-        saveService = this.nmService.createData
+        saveService = this.nmService.createData(putData)
       }
 
-      saveService(putData).then(res => {
+      saveService.then(res => {
         if (res.status === 0) {
           this.$message.success(sMsg)
           this.$emit('refresh')

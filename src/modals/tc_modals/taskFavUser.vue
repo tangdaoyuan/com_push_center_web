@@ -55,11 +55,12 @@ export default {
         this.close()
         this.$emit('saveFav', this.traList)
       } else {
-        const service = (this.$store.state.task.taskData) ? (this.tcService.edit4FavUser) : (this.tcService.saveTask4Setting)
-        service({
+        const params = {
           ...viewData,
           id: (this.$store.state.task.taskData) ? (this.editId) : (undefined)
-        }).then(res => {
+        }
+        const service = (this.$store.state.task.taskData) ? (this.tcService.edit4FavUser(params)) : (this.tcService.saveTask4Setting(params))
+        service.then(res => {
           if (res.status === 0) {
             this.$emit('saveFav', this.traList)
             this.$message.success('保存成功')
