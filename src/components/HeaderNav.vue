@@ -85,7 +85,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$refs.logo)
     const params = {
       sys_type: this.CONSTANT.SYS_TYPE
     }
