@@ -213,9 +213,6 @@ export default {
     editItem (e, id) {
       e.stopPropagation()
       this.manageId = id
-      if (this.manageId !== '') {
-        this.search()
-      }
       this.modals.addModal = true
     },
     changeStatus (e, item) {

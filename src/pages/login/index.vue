@@ -110,7 +110,7 @@ export default {
             } else {
               if (res) {
                 this.$store.commit('loginIn', this.$cookies.get('pc_data'))
-                // this.$router.push('/home')
+                this.$router.push('/home')
                 this.$message({
                   message: '登录成功',
                   type: 'success',

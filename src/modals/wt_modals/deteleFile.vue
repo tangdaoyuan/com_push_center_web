@@ -44,14 +44,14 @@ export default {
       if (this.wtId) {
         switch (this.utils.getType(this.wtId)) {
           case 'field':
-            serv = this.wtService.saveReName
+            serv = this.wtService.saveReName(putData)
             break
           case 'folder':
-            serv = this.wtService.saveFolderItem
+            serv = this.wtService.saveFolderItem(putData)
         }
       }
 
-      serv(putData).then(res => {
+      serv.then(res => {
         if (res.status === 0) {
           this.$message({
             message: '删除成功',

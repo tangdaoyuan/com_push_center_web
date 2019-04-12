@@ -524,15 +524,17 @@ export default {
       let itemService
       switch (this.utils.getType(data.id)) {
         case 'folder':
-          itemService = this.wtService.getFolderItem
+          itemService = this.wtService.getFolderItem({
+            id: data.id
+          })
           break
         case 'field':
-          itemService = this.wtService.getTableItem
+          itemService = this.wtService.getTableItem({
+            id: data.id
+          })
           break
       }
-      itemService({
-        id: data.id
-      }).then(res => {
+      itemService.then(res => {
         if (res.status === 0) {
           this.rnwtData = res.data
           this.modals.mfModal = true

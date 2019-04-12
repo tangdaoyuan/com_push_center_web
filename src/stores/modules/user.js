@@ -7,6 +7,7 @@ const state = {
   loginUrl: '',
   groupList: null,
   roleEditData: null,
+  userEditData: null,
   chooseRoleId: null,
   userRoleCache: null,
   userCache: null
@@ -104,6 +105,9 @@ const mutations = {
   setRoleEditData (state, data) {
     state.roleEditData = data
   },
+  setUserEditData (state, data) {
+    state.userEditData = data
+  },
   setUserRoleCache (state, data) {
     state.userRoleCache = data
   },
@@ -115,6 +119,9 @@ const mutations = {
   },
   resetUserRoleCache (state) {
     [state.userRoleCache] = []
+  },
+  resetUserEditData (state) {
+    [state.userEditData] = []
   },
   resetRoleId (state) {
     [state.chooseRoleId] = []
