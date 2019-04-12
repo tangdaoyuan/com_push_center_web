@@ -375,13 +375,15 @@ export default {
             putData.push(tmp)
           })
 
-          let finishService = this.wtService.saveExcelTmpData
+          let finishService
 
           if (this.addId) {
-            finishService = this.wtService.saveExcelData
+            finishService = this.wtService.saveExcelData(putData)
+          } else {
+            finishService = this.wtService.saveExcelTmpData(putData)
           }
 
-          finishService(putData).then(res => {
+          finishService.then(res => {
             if (res.status === 0) {
               if (this.addId) {
                 this.$message.success('保存成功')
