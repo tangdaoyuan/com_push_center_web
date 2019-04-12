@@ -19,17 +19,6 @@
       </div>
       <div class="item-main">
         <label class="item-title">
-          组织
-        </label>
-        <div class="item-con">
-          <div class="group-item">
-            <el-tag v-for="(item, index) in sourceList" :key="index" @close="deleteItem($event, index)" size="mini" closable>{{item.name}}</el-tag>
-          </div>
-          <Icon type="ios-people" @click="chooseGroup" />
-        </div>
-      </div>
-      <div class="item-main">
-        <label class="item-title">
           任务类型
         </label>
         <div class="item-con">
@@ -53,13 +42,6 @@
       <el-button type="text" class="sure-btn" @click="ok">确定</el-button>
       <el-button type="text" class="cancel-btn"  @click="close">取消</el-button>
     </div>
-    <group-allot
-      v-model="modals.groupAllot"
-      @close="closeGroupAllot"
-      pr-key="code"
-      show-text="name"
-      @ok="changeTarget"
-      :change-list="sourceList"></group-allot>
   </Modal>
 </template>
 <script>
@@ -89,10 +71,6 @@ export default {
         this.$message.error('角色名称不能为空')
         return
       }
-      if (this.sourceList.length === 0) {
-        this.$message.error('组织机构不能为空')
-        return
-      }
       if (this.roleData.type !== 'all') {
         if (this.roleData.typeList.length === 0) {
           this.$message.error('任务类型不能为空')
@@ -105,8 +83,7 @@ export default {
         name: this.roleData.name,
         type: 1,
         task_type_list: (this.roleData.type === 'all') ? ([]) : (this.roleData.typeList),
-        task_type_choosed: this.roleData.type,
-        organization_code_list: this.sourceList.map(item => item.code)
+        task_type_choosed: this.roleData.type
       }
 
       this.userService.saveRoleData(putData).then(res => {
@@ -118,19 +95,6 @@ export default {
     },
     close () {
       this.$emit('close')
-    },
-    closeGroupAllot () {
-      this.modals.groupAllot = false
-    },
-    chooseGroup () {
-      this.modals.groupAllot = true
-    },
-    changeTarget (data) {
-      this.sourceList = data
-      this.modals.groupAllot = false
-    },
-    deleteItem (e, index) {
-      this.sourceList.splice(index, 1)
     },
     changeType () {
       if (this.roleData.type === 'all') {
@@ -152,14 +116,6 @@ export default {
             type: (editData.task_type_choosed && editData.task_type_choosed === 'all') ? ('all') : ('tmp'),
             typeList: editData.task_type_list
           }
-
-          this.sourceList = editData.organization_code_list.map((item, index) => {
-            return {
-              code: item,
-              name: editData.organization_name_list[index],
-              type: 1
-            }
-          })
         }
       } else {
         Object.assign(this.$data, this.$options.data())

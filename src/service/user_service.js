@@ -6,6 +6,11 @@ class UserService extends Service {
       this.TEMPLATE_GET('/api/account/user/group_list', data, resolve)
     })
   }
+  setGroup (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_POST('/api/role_permission/user/dept', data, resolve)
+    })
+  }
 
   saveRoleData (data) {
     return new Promise((resolve) => {
@@ -40,6 +45,12 @@ class UserService extends Service {
   getRoleList (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_GET('/api/role_permission/role/list', data, resolve)
+    })
+  }
+
+  getOrgData (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_GET('/api/role_permission/user/dept_list', data, resolve)
     })
   }
 }

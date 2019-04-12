@@ -161,11 +161,26 @@ export default {
   watch: {
     value () {
       if (this.value) {
-        this.triggerList = [...this.changeList]
         this.$store.dispatch('getUserGroupList', {
           level: -1
         }).then(res => {
           this.sourceList = res
+          if (this.$store.state.user.userEditData) {
+            const editData = this.$store.state.user.userEditData
+            this.userService.getOrgData({
+              user_id: editData.id
+            }).then(response => {
+              if (response.status === 0 && response.data) {
+                this.triggerList = [...response.data.organization_code_list.map((item, index) => {
+                  return {
+                    code: item,
+                    name: response.data.organization_name_list[index],
+                    type: 1
+                  }
+                })]
+              }
+            })
+          }
         })
       } else {
         Object.assign(this.$data, this.$options.data())

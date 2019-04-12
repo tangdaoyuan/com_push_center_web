@@ -14,20 +14,21 @@
         <el-table-column
           prop="name"
           label="用户名"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="phone"
-          width="120"
+          width="100"
           label="手机">
         </el-table-column>
         <el-table-column
           prop="username"
-          width="120"
+          width="100"
           label="登录名">
         </el-table-column>
         <el-table-column
-          label="创建时间">
+          label="创建时间"
+          width="180">
           <template slot-scope="scope">
             <div>
               {{utils.momentDate((scope.row.create_time ? Number(scope.row.create_time) : null), 'date_time')}}
@@ -43,12 +44,21 @@
           </template>
         </el-table-column>
         <el-table-column
-          width="100"
+          label="组织">
+          <template slot-scope="scope">
+            <div class="tag-box">
+              <el-tag v-show="scope.row.organization_name_list" v-for="(item, index) in scope.row.organization_name_list" :key="index">{{item}}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          width="120"
           label="操作">
           <template slot-scope="scope">
             <div class="op-box">
               <el-button v-show="!scope.row.role_name_list" @click="setRole($event, scope.row)" type="text">设置角色</el-button>
               <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑</el-button>
+              <el-button @click="editGroup($event, scope.row)" type="text">设置组织</el-button>
             </div>
           </template>
         </el-table-column>
@@ -70,6 +80,13 @@
       @close="closeEditRole"
       @finish="finshEditRole">
     </edit-role>
+    <group-allot
+      v-model="modals.groupAllot"
+      @close="closeGroupAllot"
+      pr-key="code"
+      show-text="name"
+      @ok="changeTarget"
+      :change-list="sourceList"></group-allot>
   </div>
 </template>
 <script>
@@ -86,8 +103,11 @@ export default {
         page_size: 20
       },
       modals: {
-        editRole: false
-      }
+        editRole: false,
+        groupAllot: false
+      },
+      sourceList: [],
+      selectedUserId: ''
     }
   },
   created () {
@@ -113,6 +133,21 @@ export default {
         }
       })
     },
+    changeTarget (data) {
+      this.sourceList = data
+      console.log(this.$store.state.user.userEditData)
+      const params = {
+        user_id: this.$store.state.user.userEditData.id,
+        organization_code_list: data.map(item => item.code)
+      }
+      console.log(params)
+      this.userService.setGroup(params).then(res => {
+        if (res.status === 0) {
+          this.$message.success('设置成功')
+          this.closeGroupAllot()
+        }
+      })
+    },
     changePage (no) {
       this.params.page_no = no
       this.search()
@@ -130,6 +165,11 @@ export default {
         }
       })
     },
+    editGroup (e, item) {
+      e.stopPropagation()
+      this.$store.commit('setUserEditData', item)
+      this.modals.groupAllot = true
+    },
     setRole (e, item) {
       e.stopPropagation()
       this.$store.commit('resetUserRoleCache')
@@ -146,6 +186,10 @@ export default {
           this.modals.editRole = true
         }
       })
+    },
+    closeGroupAllot () {
+      this.$store.commit('resetUserEditData')
+      this.modals.groupAllot = false
     },
     closeEditRole () {
       this.$store.commit('resetUserDataCache')
