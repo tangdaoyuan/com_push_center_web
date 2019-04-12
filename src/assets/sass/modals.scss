@@ -551,6 +551,9 @@
           .drag-main {
             display: block;
             height: 100%;
+            &.drag-mothoer {
+              height: calc(100% - 32px);
+            }
 
             ul {
               display: block;
@@ -577,12 +580,8 @@
 
                 .drag-item {
                   .drag-type {
-                    .link-type {
-                      display: none !important;
-                    }
-
-                    .img-type {
-                      display: none !important;
+                    .item-icon {
+                      display: none;
                     }
 
                     .delet-btn {
@@ -591,6 +590,10 @@
 
                     .el-dropdown {
                       display: flex;
+                    }
+
+                    .field-set {
+                      display: block;
                     }
                   }
                 }
@@ -622,6 +625,23 @@
                   display: flex;
                   align-items: center;
                   justify-content: flex-end;
+
+                  .item-icon {
+                    width: 16px;
+                    height: 16px;
+                    &.number-type {
+                      @include item-icon-num;
+                    }
+                    &.text-type {
+                      @include item-icon-text;
+                    }
+                    &.date-type {
+                      @include item-icon-date;
+                    }
+                    &.dic-type {
+                      @include item-icon-dic;
+                    }
+                  }
 
                   .delet-btn {
                     display: none;
@@ -685,6 +705,11 @@
                     width: 16px;
                     height: 16px;
                     @include date-icon;
+                  }
+                  .ent-type {
+                    width: 16px;
+                    height: 16px;
+                    @include item-icon-ent;
                   }
                 }
               }
@@ -1952,5 +1977,25 @@
   .title-box {
     width: 100%;
     height: 20px;
+  }
+}
+
+.set-field-modal {
+  .modal-body {
+    .modal-item {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      
+      .el-radio {
+        width: 80px;
+      }
+
+      .el-select {
+        width: calc(100% - 100px);
+      }
+    }
   }
 }

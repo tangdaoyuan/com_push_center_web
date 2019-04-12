@@ -12,15 +12,14 @@
           </div>
           <draggable
             element="div"
-            class="drag-main"
+            class="drag-main drag-mothoer"
             v-model="tbList"
             v-bind="dragOptions"
-            :move="onMove"
             @start="moveStart"
             @end="moveEnd">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList"
-                :key="item.id"
+                :key="index"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item">
@@ -62,13 +61,12 @@
             :class="{'empty-ul': tbList1 && !tbList1[0].id}"
             v-bind="putOptions"
             v-model="tbList1"
-            :move="onMove"
             @start="isDragging = true"
             @end="isDragging = false">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList1"
                 :class="{'empty': !item.id}"
-                :key="item.id"
+                :key="index"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -77,18 +75,18 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i class="link-type" :ref="`tb1_link${index}`" v-show="item.display_type === 2"></i>
-                    <i class="img-type" :ref="`tb1_img${index}`" v-show="item.display_type === 3"></i>
-
+                    <i :ref="`tb1_icon${index}`" :class="`item-icon
+                      ${item.display_type === 2 && 'link-type'}
+                      ${item.display_type === 3 && 'img-type'}`"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb1')"></i>
                     <el-dropdown trigger="click">
                       <el-button>
                         <i class="drop-btn"></i>
                       </el-button>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="chooseType($event, item, 1, index, 'tb1')">默认</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 2, index, 'tb1', `link`)">作为链接</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 3, index, 'tb1', `img`)">作为图片</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 1, index, 1)">默认</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 2, index, 1)">作为链接</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 3, index, 1)">作为图片</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -114,13 +112,12 @@
             :class="{'empty-ul': tbList2 && !tbList2[0].id}"
             v-bind="putOptions"
             v-model="tbList2"
-            :move="onMove"
             @start="isDragging = true"
             @end="isDragging = false">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList2"
                 :class="{'empty': !item.id}"
-                :key="item.id"
+                :key="index"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -129,18 +126,20 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i class="link-type" :ref="`tb2_link${index}`" v-show="item.display_type === 2"></i>
-                    <i class="img-type" :ref="`tb2_img${index}`" v-show="item.display_type === 3"></i>
-
+                    <i :ref="`tb2_icon${index}`" :class="`item-icon ${item.display_type === 5 && 'number-type'}
+                        ${item.display_type === 6 && 'text-type'}
+                        ${item.display_type === 7 && 'date-type'}
+                        ${item.display_type === 8 && 'dic-type'}`"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb2')"></i>
                     <el-dropdown trigger="click">
                       <el-button>
                         <i class="drop-btn"></i>
                       </el-button>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="chooseType($event, item, 1, index, 'tb2')">默认</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 2, index, 'tb2', `link`)">作为链接</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 3, index, 'tb2', `img`)">作为图片</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb2Type($event, item, 5, index)">数字</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb2Type($event, item, 6, index)">文本</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb2Type($event, item, 7, index)">日期</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb2Type($event, item, 8, index)">字典</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -166,13 +165,12 @@
             v-bind="putOptions"
             :class="{'empty-ul': tbList3 && !tbList3[0].id}"
             v-model="tbList3"
-            :move="onMove"
             @start="isDragging = true"
             @end="isDragging = false">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList3"
                 :class="{'empty': !item.id}"
-                :key="item.id"
+                :key="index"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -181,8 +179,10 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i class="link-type" :ref="`tb3_link${index}`" v-show="item.display_type === 2"></i>
-                    <i class="img-type" :ref="`tb3_img${index}`" v-show="item.display_type === 3"></i>
+                    <i :ref="`tb3_icon${index}`" :class="`item-icon
+                      ${item.display_type === 2 && 'link-type'}
+                      ${item.display_type === 3 && 'img-type'}
+                      ${item.display_type === 4 && 'ent-type'}`"></i>
 
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb3')"></i>
                     <el-dropdown trigger="click">
@@ -190,9 +190,10 @@
                         <i class="drop-btn"></i>
                       </el-button>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="chooseType($event, item, 1, index, 'tb3')">默认</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 2, index, 'tb3', `link`)">作为链接</el-dropdown-item>
-                        <el-dropdown-item @click.native="chooseType($event, item, 3, index, 'tb3', `img`)">作为图片</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 1, index, 3)">默认</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 2, index, 3)">作为链接</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 3, index, 3)">作为图片</el-dropdown-item>
+                        <el-dropdown-item @click.native="chooseTb1Type($event, item, 4, index, 3)">作为实体</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -213,6 +214,7 @@
       <el-button v-show="!$store.state.task.taskData" @click="prev()">上一步</el-button>
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
     </div>
+    <set-field v-model="modals.setField" :table-list="tbList" @close="closeSetField" @finish="finishField"></set-field>
   </div>
 </template>
 <script>
@@ -242,6 +244,9 @@ export default {
     return {
       editable: true,
       detailHover: false,
+      modals: {
+        setField: false
+      },
       tbList: [],
       tbList1: [
         {
@@ -260,7 +265,10 @@ export default {
           name: '',
           id: ''
         }
-      ]
+      ],
+      tbTemp1: [],
+      tbTemp2: [],
+      tbTemp3: []
     }
   },
   methods: {
@@ -299,28 +307,38 @@ export default {
         tb1 = [...tb1, ...this.tbList.filter(item => n.field_id === item.id)]
       })
       this.$store.state.task.taskData.task_fields.filter_fields.forEach(n => {
-        tb2 = [...tb2, ...this.tbList.filter(item => n.field_id === item.id)]
+        tb2 = [...this.tbList.filter(item => n.field_id === item.id)].map(item => {
+          this.setTb2Type(item)
+          return item
+        })
       })
       this.$store.state.task.taskData.task_fields.detail_fields.forEach(n => {
         tb3 = [...tb3, ...this.tbList.filter(item => n.field_id === item.id)]
       })
-      this.tbList1 = [...tb1, ...(tb1.length === 0) ? ([{
+      this.tbList1 = (tb1.length > 0) ? tb1 : [{
         name: '',
         id: ''
-      }]) : ([])]
-      this.tbList2 = [...tb2, ...(tb2.length === 0) ? ([{
+      }]
+      this.tbList2 = (tb2.length > 0) ? tb2 : [{
         name: '',
         id: ''
-      }]) : ([])]
-      this.tbList3 = [...tb3, ...(tb3.length === 0) ? ([{
+      }]
+      this.tbList3 = (tb3.length > 0) ? tb3 : [{
         name: '',
         id: ''
-      }]) : ([])]
+      }]
+
+      this.tbTemp1 = JSON.parse(JSON.stringify(this.tbList1))
+      this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
+      this.tbTemp3 = JSON.parse(JSON.stringify(this.tbList3))
     },
-    moveStart (evt) {
+    moveStart (evt, data) {
       this.isDragging = true
+      this.tbList.forEach(item => {
+        item.display_type = undefined
+      })
     },
-    moveEnd (evt, data) {
+    moveEnd (evt) {
       this.isDragging = false
       if (this.tbList1.length > 1) {
         this.tbList1.forEach((item, index) => {
@@ -343,9 +361,26 @@ export default {
           }
         })
       }
+
       this.tbList1 = this.lodash.uniqBy(this.tbList1, 'id')
       this.tbList2 = this.lodash.uniqBy(this.tbList2, 'id')
       this.tbList3 = this.lodash.uniqBy(this.tbList3, 'id')
+
+      this.tbList2 = [...this.tbList2.filter(item => {
+        let has = false
+        this.tbTemp2.forEach(n => {
+          if (n.id === item.id) {
+            has = true
+            item.display_type = n.display_type
+          }
+        })
+        if (!has) {
+          this.setTb2Type(item)
+        }
+        return true
+      })]
+
+      this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
     },
     deleteItem (e, index, type) {
       switch (type) {
@@ -413,25 +448,67 @@ export default {
           break
       }
     },
-    chooseType (e, item, type, index, listType, refType) {
-      switch (listType) {
-        case 'tb1':
-          this.tbList1[index].display_type = type
+    chooseTb2Type (e, item, type, index) {
+      this.tbList2[index].display_type = type
+      window.$(this.$refs[`tb2_icon${index}`]).attr('class', `item-icon ${item.display_type === 5 && 'number-type'}
+        ${item.display_type === 6 && 'text-type'}
+        ${item.display_type === 7 && 'date-type'}
+        ${item.display_type === 8 && 'dic-type'}`)
+      this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
+    },
+    chooseTb1Type (e, item, type, index, tb_type) {
+      switch (type) {
+        case 1:
+          this[`tbList${tb_type}`][index].display_type = type
+          this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
-        case 'tb2':
-          this.tbList2[index].display_type = type
+        case 2:
+          this.$store.commit('setFieldConfig', {
+            index: index,
+            type: type,
+            tb_type: tb_type
+          })
+          this.$store.commit('setFiledData', item)
+          this.modals.setField = true
           break
-        case 'tb3':
-          this.tbList3[index].display_type = type
+        case 3:
+          this.$store.commit('setFieldConfig', {
+            index: index,
+            type: type,
+            tb_type: tb_type
+          })
+          this.$store.commit('setFiledData', item)
+          this.modals.setField = true
           break
-      }
-      this.$refs[`${listType}_link${index}`][0].style.display = 'none'
-      this.$refs[`${listType}_img${index}`][0].style.display = 'none'
-      if (refType) {
-        this.$refs[`${listType}_${refType}${index}`][0].style.display = 'block'
+        case 4:
+          this[`tbList${tb_type}`][index].display_type = type
+          this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
+          window.$(this.$refs[`tb${tb_type}_icon${index}`]).attr('class', `item-icon ${type === 2 && 'img-type'}
+            ${type === 3 && 'link-type'} ${type === 4 && 'ent-type'}`)
+          this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
+          break
+        default:
+          this[`tbList${tb_type}`][index].display_type = 1
+          this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
+          break
       }
     },
-    onMove (a, b) {
+    closeSetField () {
+      this.$store.commit('resetFieldData')
+      this.modals.setField = false
+    },
+    finishField (data) {
+      const config = this.$store.state.task.fieldConfig
+      this[`tbList${config.tb_type}`][config.index] = {
+        ...this[`tbList${config.tb_type}`][config.index],
+        ...data,
+        display_type: config.type
+      }
+      this[`tbTemp${config.tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${config.tb_type}`]))
+      window.$(this.$refs[`tb${config.tb_type}_icon${config.index}`]).attr('class', `item-icon ${config.type === 2 && 'img-type'}
+        ${config.type === 3 && 'link-type'} ${config.type === 4 && 'ent-type'}`)
+      this.$store.commit('resetFieldData')
+      this.modals.setField = false
     },
     pushAll (e, type) {
       this.$Spin.show()
@@ -467,7 +544,10 @@ export default {
         if (item.id) {
           pushData.alarm_fields.push({
             field_id: item.id,
-            display_type: item.display_type || 1
+            display_type: item.display_type || 1,
+            display_field_type: item.display_field_type || 1,
+            display_field_text: item.display_field_text || undefined,
+            display_field_id: item.field_id || undefined
           })
         }
       })
@@ -483,7 +563,10 @@ export default {
         if (item.id) {
           pushData.detail_fields.push({
             field_id: item.id,
-            display_type: item.display_type || 1
+            display_type: item.display_type || 1,
+            display_field_type: item.display_field_type || 1,
+            display_field_text: item.display_field_text || undefined,
+            display_field_id: item.field_id || undefined
           })
         }
       })
@@ -499,6 +582,22 @@ export default {
           this.$message.error(res.msg || '保存失败')
         }
       })
+    },
+    setTb2Type (item) {
+      switch (item.origin_type) {
+        case 1:
+          item.display_type = 6
+          break
+        case 0:
+          item.display_type = 5
+          break
+        case 2:
+          item.display_type = 7
+          break
+        default:
+          item.display_type = 6
+          break
+      }
     }
   },
   watch: {

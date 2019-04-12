@@ -9,7 +9,9 @@ const state = {
   tableId: null,
   dicData: null,
   userDicData: [],
-  userDicMap: null
+  userDicMap: null,
+  fieldData: null,
+  fieldConfig: null
 }
 
 const actions = {
@@ -84,6 +86,12 @@ const mutations = {
   setTableId: (state, id) => {
     state.tableId = id
   },
+  setFieldConfig: (state, data) => {
+    state.fieldConfig = data
+  },
+  setFiledData: (state, data) => {
+    state.fieldData = data
+  },
   setDicData: (state, data) => {
     state.dicData = data
   },
@@ -92,6 +100,12 @@ const mutations = {
   },
   setUserMapDic: (state, data) => {
     state.userDicMap = data
+  },
+  resetFieldData: (state) => {
+    [
+      state.fieldConfig,
+      state.fieldData
+    ] = []
   },
   resetTaskEdit: (state) => {
     [
