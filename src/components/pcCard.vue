@@ -6,7 +6,7 @@
       :gutter="gutter"
       v-for="(child, index) in tableData"
       :key="index">
-      <Col class="pc-card-col"
+      <i-col class="pc-card-col"
         :span="24 / span"
         v-show="child && child.length > 0"
         v-for="(item, tIndex) in child"
@@ -35,7 +35,7 @@
             </div>
           </div>
         </div>
-      </Col>
+      </i-col>
     </Row>
   </Scroll>
 

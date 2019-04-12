@@ -14,6 +14,7 @@
 @import 'tc.scss';
 @import 'dictionary.scss';
 @import 'rm.scss';
+@import 'tm.scss';
 
 .main {
   width: 100%;
@@ -25,7 +26,7 @@
 
     .main-body {
       width: 100%;
-      height: calc(100% - 64px);
+      height: calc(100% - 65px);
       background-color: #E8EBED;
     }
   }

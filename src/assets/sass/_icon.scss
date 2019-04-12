@@ -247,6 +247,31 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/empty_fav_user.png');
 }
 
+@mixin item-icon-text {
+  @include icon;
+  background-image: url('#{$root_url}/text_type.svg')
+}
+
+@mixin item-icon-num {
+  @include icon;
+  background-image: url('#{$root_url}/num_type.svg')
+}
+
+@mixin item-icon-date {
+  @include icon;
+  background-image: url('#{$root_url}/date_type.svg')
+}
+
+@mixin item-icon-dic {
+  @include icon;
+  background-image: url('#{$root_url}/dic_type.svg')
+}
+
+@mixin item-icon-ent {
+  @include icon;
+  background-image: url('#{$root_url}/ent_type.png')
+}
+
 $comp_root_url: '../../assets/imgs';
 @mixin afterIcon($background, $width: 16px, $height: 16px) {
   content: '';
