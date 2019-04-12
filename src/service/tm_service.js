@@ -3,7 +3,7 @@ import Service from './index'
 class TmService extends Service {
   currentLogoTitle (data) {
     return new Promise((resolve) => {
-      this.TEMPLATE_GET('/api/logo_title/getCurrentLog', data, resolve)
+      this.TEMPLATE_GET('/api/logo_title/getCurrentLogo', data, resolve)
     })
   }
   getLogoList (data) {

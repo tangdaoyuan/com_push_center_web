@@ -92,7 +92,7 @@ export default {
     this.tmService.currentLogoTitle(params).then(res => {
       if (res.status === 0) {
         if (res.data.logo) {
-          this.$(this.$refs.logo).css('backgroundImage', `url(${res.data.logo})`)
+          window.$(this.$refs.logo).css('backgroundImage', `url(${res.data.logo})`)
           window.document.title = res.data.title
         }
       }
