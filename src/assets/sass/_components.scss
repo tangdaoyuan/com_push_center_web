@@ -468,3 +468,17 @@
   
 }
 
+// Logo Setting Popover
+.pop-tip {
+  .tip-btn-group {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    .el-button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+  }
+}
+

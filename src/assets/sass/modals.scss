@@ -1917,3 +1917,40 @@
     }
   }
 }
+
+.add-logo-modal {
+  .upload-box {
+    width: 100%;
+    height: 200px;
+    .upload {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      .ivu-upload {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pre-upload {
+        width: 58px;
+        height:58px;
+        line-height: 58px;
+      }
+      .upload-img {
+        width: 100%;
+        height: 100%;
+        & > img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+    }
+  }
+  .title-box {
+    width: 100%;
+    height: 20px;
+  }
+}

@@ -14,6 +14,8 @@ import root from '@/pages/main/root_manage'
 import role from '@/pages/main/role_manage'
 import rt from '@/pages/main/root_dic'
 import tm from '@/pages/main/title_manage'
+import lm from '@/pages/main/title_manage/logo_manage'
+import titlem from '@/pages/main/title_manage/title_manage'
 
 Vue.use(Router)
 
@@ -87,7 +89,19 @@ export default new Router({
         {
           path: '/tm',
           name: 'tm',
-          component: tm
+          component: tm,
+          children: [
+            {
+              path: '/tm/lm',
+              name: 'lm',
+              component: lm
+            },
+            {
+              path: '/tm/titlem',
+              name: 'titlem',
+              component: titlem
+            }
+          ]
         }
       ]
     }
