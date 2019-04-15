@@ -274,7 +274,6 @@ export default {
       this.searchData()
     },
     changeSearchData (data) {
-      console.log(data)
       this.searchParams = {
         ...this.searchParams,
         type: data[0].value || '',
