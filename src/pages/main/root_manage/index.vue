@@ -59,7 +59,7 @@
             <div class="op-box">
               <el-button v-show="!scope.row.role_name_list" @click="setRole($event, scope.row)" type="text">设置角色</el-button>
               <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑</el-button>
-              <el-button @click="editGroup($event, scope.row)" type="text">设置组织</el-button>
+              <el-button @click="editGroup($event, scope.row)" type="text">设置单位</el-button>
             </div>
           </template>
         </el-table-column>

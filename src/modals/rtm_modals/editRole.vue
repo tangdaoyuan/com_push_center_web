@@ -5,7 +5,7 @@
     :mask-closable="false"
     :closable="false">
     <div class="modal-header" slot="header">
-      <span>配置角色</span>
+      <span>设置角色</span>
       <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
