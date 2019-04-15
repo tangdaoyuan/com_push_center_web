@@ -547,7 +547,7 @@ export default {
             display_type: item.display_type || 1,
             display_field_type: item.display_field_type || 1,
             display_field_text: item.display_field_text || undefined,
-            display_field_id: item.field_id || undefined
+            display_field_id: item.display_field_id || undefined
           })
         }
       })
@@ -566,7 +566,7 @@ export default {
             display_type: item.display_type || 1,
             display_field_type: item.display_field_type || 1,
             display_field_text: item.display_field_text || undefined,
-            display_field_id: item.field_id || undefined
+            display_field_id: item.display_field_id || undefined
           })
         }
       })
