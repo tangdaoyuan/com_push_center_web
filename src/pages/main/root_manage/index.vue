@@ -2,6 +2,7 @@
   <div class="rm-main">
     <div class="rm-title">
       <span>用户管理</span>
+      <filter-option :filter-items='filterItems' @filter-search="changeSearchData"></filter-option>
     </div>
     <div class="rm-body">
       <el-table
@@ -58,7 +59,7 @@
             <div class="op-box">
               <el-button v-show="!scope.row.role_name_list" @click="setRole($event, scope.row)" type="text">设置角色</el-button>
               <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑</el-button>
-              <el-button @click="editGroup($event, scope.row)" type="text">设置组织</el-button>
+              <el-button @click="editGroup($event, scope.row)" type="text">设置单位</el-button>
             </div>
           </template>
         </el-table-column>
@@ -107,7 +108,16 @@ export default {
         groupAllot: false
       },
       sourceList: [],
-      selectedUserId: ''
+      selectedUserId: '',
+      filterItems: [
+        {
+          itemName: '',
+          placeholder: '搜索',
+          type: 'name',
+          in_type: 'input',
+          value: ''
+        }
+      ]
     }
   },
   created () {
@@ -125,8 +135,13 @@ export default {
         }
       })
     },
-    search () {
-      this.tcService.getUserlist(this.params).then(res => {
+    changeSearchData (data) {
+      if (data[0] && data[0].value) {
+        this.search({ search_content: data[0].value })
+      }
+    },
+    search (data) {
+      this.tcService.getUserlist({ ...this.params, ...(data || {}) }).then(res => {
         if (res.status === 0) {
           this.list = res.data.list
           this.count = res.data.total
