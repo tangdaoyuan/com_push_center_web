@@ -304,7 +304,15 @@ export default {
       let tb2 = []
       let tb3 = []
       this.$store.state.task.taskData.task_fields.alarm_fields.forEach(n => {
-        tb1 = [...tb1, ...this.tbList.filter(item => n.field_id === item.id)]
+        tb1 = [...tb1, ...this.tbList.filter(item => n.field_id === item.id).map(item => {
+          return {
+            ...item,
+            display_type: n.display_type,
+            display_field_type: n.display_field_type,
+            display_field_id: n.display_field_id,
+            display_field_text: n.display_field_text
+          }
+        })]
       })
       this.$store.state.task.taskData.task_fields.filter_fields.forEach(n => {
         tb2 = [...this.tbList.filter(item => n.field_id === item.id)].map(item => {
@@ -313,7 +321,15 @@ export default {
         })
       })
       this.$store.state.task.taskData.task_fields.detail_fields.forEach(n => {
-        tb3 = [...tb3, ...this.tbList.filter(item => n.field_id === item.id)]
+        tb3 = [...tb3, ...this.tbList.filter(item => n.field_id === item.id).map(item => {
+          return {
+            ...item,
+            display_type: n.display_type,
+            display_field_type: n.display_field_type,
+            display_field_id: n.display_field_id,
+            display_field_text: n.display_field_text
+          }
+        })]
       })
       this.tbList1 = (tb1.length > 0) ? tb1 : [{
         name: '',
