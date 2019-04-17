@@ -128,7 +128,7 @@
                           <el-button size="mini" type="text" @click="item.deleteModal = false">取消</el-button>
                           <el-button type="primary" size="mini" @click="deleteFilter(item, index)">确定</el-button>
                         </div>
-                        <i slot="reference" class="el-icon-delete" @click="item.deleteModal = true"></i>
+                        <i slot="reference" class="el-icon-delete" @click.native="item.deleteModal = true"></i>
                       </el-popover>
                     </div>
                   </div>
