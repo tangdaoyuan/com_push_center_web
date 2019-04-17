@@ -40,7 +40,8 @@
           label="角色">
           <template slot-scope="scope">
             <div class="tag-box">
-              <el-tag v-show="scope.row.role_name_list" v-for="(item, index) in scope.row.role_name_list" :key="index">{{item}}</el-tag>
+              <el-tag v-show="scope.row.role_name_list && index < 5" v-for="(item, index) in scope.row.role_name_list" :key="index">{{item}}</el-tag>
+              <span v-show="scope.row.role_name_list && scope.row.role_name_list.length > 5">...</span>
             </div>
           </template>
         </el-table-column>
@@ -48,7 +49,8 @@
           label="组织">
           <template slot-scope="scope">
             <div class="tag-box">
-              <el-tag v-show="scope.row.organization_name_list" v-for="(item, index) in scope.row.organization_name_list" :key="index">{{item}}</el-tag>
+              <el-tag v-show="scope.row.organization_name_list && index < 5" v-for="(item, index) in scope.row.organization_name_list" :key="index">{{item}}</el-tag>
+              <span v-show="scope.row.organization_name_list && scope.row.organization_name_list.length > 5">...</span>
             </div>
           </template>
         </el-table-column>
@@ -61,7 +63,6 @@
               <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑角色</el-button>
               <el-button v-show="!scope.row.organization_name_list" @click="editGroup($event, scope.row)" type="text">设置单位</el-button>
               <el-button v-show="scope.row.organization_name_list" @click="editGroup($event, scope.row)" type="text">编辑单位</el-button>
-
             </div>
           </template>
         </el-table-column>

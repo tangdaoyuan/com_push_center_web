@@ -40,8 +40,8 @@
     }
     .op-box {
       display: flex;
+      justify-content: space-around;
       .el-button {
-        padding: 8px 0;
         font-size: 12px;
       }
     }

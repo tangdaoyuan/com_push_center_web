@@ -57,11 +57,11 @@
           </div>
         </a>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item  @click.native="chooseMenu($event, 'system')">反馈字典</el-dropdown-item>
-          <el-dropdown-item  @click.native="chooseMenu($event, 'root')">用户管理</el-dropdown-item>
-          <el-dropdown-item  @click.native="chooseMenu($event, 'role')">角色管理</el-dropdown-item>
-          <el-dropdown-item  @click.native="chooseMenu($event, 'rt')">权限字典</el-dropdown-item>
-          <el-dropdown-item  @click.native="chooseMenu($event, 'tm/lm')">页面设置</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'system', 'none')">反馈字典</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'root', 'none')">用户管理</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'role', 'none')">角色管理</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'rt', 'none')">权限字典</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'tm/lm', 'none')">页面设置</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="setting">
