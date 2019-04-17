@@ -52,13 +52,14 @@
           </template>
         </el-table-column>
         <el-table-column
-          width="120"
+          width="150"
           label="操作">
           <template slot-scope="scope">
             <div class="op-box">
               <el-button v-show="!scope.row.role_name_list" @click="setRole($event, scope.row)" type="text">设置角色</el-button>
-              <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑</el-button>
-              <el-button @click="editGroup($event, scope.row)" type="text">设置组织</el-button>
+              <el-button v-show="scope.row.role_name_list" @click="editRole($event, scope.row)" type="text">编辑角色</el-button>
+              <el-button v-show="!scope.row.organization_name_list" @click="editGroup($event, scope.row)" type="text">设置组织</el-button>
+              <el-button v-show="scope.row.organization_name_list" @click="editGroup($event, scope.row)" type="text">编辑组织</el-button>
             </div>
           </template>
         </el-table-column>
@@ -135,16 +136,15 @@ export default {
     },
     changeTarget (data) {
       this.sourceList = data
-      console.log(this.$store.state.user.userEditData)
       const params = {
         user_id: this.$store.state.user.userEditData.id,
         organization_code_list: data.map(item => item.code)
       }
-      console.log(params)
       this.userService.setGroup(params).then(res => {
         if (res.status === 0) {
           this.$message.success('设置成功')
           this.closeGroupAllot()
+          this.search()
         }
       })
     },

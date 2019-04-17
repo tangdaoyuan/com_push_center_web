@@ -272,6 +272,36 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/ent_type.png')
 }
 
+@mixin item-icon-link {
+  @include icon;
+  background-image: url('#{$root_url}/link_type_default.png')
+}
+
+@mixin item-icon-link-field {
+  @include icon;
+  background-image: url('#{$root_url}/link_type_field.png')
+}
+
+@mixin item-icon-link-text {
+  @include icon;
+  background-image: url('#{$root_url}/link_type_text.png')
+}
+
+@mixin item-icon-img {
+  @include icon;
+  background-image: url('#{$root_url}/img_type_default.png')
+}
+
+@mixin item-icon-img-field {
+  @include icon;
+  background-image: url('#{$root_url}/img_type_field.svg')
+}
+
+@mixin item-icon-img-text {
+  @include icon;
+  background-image: url('#{$root_url}/img_type_text.svg')
+}
+
 $comp_root_url: '../../assets/imgs';
 @mixin afterIcon($background, $width: 16px, $height: 16px) {
   content: '';

@@ -686,13 +686,37 @@
                   .link-type {
                     width: 16px;
                     height: 16px;
-                    @include link-icon;
+                    @include item-icon-link;
+                  }
+
+                  .link-type-text {
+                    width: 16px;
+                    height: 16px;
+                    @include item-icon-link-text;
+                  }
+
+                  .link-type-field {
+                    width: 16px;
+                    height: 16px;
+                    @include item-icon-link-field;
                   }
 
                   .img-type {
                     width: 16px;
                     height: 16px;
-                    @include img-icon;
+                    @include item-icon-img;
+                  }
+
+                  .img-type-text {
+                    width: 16px;
+                    height: 16px;
+                    @include item-icon-img-text;
+                  }
+
+                  .img-type-field {
+                    width: 16px;
+                    height: 16px;
+                    @include item-icon-img-field;
                   }
 
                   .text-type {

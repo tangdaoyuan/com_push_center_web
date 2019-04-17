@@ -76,8 +76,20 @@
                   </span>
                   <div class="drag-type">
                     <i :ref="`tb1_icon${index}`" :class="`item-icon
-                      ${item.display_type === 2 && 'link-type'}
-                      ${item.display_type === 3 && 'img-type'}`"></i>
+                      ${(item.display_type === 2 && item.display_field_type === 1) ? ('link-type') : (
+                          (item.display_type === 2 && item.display_field_type === 2) ? ('link-type-text') : (
+                            (item.display_type === 2 && item.display_field_type === 3) ? ('link-type-field') : (
+                              (item.display_type === 2 && 'link-type')
+                            )
+                          )
+                        )}
+                      ${(item.display_type === 3 && item.display_field_type === 1) ? ('img-type') : (
+                          (item.display_type === 3 && item.display_field_type === 2) ? ('img-type-text') : (
+                            (item.display_type === 3 && item.display_field_type === 3) ? ('img-type-field') : (
+                              (item.display_type === 3 && 'img-type')
+                            )
+                          )
+                        )}`"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb1')"></i>
                     <el-dropdown trigger="click">
                       <el-button>
@@ -180,8 +192,20 @@
                   </span>
                   <div class="drag-type">
                     <i :ref="`tb3_icon${index}`" :class="`item-icon
-                      ${item.display_type === 2 && 'link-type'}
-                      ${item.display_type === 3 && 'img-type'}
+                      ${(item.display_type === 2 && item.display_field_type === 1) ? ('link-type') : (
+                          (item.display_type === 2 && item.display_field_type === 2) ? ('link-type-text') : (
+                            (item.display_type === 2 && item.display_field_type === 3) ? ('link-type-field') : (
+                              (item.display_type === 2 && 'link-type')
+                            )
+                          )
+                        )}
+                      ${(item.display_type === 3 && item.display_field_type === 1) ? ('img-type') : (
+                          (item.display_type === 3 && item.display_field_type === 2) ? ('img-type-text') : (
+                            (item.display_type === 3 && item.display_field_type === 3) ? ('img-type-field') : (
+                              (item.display_type === 3 && 'img-type')
+                            )
+                          )
+                        )}
                       ${item.display_type === 4 && 'ent-type'}`"></i>
 
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb3')"></i>
@@ -515,14 +539,29 @@ export default {
     },
     finishField (data) {
       const config = this.$store.state.task.fieldConfig
-      this[`tbList${config.tb_type}`][config.index] = {
+      const tmp = this[`tbList${config.tb_type}`][config.index] = {
         ...this[`tbList${config.tb_type}`][config.index],
         ...data,
         display_type: config.type
       }
       this[`tbTemp${config.tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${config.tb_type}`]))
-      window.$(this.$refs[`tb${config.tb_type}_icon${config.index}`]).attr('class', `item-icon ${config.type === 2 && 'img-type'}
-        ${config.type === 3 && 'link-type'} ${config.type === 4 && 'ent-type'}`)
+      const className = `item-icon
+        ${(tmp.display_type === 2 && tmp.display_field_type === 1) ? ('link-type') : (
+    (tmp.display_type === 2 && tmp.display_field_type === 2) ? ('link-type-text') : (
+      (tmp.display_type === 2 && tmp.display_field_type === 3) ? ('link-type-field') : (
+        (tmp.display_type === 2 && 'link-type')
+      )
+    )
+  )}
+        ${(tmp.display_field_type === 1) ? ('img-type') : (
+    (tmp.display_field_type === 2) ? ('img-type-text') : (
+      (tmp.display_field_type === 3) ? ('img-type-field') : (
+        (tmp.display_type === 3 && 'img-type')
+      )
+    )
+  )}
+        ${tmp.display_type === 4 && 'ent-type'}`
+      window.$(this.$refs[`tb${config.tb_type}_icon${config.index}`]).attr('class', className)
       this.$store.commit('resetFieldData')
       this.modals.setField = false
     },
