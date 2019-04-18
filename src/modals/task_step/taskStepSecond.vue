@@ -198,6 +198,7 @@ export default {
         }).then(res => {
           if (res.status === 0) {
             this.tableData = res.data
+            this.filterList = []
             this.$store.commit('setTableId', node.id)
             this.$store.commit('setTaskTableData', res.data)
           }
