@@ -75,21 +75,17 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i :ref="`tb1_icon${item.id}`" :class="`item-icon
-                      ${(item.display_type === 2 && item.display_field_type === 1) ? ('link-type') : (
-                          (item.display_type === 2 && item.display_field_type === 2) ? ('link-type-text') : (
-                            (item.display_type === 2 && item.display_field_type === 3) ? ('link-type-field') : (
-                              (item.display_type === 2 && 'link-type')
-                            )
-                          )
-                        )}
-                      ${(item.display_type === 3 && item.display_field_type === 1) ? ('img-type') : (
-                          (item.display_type === 3 && item.display_field_type === 2) ? ('img-type-text') : (
-                            (item.display_type === 3 && item.display_field_type === 3) ? ('img-type-field') : (
-                              (item.display_type === 3 && 'img-type')
-                            )
-                          )
-                        )}`"></i>
+                    <i :key="item.display_type"
+                      v-if="iconShow"
+                      :class="{
+                        'item-icon': true,
+                        'link-type': item.display_type === 2 && item.display_field_type === 1,
+                        'link-type-text': item.display_type === 2 && item.display_field_type === 2,
+                        'link-type-field': item.display_type === 2 && item.display_field_type === 3,
+                        'img-type': item.display_type === 3 && item.display_field_type === 1,
+                        'img-type-text': item.display_type === 3 && item.display_field_type === 2,
+                        'img-type-field': item.display_type === 3 && item.display_field_type === 3
+                      }"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb1')"></i>
                     <el-dropdown trigger="hover">
                       <el-button>
@@ -138,10 +134,15 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i :ref="`tb2_icon${item.id}`" :class="`item-icon ${item.display_type === 5 && 'number-type'}
-                        ${item.display_type === 6 && 'text-type'}
-                        ${item.display_type === 7 && 'date-type'}
-                        ${item.display_type === 8 && 'dic-type'}`"></i>
+                    <i :key="item.display_type"
+                      v-if="iconShow"
+                      :class="{
+                      'item-icon': true,
+                      'number-type': item.display_type === 5,
+                      'text-type': item.display_type === 6,
+                      'date-type': item.display_type === 7,
+                      'dic-type': item.display_type === 8
+                    }"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb2')"></i>
                     <el-dropdown trigger="hover">
                       <el-button>
@@ -191,22 +192,18 @@
                     <span>{{item.alias || item.name}}</span>
                   </span>
                   <div class="drag-type">
-                    <i :ref="`tb3_icon${item.id}`" :class="`item-icon
-                      ${(item.display_type === 2 && item.display_field_type === 1) ? ('link-type') : (
-                          (item.display_type === 2 && item.display_field_type === 2) ? ('link-type-text') : (
-                            (item.display_type === 2 && item.display_field_type === 3) ? ('link-type-field') : (
-                              (item.display_type === 2 && 'link-type')
-                            )
-                          )
-                        )}
-                      ${(item.display_type === 3 && item.display_field_type === 1) ? ('img-type') : (
-                          (item.display_type === 3 && item.display_field_type === 2) ? ('img-type-text') : (
-                            (item.display_type === 3 && item.display_field_type === 3) ? ('img-type-field') : (
-                              (item.display_type === 3 && 'img-type')
-                            )
-                          )
-                        )}
-                      ${item.display_type === 4 ? 'ent-type' : ''}`"></i>
+                    <i :key="item.display_type"
+                      v-if="iconShow"
+                      :class="{
+                        'item-icon': true,
+                        'link-type': item.display_type === 2 && item.display_field_type === 1,
+                        'link-type-text': item.display_type === 2 && item.display_field_type === 2,
+                        'link-type-field': item.display_type === 2 && item.display_field_type === 3,
+                        'img-type': item.display_type === 3 && item.display_field_type === 1,
+                        'img-type-text': item.display_type === 3 && item.display_field_type === 2,
+                        'img-type-field': item.display_type === 3 && item.display_field_type === 3,
+                        'ent-type': item.display_type === 4
+                      }"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb3')"></i>
                     <el-dropdown trigger="hover">
                       <el-button>
@@ -267,6 +264,7 @@ export default {
     return {
       editable: true,
       detailHover: false,
+      iconShow: true,
       modals: {
         setField: false
       },
@@ -384,6 +382,9 @@ export default {
           if (!item.id) {
             this.tbList1.splice(index, 1)
           }
+          if (!item.display_type) {
+            this.tbList1[index].display_type = -1
+          }
         })
       }
       if (this.tbList2.length > 1) {
@@ -397,6 +398,9 @@ export default {
         this.tbList3.forEach((item, index) => {
           if (!item.id) {
             this.tbList3.splice(index, 1)
+          }
+          if (!item.display_type) {
+            this.tbList3[index].display_type = -1
           }
         })
       }
@@ -446,36 +450,15 @@ export default {
           }
           break
         case 'tb3':
-          let tmp = JSON.parse(JSON.stringify(this.tbList3))
-          tmp.splice(index, 1)
-          if (tmp.length === 0) {
-            tmp = [
+          this.tbList3.splice(index, 1)
+          if (this.tbList3.length === 0) {
+            this.tbList3 = [
               {
                 name: '',
                 id: ''
               }
             ]
           }
-          this.tbList3 = [...tmp]
-          this.tbList3.forEach(n => {
-            const className = `item-icon
-              ${(n.display_type === 2 && n.display_field_type === 1) ? ('link-type') : (
-    (n.display_type === 2 && n.display_field_type === 2) ? ('link-type-text') : (
-      (n.display_type === 2 && n.display_field_type === 3) ? ('link-type-field') : (
-        (n.display_type === 2 && 'link-type')
-      )
-    )
-  )}
-              ${(n.display_type === 3 && n.display_field_type === 1) ? ('img-type') : (
-    (n.display_field_type === 2) ? ('img-type-text') : (
-      (n.display_field_type === 3) ? ('img-type-field') : (
-        (n.display_type === 3 && 'img-type')
-      )
-    )
-  )}
-              ${n.display_type === 4 && 'ent-type'}`
-            window.$(this.$refs[`tb3_icon${n.id}`]).attr('class', className)
-          })
           break
       }
     },
@@ -509,17 +492,21 @@ export default {
       }
     },
     chooseTb2Type (e, item, type, index) {
-      this.tbList2[index].display_type = type
-      window.$(this.$refs[`tb2_icon${item.id}`]).attr('class', `item-icon ${item.display_type === 5 && 'number-type'}
-        ${item.display_type === 6 && 'text-type'}
-        ${item.display_type === 7 && 'date-type'}
-        ${item.display_type === 8 && 'dic-type'}`)
+      setTimeout(() => {
+        this.tbList2[index].display_type = type
+      })
       this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
     },
     chooseTb1Type (e, item, type, index, tb_type) {
+      this.iconShow = false
       switch (type) {
         case 1:
-          this[`tbList${tb_type}`][index].display_type = type
+          setTimeout(() => {
+            this[`tbList${tb_type}`][index].display_type = type
+            this.$nextTick(function () {
+              this.iconShow = true
+            })
+          }, 300)
           this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
         case 2:
@@ -530,6 +517,9 @@ export default {
           })
           this.$store.commit('setFiledData', item)
           this.modals.setField = true
+          this.$nextTick(function () {
+            this.iconShow = true
+          })
           break
         case 3:
           this.$store.commit('setFieldConfig', {
@@ -539,16 +529,26 @@ export default {
           })
           this.$store.commit('setFiledData', item)
           this.modals.setField = true
+          this.$nextTick(function () {
+            this.iconShow = true
+          })
           break
         case 4:
-          this[`tbList${tb_type}`][index].display_type = type
-          this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
-          window.$(this.$refs[`tb${tb_type}_icon${item.id}`]).attr('class', `item-icon ${type === 2 && 'img-type'}
-            ${type === 3 && 'link-type'} ${type === 4 && 'ent-type'}`)
+          setTimeout(() => {
+            this[`tbList${tb_type}`][index].display_type = type
+            this.$nextTick(function () {
+              this.iconShow = true
+            })
+          }, 300)
           this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
         default:
-          this[`tbList${tb_type}`][index].display_type = 1
+          setTimeout(() => {
+            this[`tbList${tb_type}`][index].display_type = 1
+            this.$nextTick(function () {
+              this.iconShow = true
+            })
+          }, 300)
           this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
       }
@@ -559,29 +559,12 @@ export default {
     },
     finishField (data) {
       const config = this.$store.state.task.fieldConfig
-      const tmp = this[`tbList${config.tb_type}`][config.index] = {
+      this[`tbList${config.tb_type}`][config.index] = {
         ...this[`tbList${config.tb_type}`][config.index],
         ...data,
         display_type: config.type
       }
       this[`tbTemp${config.tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${config.tb_type}`]))
-      const className = `item-icon
-        ${(tmp.display_type === 2 && tmp.display_field_type === 1) ? ('link-type') : (
-    (tmp.display_type === 2 && tmp.display_field_type === 2) ? ('link-type-text') : (
-      (tmp.display_type === 2 && tmp.display_field_type === 3) ? ('link-type-field') : (
-        (tmp.display_type === 2 && 'link-type')
-      )
-    )
-  )}
-        ${(tmp.display_type === 3 && tmp.display_field_type === 1) ? ('img-type') : (
-    (tmp.display_field_type === 2) ? ('img-type-text') : (
-      (tmp.display_field_type === 3) ? ('img-type-field') : (
-        (tmp.display_type === 3 && 'img-type')
-      )
-    )
-  )}
-        ${tmp.display_type === 4 && 'ent-type'}`
-      window.$(this.$refs[`tb${config.tb_type}_icon${data.id}`]).attr('class', className)
       this.$store.commit('resetFieldData')
       this.modals.setField = false
     },
@@ -594,7 +577,7 @@ export default {
             let has = false
             let tmpItem = {}
             this.tbList1.forEach(n => {
-              if (n.field_id === item.field_id) {
+              if (n.id === item.id) {
                 tmpItem = n
                 has = true
               }
@@ -616,7 +599,7 @@ export default {
             let has = false
             let tmpItem = {}
             this.tbList2.forEach(n => {
-              if (n.field_id === item.field_id) {
+              if (n.id === item.id) {
                 tmpItem = n
                 has = true
               }
@@ -627,11 +610,19 @@ export default {
               }
             } else {
               return {
-                ...item
+                ...item,
+                display_type: 0
               }
             }
           })
           this.tbList2 = JSON.parse(JSON.stringify(tmp))
+          setTimeout(() => {
+            this.tbList2.forEach(n => {
+              if (n.display_type === 0) {
+                this.setTb2Type(n)
+              }
+            })
+          })
           break
         case 3:
           tmp = this.tbList.map(item => {
@@ -649,11 +640,11 @@ export default {
               }
             } else {
               return {
-                ...item
+                ...item,
+                display_type: 0
               }
             }
           })
-          console.log(tmp)
           this.tbList3 = JSON.parse(JSON.stringify(tmp))
           break
       }
