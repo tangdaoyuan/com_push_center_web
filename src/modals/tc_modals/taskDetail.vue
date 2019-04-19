@@ -1,5 +1,7 @@
 <template>
-  <Modal class="td-main-home" v-model="value">
+  <Modal class="td-main-home" v-model="value"
+    :mask-closable="false"
+    :closable="false">
     <div class="modal-header" slot="header">
       <span>任务详情</span>
       <Icon type="md-close" @click="back($event)" />
@@ -225,7 +227,10 @@ export default {
           detail_fields: []
         },
         task_users: {
-          portraits_name_list: []
+          portraits_name_list: [],
+          view_user_name_list: [],
+          view_group_name_list: [],
+          push_rule_list: []
         },
         task_channels: {
           api: {

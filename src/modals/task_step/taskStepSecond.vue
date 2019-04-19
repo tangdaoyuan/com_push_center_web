@@ -183,26 +183,30 @@ export default {
       this.taskFilterModal = false
     },
     choose (node) {
-      if (this.utils.getType(node.id) === 'field') {
-        this.chooseTag = [node.id]
-        this.chooseItem = node
-        this.tbId = node.id
-        this.tableData = {
-          title_list: [],
-          data_list: []
-        }
-        this.wtService.getprewData({
-          page_no: 1,
-          page_size: 100,
-          tb_id: node.id
-        }).then(res => {
-          if (res.status === 0) {
-            this.tableData = res.data
-            this.filterList = []
-            this.$store.commit('setTableId', node.id)
-            this.$store.commit('setTaskTableData', res.data)
+      if (this.$store.state.task.taskData) {
+        this.$message.warning('编辑过程中不允许更换数据表')
+      } else {
+        if (this.utils.getType(node.id) === 'field') {
+          this.chooseTag = [node.id]
+          this.chooseItem = node
+          this.tbId = node.id
+          this.tableData = {
+            title_list: [],
+            data_list: []
           }
-        })
+          this.wtService.getprewData({
+            page_no: 1,
+            page_size: 100,
+            tb_id: node.id
+          }).then(res => {
+            if (res.status === 0) {
+              this.tableData = res.data
+              this.filterList = []
+              this.$store.commit('setTableId', node.id)
+              this.$store.commit('setTaskTableData', res.data)
+            }
+          })
+        }
       }
     },
     syncData () {

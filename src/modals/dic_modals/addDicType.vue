@@ -47,7 +47,7 @@ export default {
         this.name = this.editData.name
         this.description = this.editData.description
       })()
-      this.value && (() => {
+      !this.value && (() => {
         Object.assign(this.$data, this.$options.data())
       })()
     }
