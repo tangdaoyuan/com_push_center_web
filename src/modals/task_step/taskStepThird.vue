@@ -43,7 +43,7 @@
           <Dropdown class="item-drop-footer" placement="top">
             <span class="ts-f-title">全部加入至</span>
             <Icon class="ts-f-icon" type="ios-arrow-forward" />
-            <DropdownMenu slot="list" trigger="click">
+            <DropdownMenu slot="list" trigger="hover">
               <DropdownItem @click.native="pushAll($event, 1)">预警列表</DropdownItem>
               <DropdownItem @click.native="pushAll($event, 2)">筛选器</DropdownItem>
               <DropdownItem @click.native="pushAll($event, 3)">详情页面</DropdownItem>
@@ -91,7 +91,7 @@
                           )
                         )}`"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb1')"></i>
-                    <el-dropdown trigger="click">
+                    <el-dropdown trigger="hover">
                       <el-button>
                         <i class="drop-btn"></i>
                       </el-button>
@@ -143,7 +143,7 @@
                         ${item.display_type === 7 && 'date-type'}
                         ${item.display_type === 8 && 'dic-type'}`"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb2')"></i>
-                    <el-dropdown trigger="click">
+                    <el-dropdown trigger="hover">
                       <el-button>
                         <i class="drop-btn"></i>
                       </el-button>
@@ -209,7 +209,7 @@
                       ${item.display_type === 4 && 'ent-type'}`"></i>
 
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb3')"></i>
-                    <el-dropdown trigger="click">
+                    <el-dropdown trigger="hover">
                       <el-button>
                         <i class="drop-btn"></i>
                       </el-button>
@@ -339,7 +339,7 @@ export default {
         })]
       })
       this.$store.state.task.taskData.task_fields.filter_fields.forEach(n => {
-        tb2 = [...this.tbList.filter(item => n.field_id === item.id)].map(item => {
+        tb2 = [...tb2, ...this.tbList.filter(item => n.field_id === item.id)].map(item => {
           this.setTb2Type(item)
           return item
         })
