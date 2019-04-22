@@ -137,11 +137,11 @@
                     <i :key="item.display_type"
                       v-if="iconShow"
                       :class="{
+                      'item-icon': true,
                       'number-type': item.display_type === 5,
                       'text-type': item.display_type === 6,
                       'date-type': item.display_type === 7,
-                      'dic-type': item.display_type === 8,
-                      'item-icon': true
+                      'dic-type': item.display_type === 8
                     }"></i>
                     <i class="delet-btn" @click="deleteItem($event, index, 'tb2')"></i>
                     <el-dropdown trigger="hover">
