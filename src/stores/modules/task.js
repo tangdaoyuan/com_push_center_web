@@ -11,7 +11,8 @@ const state = {
   userDicData: [],
   userDicMap: null,
   fieldData: null,
-  fieldConfig: null
+  fieldConfig: null,
+  dictConfig: null
 }
 
 const actions = {
@@ -92,6 +93,9 @@ const mutations = {
   setFiledData: (state, data) => {
     state.fieldData = data
   },
+  setDictConfig: (state, data) => {
+    state.dictConfig = data
+  },
   setDicData: (state, data) => {
     state.dicData = data
   },
@@ -105,6 +109,11 @@ const mutations = {
     [
       state.fieldConfig,
       state.fieldData
+    ] = []
+  },
+  resetDictConfig: () => {
+    [
+      state.dictConfig
     ] = []
   },
   resetTaskEdit: (state) => {

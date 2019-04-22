@@ -235,6 +235,7 @@
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
     </div>
     <set-field v-model="modals.setField" :table-list="tbList" @close="closeSetField" @finish="finishField"></set-field>
+    <set-dict v-model="modals.setDict" :table-list="dtList" @close="closeSetDict" @finish="finishDict"></set-dict>
   </div>
 </template>
 <script>
@@ -266,8 +267,10 @@ export default {
       detailHover: false,
       iconShow: true,
       modals: {
-        setField: false
+        setField: false,
+        setDict: false
       },
+      dtList: [],
       tbList: [],
       tbList1: [
         {
@@ -294,6 +297,11 @@ export default {
   },
   methods: {
     init () {
+      this.dicService.getDicData({}).then(res => {
+        if (res.status === 0) {
+          this.dtList = res.data.list
+        }
+      })
       if (this.$store.state.task.tableData) {
         this.tbList = this.$store.state.task.tableData.title_list
         if (this.$store.state.task.taskData) {
@@ -337,10 +345,18 @@ export default {
       })
       this.$store.state.task.taskData.task_fields.filter_fields.forEach(n => {
         tb2 = [...tb2, ...this.tbList.filter(item => n.field_id === item.id)].map(item => {
-          this.setTb2Type(item)
-          return item
+          if (!n.display_type) {
+            this.setTb2Type(item)
+          } else {
+            item.display_type = n.display_type
+          }
+          return {
+            ...item,
+            filter_dic_id: n.filter_dic_id
+          }
         })
       })
+
       this.$store.state.task.taskData.task_fields.detail_fields.forEach(n => {
         tb3 = [...tb3, ...this.tbList.filter(item => n.field_id === item.id).map(item => {
           return {
@@ -492,14 +508,24 @@ export default {
       }
     },
     chooseTb2Type (e, item, type, index) {
-      this.iconShow = false
-      setTimeout(() => {
-        this.tbList2[index].display_type = type
-        this.$nextTick(function () {
-          this.iconShow = true
+      if (type === 8) {
+        this.modals.setDict = true
+        this.$store.commit('setDictConfig', {
+          type: type,
+          index: index,
+          filter_dic_id: this.tbList2[index].filter_dic_id || ''
         })
-      })
-      this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
+      } else {
+        this.iconShow = false
+        setTimeout(() => {
+          this.tbList2[index].display_type = type
+          // this.tbList2[index].filter_dic_id = ''
+          this.$nextTick(function () {
+            this.iconShow = true
+          })
+        })
+        this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
+      }
     },
     chooseTb1Type (e, item, type, index, tb_type) {
       this.iconShow = false
@@ -557,9 +583,27 @@ export default {
           break
       }
     },
+    closeSetDict () {
+      this.$store.commit('resetDictConfig')
+      this.modals.setDict = false
+    },
     closeSetField () {
       this.$store.commit('resetFieldData')
       this.modals.setField = false
+    },
+    finishDict (data) {
+      const config = this.$store.state.task.dictConfig
+      this.iconShow = false
+      setTimeout(() => {
+        this.tbList2[config.index].display_type = config.type
+        this.tbList2[config.index].filter_dic_id = data.display_dict_id
+        this.$nextTick(function () {
+          this.iconShow = true
+        })
+      })
+      this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
+      this.$store.commit('resetDictConfig')
+      this.modals.setDict = false
     },
     finishField (data) {
       const config = this.$store.state.task.fieldConfig
@@ -680,12 +724,16 @@ export default {
           })
         }
       })
-      this.tbList2.forEach(item => {
+      this.tbList2.forEach((item, ind) => {
+        const filter_dict_id = item.display_type === 8 ? item.filter_dic_id : ''
+
         if (item.id) {
           pushData.filter_fields.push({
             field_id: item.id,
-            display_type: item.display_type || 1
+            display_type: item.display_type || 1,
+            filter_dic_id: filter_dict_id
           })
+          this.tbList2[ind].filter_dic_id = filter_dict_id
         }
       })
       this.tbList3.forEach(item => {
