@@ -492,8 +492,12 @@ export default {
       }
     },
     chooseTb2Type (e, item, type, index) {
+      this.iconShow = false
       setTimeout(() => {
         this.tbList2[index].display_type = type
+        this.$nextTick(function () {
+          this.iconShow = true
+        })
       })
       this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
     },
