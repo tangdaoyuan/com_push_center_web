@@ -75,7 +75,7 @@
       :show-menu="showMenu"
       :table-data="tableData"
       v-model="wdModal" />
-    <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
+    <abnormal-reason type="task" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
   </div>
 </template>
 <script>
