@@ -21,6 +21,22 @@
       <div class="np-item tip">
         最多支持500字输入
       </div>
+      <div class="np-item seperator"></div>
+      <div class="np-item">
+        <span class="item-title radio-title">选择工作表</span>
+        <RadioGroup v-model="tableType">
+          <Radio :label="0">普通工作表</Radio>
+          <Radio :label="1">流式工作表</Radio>
+        </RadioGroup>
+      </div>
+      <div class="np-item">
+        <span class="item-title radio-title">选择推送对象</span>
+        <RadioGroup v-model="pushType">
+          <Radio :label="0">推送用户</Radio>
+          <Radio :label="1">推送数据库</Radio>
+          <Radio :label="2">推送API</Radio>
+        </RadioGroup>
+      </div>
     </div>
     <div class="step-footer">
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
@@ -40,6 +56,8 @@ export default {
         describe: '',
         id: ''
       },
+      tableType: 0,
+      pushType: 0,
       taskTypelist: []
     }
   },

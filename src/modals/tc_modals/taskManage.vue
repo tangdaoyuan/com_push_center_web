@@ -5,17 +5,19 @@
       <span>{{($store.state.task.taskId) ? '编辑' : '新建'}}任务</span>
     </div>
     <div class="manage-body">
-      <div class="step-box">
+      <task-step-first @refresh="refresh" :step="currentStep" @next="next"/>
+      <div class="step-box" v-show="currentStep > 0">
         <Steps :current="currentStep">
-          <Step title="创建基本信息" @click.native="editStep($event, 0)" content=""></Step>
-          <Step title="选择工作表" @click.native="editStep($event, 1)" content=""></Step>
+          <!-- <Step title="创建基本信息" @click.native="editStep($event, 0)" content=""></Step> -->
+          <Step title="设置任务字段" v-show="true" @click.native="editStep($event, 1)" content=""></Step>
+          <Step title="选择工作表" v-show="false" @click.native="editStep($event, 1)" content=""></Step>
           <Step title="设置推送信息" @click.native="editStep($event, 2)" content=""></Step>
           <Step title="设置推送用户" @click.native="editStep($event, 3)" content=""></Step>
           <Step title="设置推送通道" @click.native="editStep($event, 4)" content=""></Step>
         </Steps>
       </div>
-      <task-step-first @refresh="refresh" :step="currentStep" @next="next"/>
-      <task-step-second @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <!-- <task-step-second @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/> -->
+      <task-step-second-flow @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-third @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-forth @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-fifth @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
@@ -75,7 +77,7 @@ export default {
           this.$store.dispatch('getEditDetail', {
             id: this.$store.state.task.taskId
           }).then(() => {
-            this.currentStep = 0
+            this.currentStep = 1
           })
         } else {
           this.currentStep = 0

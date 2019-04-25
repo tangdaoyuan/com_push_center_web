@@ -32,6 +32,31 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/logout.png');
 }
 
+@mixin icon-edit {
+  @include icon;
+  background-image: url('#{$root_url}/icon_edit.png');
+}
+
+@mixin icon-file {
+  @include icon;
+  background-image: url('#{$root_url}/icon_file.png');
+  
+}
+@mixin icon-del {
+  @include icon;
+  background-image: url('#{$root_url}/icon_del.png');
+}
+
+@mixin yellow-dot {
+  @include icon;
+  background-image: url('#{$root_url}/yellow_dot.png');
+}
+
+@mixin blue-dot {
+  @include icon;
+  background-image: url('#{$root_url}/blue_dot.png');
+}
+
 @mixin li-h {
   @include bg;
   background-image: url('#{$root_url}/li_h.png');
