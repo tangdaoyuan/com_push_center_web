@@ -2,7 +2,7 @@
   <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="cancel()"/>
-      <span>{{(msgId) ? ('编辑') : ('新增')}}消息队列</span>
+      <span>{{(msgId) ? ('编辑') : ('新增')}}{{isFlow?'Kafka':'消息'}}队列</span>
     </div>
     <div class="manage-body">
       <div class="step-box">
@@ -20,7 +20,7 @@
             <div class="item-body">
               <div class="item-form">
                 <label class="item-form-title">数据源</label>
-                <el-select class="item-select" v-model="msgData1.type" disabled filterable>
+                <el-select class="item-select" v-model="dmType" disabled filterable>
                   <el-option
                     v-for="item in CONSTANT.dmTypeList"
                     :value="item.value"
@@ -30,8 +30,12 @@
                 </el-select>
               </div>
               <div class="item-form">
-                <label class="item-form-title">数据源名称</label>
+                <label class="item-form-title"><span>*</span>数据源名称</label>
                 <Input class="item-input" v-model="msgData1.name" :maxlength="16" />
+              </div>
+              <div class="item-form" v-if="isFlow">
+                <label class="item-form-title">线程数量</label>
+                <InputNumber class="item-input" v-model="msgData1.params.consumer_no" :min="0"  ></InputNumber>
               </div>
               <div class="item-form-area">
                 <Input class="item-input" v-model="msgData1.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200" />
@@ -59,8 +63,12 @@
                 <Icon type="ios-copy" @click="copyKey($event, 'Secret Key', sk)" />
               </div>
               <div class="item-form">
-                <label class="item-form-title">Topic</label>
+                <label class="item-form-title"><span>*</span>Topic</label>
                 <Input class="item-input right" :maxlength="16" v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
+              </div>
+              <div class="item-form" v-if="isFlow">
+                <label class="item-form-title">Kafak地址</label>
+                <Input class="item-input right" :maxlength="16" v-model="msgData1.params.address"/>
               </div>
             </div>
           </div>
@@ -115,7 +123,13 @@
 export default {
   props: {
     value: Boolean,
-    msgId: String
+    msgId: String,
+    isFlow: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
   },
   data () {
     return {
@@ -128,13 +142,13 @@ export default {
       msgData1: {
         name: '',
         desc: '',
-        type: 2,
         params: {
-          topic: ''
+          topic: '',
+          address: '',
+          consumer_no: 1
         }
       },
       msgData2: {
-        type: 2,
         temp_id: '',
         params: {
           table_fields: [
@@ -146,6 +160,11 @@ export default {
           ]
         }
       }
+    }
+  },
+  computed: {
+    dmType () {
+      return this.isFlow ? 7 : 2
     }
   },
   methods: {
@@ -168,9 +187,11 @@ export default {
         this.msgData1 = {
           name: this.dataSource.name,
           desc: this.dataSource.desc,
-          type: 2,
+          type: this.dmType,
           params: {
-            topic: this.dataSource.topic
+            topic: this.dataSource.topic,
+            address: this.dataSource.address,
+            consumer_no: this.dataSource.consumer_no
           }
         }
         this.setting.forEach(item => {
@@ -197,6 +218,7 @@ export default {
         if (this.msgId) {
           this.dmService.editApiData({
             ...this.msgData1,
+            type: this.dmType,
             id: this.dataSource.id
           }).then(res => {
             if (res.status === 0) {
@@ -213,7 +235,10 @@ export default {
               id: ''
             }
           ]
-          this.dmService.saveMsgTmpData(this.msgData1).then(res => {
+          this.dmService.saveMsgTmpData({
+            ...this.msgData1,
+            type: this.dmType
+          }).then(res => {
             if (res.status === 0) {
               this.msgData2.temp_id = res.data.temp_id
               this.currentStep = 1
@@ -249,13 +274,16 @@ export default {
         this.dmService.saveEditData({
           ...this.msgData2,
           temp_id: undefined,
+          type: this.dmType,
           ds_id: this.dataSource.id,
           tb_id: this.tbID
         }).then(res => {
           if (res.status === 0) {
             this.$message.success('编辑消息队列成功')
-            this.$emit('refresh')
             this.close()
+            this.$nextTick(() => {
+              this.$emit('refresh')
+            })
           } else {
             this.$message.error(res.msg)
           }
@@ -272,6 +300,7 @@ export default {
           }
         })
         putData.params.table_fields = fields
+        putData.type = this.dmType
         if (putData.params.table_fields.length === 0) {
           this.$message.error('参数设置不能为空')
           return
@@ -295,7 +324,6 @@ export default {
       this.msgData1 = {
         name: '',
         desc: '',
-        type: 2,
         params: {
           topic: ''
         }

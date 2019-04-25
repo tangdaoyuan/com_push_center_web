@@ -21,6 +21,8 @@ export default class Service {
         iView.Spin.show()
       }
       reqCount++
+      // console.log('request', reqCount)
+      // console.log('request', config.url)
       return config
     }, error => {
       reqCount--
@@ -39,6 +41,8 @@ export default class Service {
     axios.interceptors.response.use(
       response => {
         reqCount--
+        // console.log('response', reqCount)
+        // console.log('response', response.config.url)
         if (reqCount === 0) {
           setTimeout(() => {
             iView.Spin.hide()

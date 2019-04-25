@@ -20,13 +20,17 @@
             <div class="item-body">
               <div class="item-form">
                 <label class="item-form-title">数据源</label>
-                <el-select class="item-select" v-model="oracleData.type" disabled filterable>
+                <el-select class="item-select" v-model="dmType" disabled filterable>
                   <el-option v-for="item in CONSTANT.dmTypeList" :value="item.value" :key="item.value" :label="item.label"></el-option>
                 </el-select>
               </div>
               <div class="item-form">
                 <label class="item-form-title"><span>*</span>数据源名称</label>
                 <Input class="item-input" v-model="oracleData.name" :maxlength="16" />
+              </div>
+              <div class="item-form" v-if="isFlow">
+                <label class="item-form-title"><span>*</span>线程数量</label>
+                <InputNumber class="item-input" v-model="oracleData.params.consumer_no" :min="0"  ></InputNumber>
               </div>
               <div class="item-form-area">
                 <Input class="item-input" v-model="oracleData.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200" />
@@ -165,7 +169,13 @@
 export default {
   props: {
     value: Boolean,
-    oracleId: String
+    oracleId: String,
+    isFlow: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
   },
   data () {
     return {
@@ -175,7 +185,6 @@ export default {
       oracleList: {},
       wsModal: false,
       oracleData: {
-        type: 5,
         name: '',
         desc: '',
         params: {
@@ -185,7 +194,8 @@ export default {
           username: '',
           password: '',
           database: '',
-          table: ''
+          table: '',
+          consumer_no: 1
         }
       },
       oracleData2: {
@@ -215,6 +225,11 @@ export default {
       sync_fields: [],
       oracleSchema: {},
       serveType: 'SID'
+    }
+  },
+  computed: {
+    dmType () {
+      return this.isFlow ? 8 : 5
     }
   },
   methods: {
@@ -264,7 +279,7 @@ export default {
           }
           this.editData2 = {
             tb_id: res.data.table_id,
-            type: 5,
+            type: this.dmType,
             ds_id: this.oracleList.id
           }
         }
@@ -335,11 +350,11 @@ export default {
           this.$message.error('数据库端口号不能为空')
           return
         }
-
         if (this.oracleId) {
           this.dmService.editApiData({
             ...putData,
             params: undefined,
+            type: this.dmType,
             id: this.oracleList.id
           }).then(res => {
             if (res.status === 0) {
@@ -349,7 +364,10 @@ export default {
             }
           })
         } else {
-          this.dmService.saveMsgTmpData(putData).then(res => {
+          this.dmService.saveMsgTmpData({
+            ...putData,
+            type: this.dmType
+          }).then(res => {
             if (res.status === 0) {
               this.oracleSchema = res.data.schema
               this.oracleSchema.fields.forEach(item => {
@@ -369,7 +387,7 @@ export default {
     },
     finishOracle () {
       const putData = {
-        type: 5,
+        type: this.dmType,
         temp_id: this.oracleData2.temp_id,
         params: {}
       }

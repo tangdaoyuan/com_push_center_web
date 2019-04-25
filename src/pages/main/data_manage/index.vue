@@ -72,8 +72,8 @@
     <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
     <adm-syncbdp v-model="modals.admBdpModal" @refresh="init" :bdp-id="datasourceID.bdpID"/>
     <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID" @close="closeAdmMysql"/>
-    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle"/>
-    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg"/>
+    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle" :is-flow="isFlow.oracle"/>
+    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" @close="closeAdmApi"/>
   </div>
 </template>
@@ -105,6 +105,10 @@ export default {
       tableData: [],
       statistics: {},
       apiData: {},
+      isFlow: {
+        oracle: false,
+        msg: false
+      },
       modals: {
         daModal: false,
         diModal: false,
@@ -279,10 +283,12 @@ export default {
           break
         case 2:
           this.modals.admMsgModal = true
+          this.isFlow.msg = false
           this.datasourceID.msgID = item.id
           break
         case 5:
           this.modals.admOracleModal = true
+          this.isFlow.oracle = false
           this.datasourceID.oracleID = item.id
           break
         case 6:
@@ -292,6 +298,16 @@ export default {
         case 1:
           this.modals.admBdpModal = true
           this.datasourceID.bdpID = item.id
+          break
+        case 7:
+          this.modals.admMsgModal = true
+          this.isFlow.msg = true
+          this.datasourceID.msgID = item.id
+          break
+        case 8:
+          this.modals.admOracleModal = true
+          this.isFlow.oracle = true
+          this.datasourceID.oracleID = item.id
           break
       }
     },
