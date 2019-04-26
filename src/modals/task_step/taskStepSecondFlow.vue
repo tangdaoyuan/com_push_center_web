@@ -94,12 +94,12 @@
         </div>
         <div class="step-table">
           <div class="table-header">
-            <span class="table-selection">选择纬度表</span>
+            <span @click="showFlowSelectTable" class="table-selection">选择纬度表</span>
             <div class="table-item">
               <span class="item-title">武汉铁路维度表</span>
               <span class="el-icon-close item-del"></span>
             </div>
-            <span class="table-preview">数据预览</span>
+            <span @click="showFlowDataTable" class="table-preview">数据预览</span>
           </div>
           <div class="table-body">
             <Tabs size="small" v-model="tabName" on-click="changeTab">
@@ -173,6 +173,12 @@
       <el-button v-show="!$store.state.task.taskData" @click="prev()">上一步</el-button>
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
     </div>
+    <flow-data-table
+      v-model="modals.flowDataTable"
+      @close="closeFlowDataTable"></flow-data-table>
+    <flow-select-table
+      v-model="modals.flowSelectTable"
+      @close="closeFlowSelectTable"></flow-select-table>
   </div>
 </template>
 <script>
@@ -184,6 +190,10 @@ export default {
     return {
       tabName: 'first',
       filterText: '',
+      modals: {
+        flowDataTable: false,
+        flowSelectTable: false
+      },
       treeList: [],
       chooseTag: [],
       filterToogle: false,
@@ -201,6 +211,18 @@ export default {
     }
   },
   methods: {
+    showFlowDataTable () {
+      this.modals.flowDataTable = true
+    },
+    closeFlowDataTable () {
+      this.modals.flowDataTable = false
+    },
+    showFlowSelectTable () {
+      this.modals.flowSelectTable = true
+    },
+    closeFlowSelectTable () {
+      this.modals.flowSelectTable = false
+    },
     init () {
       if (!this.treeList || this.treeList.length === 0) {
         this.wtService.getFolder().then(res => {

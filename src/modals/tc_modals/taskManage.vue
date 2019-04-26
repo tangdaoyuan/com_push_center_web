@@ -1,5 +1,8 @@
 <template>
-  <Modal class="manage-modal task-manage" v-model="value" fullscreen>
+  <Modal
+    class="manage-modal task-manage"
+      v-model="value"
+      fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="back($event)"/>
       <span>{{($store.state.task.taskId) ? '编辑' : '新建'}}任务</span>
