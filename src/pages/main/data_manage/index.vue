@@ -67,8 +67,8 @@
       </div>
     </div>
     <detail-api v-model="modals.daModal" :detailID="detailID" @close="closeDaApi"></detail-api>
-    <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo"></detail-info>
-    <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle"></detail-oracle>
+    <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo" :is-flow="isFlow.msg"></detail-info>
+    <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle" :is-flow="isFlow.oracle"></detail-oracle>
     <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
     <adm-syncbdp v-model="modals.admBdpModal" @refresh="init" :bdp-id="datasourceID.bdpID"/>
     <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID" @close="closeAdmMysql"/>
@@ -235,6 +235,7 @@ export default {
           break
         case 2:
           // info详情
+          this.isFlow.msg = false
           this.modals.diModal = true
           break
         case 3:
@@ -245,9 +246,20 @@ export default {
           this.$message.info('excel表格无详情页')
           break
         case 5:
+          this.isFlow.oracle = false
+          this.modals.doModal = true
+          break
         case 6:
           this.modals.doModal = true
           // this.detailID = id
+          break
+        case 7:
+          this.isFlow.msg = true
+          this.modals.diModal = true
+          break
+        case 8:
+          this.isFlow.oracle = true
+          this.modals.doModal = true
           break
       }
     },

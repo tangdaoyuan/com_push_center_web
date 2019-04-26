@@ -120,6 +120,7 @@
   </Modal>
 </template>
 <script>
+import { setTimeout } from 'timers'
 export default {
   props: {
     value: Boolean,
@@ -280,10 +281,10 @@ export default {
         }).then(res => {
           if (res.status === 0) {
             this.$message.success('编辑消息队列成功')
-            this.close()
-            this.$nextTick(() => {
-              this.$emit('refresh')
-            })
+            this.$emit('refresh')
+            setTimeout(() => {
+              this.close()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }

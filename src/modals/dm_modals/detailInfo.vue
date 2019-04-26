@@ -35,6 +35,14 @@
               <span>Topic</span>
               <span>{{detailListInfo.dataSource.topic}}</span>
             </div>
+             <div v-if="isFlow" class="con-item">
+              <span>Kafka地址</span>
+              <span>{{detailListInfo.dataSource.address}}</span>
+            </div>
+             <div v-if="isFlow" class="con-item">
+              <span>线程数量</span>
+              <span>{{detailListInfo.dataSource.consumer_no}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -60,7 +68,13 @@
 export default {
   props: {
     value: Boolean,
-    detailID: String
+    detailID: String,
+    isFlow: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
   },
   data () {
     return {

@@ -357,7 +357,9 @@ export default {
             // this.$router.push('/dm')
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.close()
+            setTimeout(() => {
+              this.close()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }

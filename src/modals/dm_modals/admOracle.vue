@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="adm-step-oracle adm-step2" v-show="currentStep === 1">
-        <word-setting :datas="chooseWords" :dataSchema="oracleSchema" @finish="finishWordSetting" v-model="wsModal" />
+        <word-setting :datas="chooseWords" :dataSchema="oracleSchema" @finish="finishWordSetting" @close="closeWordSetting"  v-model="wsModal" />
         <div class="step-body">
           <div class="item-body">
             <div class="item-form item-form1">
@@ -235,6 +235,9 @@ export default {
   methods: {
     close () {
       this.$emit('close')
+    },
+    closeWordSetting () {
+      this.wsModal = false
     },
     changeStep (step) {
       if (this.oracleId) {
@@ -411,7 +414,9 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.close()
+            setTimeout(() => {
+              this.close()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }
