@@ -1175,7 +1175,7 @@
 .flow-table-main {
   .ivu-modal {
     width: 1200px !important;
-    top: 25px;
+    top: 88px;
   }
   .ivu-modal-content {
     width: 1200px;
@@ -1388,6 +1388,113 @@
           font-weight: bold;
         }
       }
+    }
+  }
+}
+
+.grid-main {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  align-content: start;
+  align-items: center;
+  grid-gap: 16px;
+  padding: 16px 0;
+  .item {
+    &.r-span {
+      justify-self: end;
+      .red-dot {
+        margin-right: 4px;
+      }
+      .red-dot::before {
+        @include red-dot;
+        content: "";
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+      }
+    }
+    input {
+      width: 350px;
+      background-color: transparent;
+      border: 0;
+      border-bottom: 1px solid #94BCFF;
+      border-radius: 0;
+      color: #000000;
+      font-size: 14px;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.flow-api-main {
+  width: 100%;
+  height: 100%;
+
+  .api-header,
+  .filter-header {
+    width: 100%;
+    height: 36px;
+    background-color: rgba(41, 121, 255, .08);
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    font-size: 13px;
+
+    span {
+      color: rgba(5, 16, 33, .72);
+    }
+    span:first-child {
+       color: #051021;
+    }
+    span:last-child {
+      margin-left: 8px;
+      color: #8992A2;
+    }
+  }
+  .api-main {
+    height: calc(100% - 120px);
+    background-color: #fff;
+    grid: auto 32px 32px/100px 400px;
+  }
+}
+.flow-sys-main {
+  width: 100%;
+  height: 100%;
+
+  .sys-header,
+  .filter-header {
+    width: 100%;
+    height: 36px;
+    background-color: rgba(41, 121, 255, .08);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 13px;
+
+    span {
+      color: rgba(5, 16, 33, .72);
+    }
+    span:first-child {
+       color: #051021;
+    }
+    span:last-child {
+      margin-left: 8px;
+      color: #8992A2;
+    }
+  }
+  .sys-main {
+    grid: auto 32px 32px 32px 32px 32px / 100px 350px 100px 350px;
+    justify-content: start;
+    height: calc(100% - 120px);
+    background-color: #fff;
+    .user-input {
+      grid-area: 3/2/4/5;
+    }
+    .pwd-input {
+      grid-area: 4/2/5/5;
     }
   }
 }
