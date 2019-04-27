@@ -1,13 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1">
-    <task-filter
-      v-model="taskFilterModal"
-      :choose-index="chooseIndex"
-      :filter-data="chooseFilter"
-      :table-data="tableData"
-      :table-map="tableMap"
-      @ok="addFilter"
-      @close="closeTaskFilter" />
+  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.USER">
     <div class="step-filter-body">
       <div class="ts-left ts-left-flow">
         <div class="ts-step-header">
@@ -184,7 +176,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -197,8 +190,6 @@ export default {
       treeList: [],
       chooseTag: [],
       filterToogle: false,
-      taskFilterModal: false,
-      filterDeleteModal: false,
       chooseFilterType: 1,
       chooseIndex: -1,
       tableMap: {},
@@ -252,9 +243,6 @@ export default {
           }
         })
       }
-    },
-    closeTaskFilter () {
-      this.taskFilterModal = false
     },
     changeTab (tab, event) {
       console.log(tab)

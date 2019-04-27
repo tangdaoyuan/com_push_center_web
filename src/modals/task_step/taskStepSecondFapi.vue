@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1">
+  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.API">
     <div class="flow-api-main">
       <div class="api-header">
         <span>连接配置</span>
@@ -30,7 +30,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {

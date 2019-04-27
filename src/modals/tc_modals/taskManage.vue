@@ -11,28 +11,42 @@
       <task-step-first @refresh="refresh" :step="currentStep" @next="next"/>
       <div class="step-box" v-show="currentStep > 0">
         <Steps :current="currentStep">
-          <!-- <Step title="创建基本信息" @click.native="editStep($event, 0)" content=""></Step> -->
-          <Step title="选择工作表" v-show="false" @click.native="editStep($event, 1)" content=""></Step>
-          <Step title="设置任务字段" v-show="true" @click.native="editStep($event, 1)" content=""></Step>
-          <Step title="设置推送信息" @click.native="editStep($event, 2)" content=""></Step>
-          <Step title="设置推送用户" @click.native="editStep($event, 3)" content=""></Step>
-          <Step title="设置推送通道" @click.native="editStep($event, 4)" content=""></Step>
+          <Step
+            v-show="taskStep === CONSTANT.taskStep.NORMAL"
+            title="选择工作表"
+            @click.native="editStep($event, 1)" content=""></Step>
+          <Step
+            v-show="taskStep != CONSTANT.taskStep.NORMAL"
+            title="设置任务字段"
+            @click.native="editStep($event, 1)" content=""></Step>
+          <Step
+            title="设置推送信息"
+            @click.native="editStep($event, 2)" content=""></Step>
+          <Step
+            v-if="taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER"
+            title="设置推送用户" @click.native="editStep($event, 3)" content=""></Step>
+          <Step
+            v-if="taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER"
+            title="设置推送通道" @click.native="editStep($event, 4)" content=""></Step>
         </Steps>
       </div>
-      <task-step-second @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <!-- <task-step-second-fuser  v-show="false" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/> -->
-      <!-- <task-step-second-fsys v-show="false" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/> -->
-      <!-- <task-step-second-fapi v-show="false" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/> -->
+      <task-step-second
+        :task-step="taskStep"
+        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-second-fuser
+        :task-step="taskStep"
+        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-second-fsys
+        :task-step="taskStep"
+        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-second-fapi
+        :task-step="taskStep"
+        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-third @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-forth @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
       <task-step-fifth @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
     </div>
-    <div class="task-footer" v-show="false" slot="footer">
-      <div class="footer">
-        <el-button v-show="!$store.state.task.taskData" @click="prev()">上一步</el-button>
-        <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
-      </div>
-    </div>
+    <div class="task-footer" v-show="false" slot="footer"></div>
   </Modal>
 </template>
 <script>
@@ -42,7 +56,8 @@ export default {
   },
   data () {
     return {
-      currentStep: -1
+      currentStep: -1,
+      taskStep: -1
     }
   },
   methods: {
@@ -52,9 +67,13 @@ export default {
     back () {
       this.$store.commit('resetTaskEdit')
       this.currentStep = -1
+      this.taskStep = -1
       this.close()
     },
     next (type, data) {
+      if (type === 0 && data !== undefined) {
+        this.taskStep = data
+      }
       this.currentStep++
     },
     refresh () {
@@ -76,6 +95,7 @@ export default {
     finish () {
       this.close()
       this.currentStep = -1
+      this.taskStep = -1
       this.$store.commit('resetTaskEdit')
       this.$emit('refresh')
     }
@@ -88,6 +108,9 @@ export default {
             id: this.$store.state.task.taskId
           }).then(() => {
             this.currentStep = 1
+            // TODO
+            // receive taskStep status and set taskStep
+            this.taskStep = 0
           })
         } else {
           this.currentStep = 0

@@ -1,4 +1,19 @@
 class CONSTANT {
+  tableType = {
+    'NORMAL': 0,
+    'FLOW': 1
+  }
+  pushType = {
+    'USER': 0,
+    'DATABASE': 1,
+    'API': 2
+  }
+  taskStep = {
+    'NORMAL': 0,
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
+  }
   dmTypeList = [
     {
       label: 'BDP同步客户端',

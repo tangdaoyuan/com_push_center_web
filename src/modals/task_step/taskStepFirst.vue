@@ -29,7 +29,7 @@
           <Radio :label="1">流式工作表</Radio>
         </RadioGroup>
       </div>
-      <div class="np-item">
+      <div class="np-item" v-show="tableType">
         <span class="item-title radio-title">选择推送对象</span>
         <RadioGroup v-model="pushType">
           <Radio :label="0">推送用户</Radio>
@@ -97,7 +97,7 @@ export default {
           this.$message.success('保存成功')
           if (!this.$store.state.task.taskData) {
             this.$store.commit('setTaskId', res.data.task_id)
-            this.$emit('next', 0)
+            this.$emit('next', 0, this.taskStep())
           } else {
             this.$emit('refresh')
           }
@@ -105,6 +105,20 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    taskStep () {
+      if (this.tableType === this.CONSTANT.tableType.NORMAL) {
+        return this.CONSTANT.taskStep.NORMAL
+      } else if (this.tableType === this.CONSTANT.tableType.FLOW) {
+        switch (this.pushType) {
+          case this.CONSTANT.pushType.USER:
+            return this.CONSTANT.taskStep.USER
+          case this.CONSTANT.pushType.DATABASE:
+            return this.CONSTANT.taskStep.DATABASE
+          case this.CONSTANT.pushType.API:
+            return this.CONSTANT.taskStep.API
+        }
+      }
     }
   },
   watch: {
