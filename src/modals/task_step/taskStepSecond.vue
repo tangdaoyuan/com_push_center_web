@@ -273,7 +273,6 @@ export default {
       this.chooseFilter = item
       this.chooseIndex = index
       this.taskFilterModal = true
-      console.log(item)
     },
     addTaskFilter () {
       this.chooseIndex = -1
@@ -291,6 +290,7 @@ export default {
           chooseIndex: undefined
         }]
       }
+      this.closeTaskFilter()
     },
     deleteFilter (item, index) {
       item.deleteModal = false

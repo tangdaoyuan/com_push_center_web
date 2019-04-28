@@ -701,6 +701,7 @@
             display: flex;
             align-items: center;
             justify-content: start;
+            transition: 500ms;
 
             .table-selection {
               color: #051021;
@@ -732,11 +733,22 @@
             }
           }
           .table-body {
+            height: calc(100% - 30px);
             width: 100%;
             font-size: 12px;
             font-weight: bold;
-            .ivu-tabs-nav {
-              color: #B4B7BD;
+            .ivu-tabs {
+              height: 100%;
+              .ivu-tabs-content {
+                height: calc(100% - 50px);
+              }
+              .ivu-tabs-tabpane{
+                overflow-y: auto;
+                overflow-x: hidden;
+              }
+              .ivu-tabs-nav {
+                color: #B4B7BD;
+              }
             }
             .table-panel {
               width: 100%;
@@ -753,18 +765,27 @@
                 justify-self: start;
                 color: #F5A623;
               }
-              .select {
+              .select-box {
                 width: 100%;
-              }
-              .op-box {
-                & > span {
-                  font-weight: bold;
-                  &:last-child {
-                    margin-left: 12px;
-                  }
-                  &.el-icon-plus,
-                  &.el-icon-minus {
-                    cursor: pointer;
+                grid-column: 1/5;
+                display: grid;
+                grid: auto/1fr 40px 1fr 50px;
+                align-items: center;
+                justify-items: center;
+                
+                .select {
+                  width: 100%;
+                }
+                .op-box {
+                  & > span {
+                    font-weight: bold;
+                    &:last-child {
+                      margin-left: 12px;
+                    }
+                    &.el-icon-plus,
+                    &.el-icon-minus {
+                      cursor: pointer;
+                    }
                   }
                 }
               }
@@ -808,11 +829,13 @@
               height: 28px;
               margin: 4px auto;
               background: rgba(41,121,255,0.10);
+              border: 1px solid transparent;
               font-size: 12px;
               line-height: 26px;
               display: flex;
               justify-content: start;
               align-items: center;  
+
               .dot {
                 width: 8px;
                 height: 8px;
@@ -825,16 +848,20 @@
                   @include blue-dot;
                 }
               }
-              
-              &.selected {
-                border: 1px solid #2979FF;
+              .hide {
+                display: none;
               }
-
               &:last-child {
                 margin-bottom: 8px;
               }
               &:hover {
+                .hide {
+                  display: block;
+                  transition: 500ms;
+                }
+                border: 1px solid #2979FF;
                 cursor: pointer;
+                transition: 500ms;
               }
               & > span {
                 margin-left: 8px;

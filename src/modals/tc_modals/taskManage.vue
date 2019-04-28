@@ -71,6 +71,7 @@ export default {
       this.close()
     },
     next (type, data) {
+      console.log(`current task type: ${type}`)
       if (type === 0 && data !== undefined) {
         this.taskStep = data
       }

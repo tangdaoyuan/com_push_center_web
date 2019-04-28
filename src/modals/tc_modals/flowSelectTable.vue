@@ -45,25 +45,32 @@ export default {
   data () {
     return {
       filterText: '',
-      treeList: [
-        {
-          children: [],
-          id: 'tb_1',
-          is_deleted: 0,
-          name: '时间测试数据',
-          type: 4
-        }
-      ],
-      chooseTag: []
+      treeList: [],
+      chooseTag: [],
+      params: {
+        id: '',
+        name: ''
+      }
     }
   },
   methods: {
+    init () {
+      if (!this.treeList || this.treeList.length === 0) {
+        this.wtService.getFolder().then(res => {
+          if (res.status === 0) {
+            this.treeList = res.data
+          }
+        })
+      }
+    },
     choose (node) {
       if (this.$store.state.task.taskData) {
         this.$message.warning('编辑过程中不允许更换数据表')
       } else {
         if (this.utils.getType(node.id) === 'field') {
           this.chooseTag = [node.id]
+          this.params.id = node.id
+          this.params.name = node.name
         }
       }
     },
@@ -111,10 +118,35 @@ export default {
       return h('div', spanRes1, innerSpan)
     },
     ok () {
-      console.log('ok')
+      if (this.chooseTag.length <= 0) {
+        this.$message.error('请选择纬度表')
+      }
+      this.wtService.getprewData({
+        page_no: 1,
+        page_size: 100,
+        tb_id: this.chooseTag[0]
+      }).then(res => {
+        if (res.status === 0) {
+          const datas = {
+            ...this.params,
+            ...res.data
+          }
+          this.$emit('ok', datas)
+        }
+      })
     },
     close () {
       this.$emit('close')
+    }
+  },
+  watch: {
+    value () {
+      if (this.value) {
+        this.init()
+      }
+    },
+    filterText (val) {
+      this.$refs.treeList.filter(val)
     }
   }
 }

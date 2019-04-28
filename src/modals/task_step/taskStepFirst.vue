@@ -24,17 +24,17 @@
       <div class="np-item seperator"></div>
       <div class="np-item">
         <span class="item-title radio-title">选择工作表</span>
-        <RadioGroup v-model="tableType">
-          <Radio :label="0">普通工作表</Radio>
-          <Radio :label="1">流式工作表</Radio>
+        <RadioGroup v-model="taskData.tableType">
+          <Radio :label="1">普通工作表</Radio>
+          <Radio :label="2">流式工作表</Radio>
         </RadioGroup>
       </div>
-      <div class="np-item" v-show="tableType">
+      <div class="np-item" v-show="taskData.tableType > 1">
         <span class="item-title radio-title">选择推送对象</span>
-        <RadioGroup v-model="pushType">
-          <Radio :label="0">推送用户</Radio>
-          <Radio :label="1">推送数据库</Radio>
-          <Radio :label="2">推送API</Radio>
+        <RadioGroup v-model="taskData.pushType">
+          <Radio :label="1">推送用户</Radio>
+          <Radio :label="2">推送数据库</Radio>
+          <Radio :label="3">推送API</Radio>
         </RadioGroup>
       </div>
     </div>
@@ -54,10 +54,10 @@ export default {
         name: '',
         type: '',
         describe: '',
-        id: ''
+        id: '',
+        tableType: 1,
+        pushType: 1
       },
-      tableType: 0,
-      pushType: 0,
       taskTypelist: []
     }
   },
@@ -91,6 +91,7 @@ export default {
         id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
       }
 
+      this.$emit('next', 0, this.taskStep())
       const service = this.$store.state.task.taskData ? this.tcService.saveTaskEdit(putData) : this.tcService.addTask(putData)
       service.then(res => {
         if (res.status === 0) {
@@ -107,10 +108,10 @@ export default {
       })
     },
     taskStep () {
-      if (this.tableType === this.CONSTANT.tableType.NORMAL) {
+      if (this.taskData.tableType === this.CONSTANT.tableType.NORMAL) {
         return this.CONSTANT.taskStep.NORMAL
-      } else if (this.tableType === this.CONSTANT.tableType.FLOW) {
-        switch (this.pushType) {
+      } else if (this.taskData.tableType === this.CONSTANT.tableType.FLOW) {
+        switch (this.taskData.pushType) {
           case this.CONSTANT.pushType.USER:
             return this.CONSTANT.taskStep.USER
           case this.CONSTANT.pushType.DATABASE:

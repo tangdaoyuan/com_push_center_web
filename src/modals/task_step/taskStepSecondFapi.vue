@@ -8,16 +8,24 @@
       <div class="grid-main api-main">
         <div class="item r-span">
           <i class="red-dot"></i>
-          <span>Api地址</span>
+          <span>API地址</span>
         </div>
         <div class="item">
-          <input type="text">
+          <input v-model="taskData.host" type="text">
         </div>
         <div class="item r-span">
           <span>起止时间</span>
         </div>
         <div class="item">
-          <input type="text">
+          <el-date-picker
+            v-model="date"
+            @change="changeDate"
+            type="daterange"
+            :editable="false"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
         </div>
       </div>
     </div>
@@ -35,15 +43,49 @@ export default {
   },
   data () {
     return {
-
+      date: null,
+      taskData: {
+        host: '',
+        start_time: undefined,
+        end_time: undefined
+      }
     }
   },
   methods: {
+    changeDate (dates) {
+      if (dates) {
+        this.taskData.start_time = dates[0].getTime()
+        this.taskData.end_time = dates[1].getTime()
+      }
+    },
     prev () {
       this.$emit('prev')
     },
     next () {
-      this.$emit('next')
+      if (!this.taskData.host) {
+        this.$message.error('API地址不可为空')
+        return
+      }
+      const pushData = {
+        api: {
+          ...this.taskData
+        },
+        id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
+      }
+
+      console.log(pushData)
+      const service = this.$store.state.task.taskData ? this.tcService.editStep2ByDBorAPI(pushData) : this.tcService.saveTask2SettingByDBorAPI(pushData)
+
+      service.then(res => {
+        if (res.state === 0) {
+          this.$message.success('保存成功')
+          if (!this.$store.state.task.taskData) {
+            this.$emit('next', 1)
+          } else {
+            this.$emit('refresh')
+          }
+        }
+      })
     }
   },
   watch: {

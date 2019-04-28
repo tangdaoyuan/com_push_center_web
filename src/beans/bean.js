@@ -1,12 +1,12 @@
 class CONSTANT {
   tableType = {
-    'NORMAL': 0,
-    'FLOW': 1
+    'NORMAL': 1,
+    'FLOW': 2
   }
   pushType = {
-    'USER': 0,
-    'DATABASE': 1,
-    'API': 2
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
   }
   taskStep = {
     'NORMAL': 0,

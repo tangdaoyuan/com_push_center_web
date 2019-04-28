@@ -79,6 +79,17 @@ class Utils {
     return res
   }
 
+  filterEmptyField (obj) {
+    if (obj) {
+      return obj.filter(item => {
+        for (const k in item) {
+          if (item[k] === undefined || item[k] == null || item[k] === '') return false
+        }
+        return true
+      })
+    }
+  }
+
   viewGo (url) {
     const a = $(`<a href="${url}" target="_blank"></a>`)
     const dom = a.get(0)

@@ -1,5 +1,13 @@
 <template>
   <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.USER">
+    <task-filter
+      v-model="modals.taskFilterModal"
+      :choose-index="chooseIndex"
+      :filter-data="chooseFilter"
+      :table-data="tableData"
+      :table-map="tableMap"
+      @ok="addFilter"
+      @close="closeTaskFilter" />
     <div class="step-filter-body">
       <div class="ts-left ts-left-flow">
         <div class="ts-step-header">
@@ -29,7 +37,7 @@
       <div class="ts-content-flow">
         <div class="step-filter" :class="{'hide-body': filterToogle}">
           <div class="filter-header">
-            <span>武汉铁路表</span>
+            <span>{{sourceTbName || "请选择流式表"}}</span>
           </div>
           <div class="filter-body" :class="{'hide-body': filterToogle}">
             <div class="filter-text">
@@ -87,49 +95,82 @@
         <div class="step-table">
           <div class="table-header">
             <span @click="showFlowSelectTable" class="table-selection">选择纬度表</span>
-            <div class="table-item">
-              <span class="item-title">武汉铁路维度表</span>
-              <span class="el-icon-close item-del"></span>
+            <div v-show="targetTableData.id" class="table-item">
+              <span class="item-title">{{ targetTableData.name }}</span>
+              <span @click="resetTargetTable" class="el-icon-close item-del"></span>
             </div>
-            <span @click="showFlowDataTable" class="table-preview">数据预览</span>
+            <span
+              v-show="targetTableData.id"
+              @click="showFlowDataTable"
+              class="table-preview">
+              数据预览
+            </span>
           </div>
-          <div class="table-body">
-            <Tabs size="small" v-model="tabName" on-click="changeTab">
-              <TabPane label="条件碰撞" name="first">
+          <div v-show="true || sourceTbName" class="table-body">
+            <Tabs size="small" v-model="tabName">
+              <TabPane label="条件碰撞" name="relevanceTab">
                 <div class="table-panel">
-                  <span class="source-table">武汉铁路流失表</span>
+                  <span class="source-table">{{sourceTbName || "请选择流式表"}}</span>
                   <span>&nbsp;</span>
-                  <span class="target-table">武汉铁路纬度表</span>
+                  <span class="target-table">{{targetTableData.name || "请选择纬度表"}}</span>
                   <span>&nbsp;</span>
-                  <el-select class="select" value="性别">
-                    <el-option :key="1" value="性别" label="性别"></el-option>
-                    <el-option :key="2" value="年龄" label="年龄"></el-option>
-                  </el-select>
-                  <span class="equal">等于</span>
-                  <el-select class="select" value="男">
-                    <el-option :key="1" value="男" label="男"></el-option>
-                    <el-option :key="2" value="女" label="女"></el-option>
-                  </el-select>
-                  <div class="op-box">
-                    <span class="el-icon-plus"></span>
-                    <span class="el-icon-minus"></span>
+                  <div v-for="(row, index) in relevanceRules"
+                    :key="index"
+                    class="select-box">
+                    <el-select
+                      class="select"
+                      v-model="relevanceRules[index].origin_field_id">
+                      <el-option
+                        v-for="item in tableData.title_list"
+                        :key="item.id"
+                        :value="item.id"
+                        :label="item.alias || item.name">
+                      </el-option>
+                    </el-select>
+                    <span class="equal">等于</span>
+                    <el-select
+                      class="select"
+                      v-model="relevanceRules[index].target_field_id">
+                      <el-option
+                        v-for="item in targetTableData.title_list"
+                        :key="item.id"
+                        :value="item.id"
+                        :label="item.alias || item.name">
+                      </el-option>
+                    </el-select>
+                    <div class="op-box">
+                      <span @click="addRelRow(index)" class="el-icon-plus"></span>
+                      <span v-show="relevanceRules.length > 1" @click="removeRelRow(index)" class="el-icon-minus"></span>
+                    </div>
                   </div>
                 </div>
               </TabPane>
-              <TabPane label="数据筛选" name="second">
+              <TabPane label="数据筛选" name="filterTab">
                 <div class="table-panel">
-                  <el-select class="select" value="年龄">
-                    <el-option :key="1" value="性别" label="性别"></el-option>
-                    <el-option :key="2" value="年龄" label="年龄"></el-option>
-                  </el-select>
-                  <span class="equal">等于</span>
-                  <el-select class="select" value="10">
-                    <el-option :key="1" value="10" label="10"></el-option>
-                    <el-option :key="2" value="20" label="20"></el-option>
-                  </el-select>
-                  <div class="op-box">
-                    <span class="el-icon-plus"></span>
-                    <span class="el-icon-minus"></span>
+                  <div
+                    v-for="(row, index) in targetTableData.filterList"
+                    :key="index"
+                    class="select-box">
+                    <el-select
+                      class="select"
+                      v-model="targetTableData.filterList[index].field_id">
+                      <el-option
+                        v-for="item in targetTableData.title_list"
+                        :key="item.id"
+                        :value="item.id"
+                        :label="item.alias || item.name">
+                      </el-option>
+                    </el-select>
+                    <span class="equal">等于</span>
+                    <el-input
+                      class="select"
+                      v-model="targetTableData.filterList[index].value"
+                      placeholder="请输入内容">
+                    </el-input>
+                    <div class="op-box">
+                      <span @click="addFilRow(index)" class="el-icon-plus"></span>
+                      <span v-show="targetTableData.filterList.length > 1" @click="removeFilRow(index)" class="el-icon-minus"></span>
+                    </div>
                   </div>
                 </div>
               </TabPane>
@@ -141,21 +182,16 @@
         <div class="step-filter">
           <div class="filter-header">
             <span>输出字段</span>
-            <span class="el-icon-plus"></span>
+            <span @click="addOutputField" class="el-icon-plus"></span>
           </div>
           <div class="filter-body">
-            <div class="output-field selected">
-              <span class="dot b-dot"></span>
-              <span>字段一</span>
-              <span class="el-icon-close"></span>
-            </div>
-            <div class="output-field">
-              <span class="dot b-dot"></span>
-              <span>字段一</span>
-            </div>
-            <div class="output-field">
-              <span class="dot y-dot"></span>
-              <span>字段一</span>
+            <div
+              v-for="(item, index) in getOutputFields"
+              :key="item.id"
+              class="output-field">
+              <span class="dot" :class="item.table_id==targetTableData.id?'b-dot':'y-dot'"></span>
+              <span>{{item.alias || item.name}}</span>
+              <span @click="removeOutputField(index, item.table_id)" class="el-icon-close hide"></span>
             </div>
           </div>
         </div>
@@ -170,6 +206,7 @@
       @close="closeFlowDataTable"></flow-data-table>
     <flow-select-table
       v-model="modals.flowSelectTable"
+      @ok="chooseTargetTable"
       @close="closeFlowSelectTable"></flow-select-table>
   </div>
 </template>
@@ -181,24 +218,51 @@ export default {
   },
   data () {
     return {
-      tabName: 'first',
+      tbId: undefined,
+      tabName: 'relevanceTab',
       filterText: '',
       modals: {
         flowDataTable: false,
-        flowSelectTable: false
+        flowSelectTable: false,
+        taskFilterModal: false
       },
       treeList: [],
       chooseTag: [],
       filterToogle: false,
       chooseFilterType: 1,
       chooseIndex: -1,
+      sourceTbName: '',
       tableMap: {},
       tableData: {
         title_list: [],
         data_list: []
       },
+      targetTableData: {
+        id: undefined,
+        tbName: '',
+        filterLogic: 0,
+        title_list: [],
+        filterList: [
+          {
+            op: 'eq',
+            field_id: '',
+            value: ''
+          }
+        ]
+      },
       chooseFilter: {},
-      filterList: []
+      filterList: [],
+      relevanceRules: [
+        {
+          origin_field_id: '',
+          target_field_id: '',
+          origin_type: 1
+        }
+      ],
+      outputFields: {
+        sources: [],
+        targets: []
+      }
     }
   },
   methods: {
@@ -213,6 +277,9 @@ export default {
     },
     closeFlowSelectTable () {
       this.modals.flowSelectTable = false
+    },
+    closeTaskFilter () {
+      this.modals.taskFilterModal = false
     },
     init () {
       if (!this.treeList || this.treeList.length === 0) {
@@ -247,11 +314,51 @@ export default {
     changeTab (tab, event) {
       console.log(tab)
     },
+    addRelRow (index) {
+      this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
+    },
+    removeRelRow (index) {
+      this.relevanceRules.splice(index, 1)
+    },
+    addFilRow (index) {
+      this.targetTableData.filterList.splice(index + 1, 0, this.$options.data().targetTableData.filterList[0])
+    },
+    removeFilRow (index) {
+      this.targetTableData.filterList.splice(index, 1)
+    },
+    chooseTargetTable (targetTableData) {
+      if (targetTableData.id === this.tbId) {
+        this.$message.error('维度表与工作表重复')
+        return
+      }
+      this.targetTableData = {
+        ...this.$options.data().targetTableData,
+        ...targetTableData
+      }
+      this.outputFields.targets = targetTableData.title_list
+      this.closeFlowSelectTable()
+    },
+    resetTargetTable () {
+      Object.assign(this.targetTableData, this.$options.data().targetTableData)
+      this.outputFields.targets = []
+    },
+    addOutputField () {
+
+    },
+    removeOutputField (index) {
+      const len = this.outputFields.sources.length
+      if (index > len - 1) {
+        this.outputFields.targets.splice(index - len, 1)
+      } else {
+        this.outputFields.sources.splice(index, 1)
+      }
+    },
     choose (node) {
       if (this.$store.state.task.taskData) {
         this.$message.warning('编辑过程中不允许更换数据表')
       } else {
         if (this.utils.getType(node.id) === 'field') {
+          this.sourceTbName = node.name
           this.chooseTag = [node.id]
           this.chooseItem = node
           this.tbId = node.id
@@ -267,6 +374,7 @@ export default {
             if (res.status === 0) {
               this.tableData = res.data
               this.filterList = []
+              this.outputFields.sources = res.data.title_list
               this.$store.commit('setTableId', node.id)
               this.$store.commit('setTaskTableData', res.data)
             }
@@ -320,12 +428,11 @@ export default {
     editFilter (item, index) {
       this.chooseFilter = item
       this.chooseIndex = index
-      this.taskFilterModal = true
-      console.log(item)
+      this.modals.taskFilterModal = true
     },
     addTaskFilter () {
       this.chooseIndex = -1
-      this.taskFilterModal = true
+      this.modals.taskFilterModal = true
     },
     addFilter (res) {
       if (res.chooseIndex > -1) {
@@ -339,6 +446,7 @@ export default {
           chooseIndex: undefined
         }]
       }
+      this.closeTaskFilter()
     },
     deleteFilter (item, index) {
       item.deleteModal = false
@@ -366,26 +474,65 @@ export default {
         })
       }
 
+      let streamRules = []
+      if (this.targetTableData.id) {
+        streamRules.push({
+          table_id: this.targetTableData.id,
+          filter_logic: this.targetTableData.filterLogic,
+          filter_list: this.utils.filterEmptyField(this.targetTableData.filterList),
+          relevance_rules: this.utils.filterEmptyField(this.relevanceRules)
+        })
+      }
+
+      let outputFields = []
+      if (this.outputFields) {
+        outputFields.push(...this.outputFields.sources.map(item => {
+          return {
+            field_id: item.id,
+            table_id: this.tbId,
+            origin_type: 1
+          }
+        }))
+        if (this.targetTableData.id) {
+          outputFields.push(...this.outputFields.targets.map(item => {
+            return {
+              field_id: item.id,
+              table_id: this.targetTableData.id,
+              origin_type: 1
+            }
+          }))
+        }
+      }
+
       const putData = {
         id: this.$store.state.task.taskId,
         table_id: this.tbId,
         filter_list: this.filterList,
-        filter_logic: this.chooseFilterType
+        filter_logic: this.chooseFilterType,
+        stream_rules: streamRules,
+        output_fields: outputFields
       }
 
-      const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
-      service.then(res => {
-        if (res.status === 0) {
-          this.$message.success('保存成功')
-          if (!this.$store.state.task.taskData) {
-            this.$emit('next', 1)
-          } else {
-            this.$emit('refresh')
-          }
-        } else {
-          this.$message.error(res.msg || '保存失败')
-        }
-      })
+      console.log(putData)
+
+      // const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
+      // service.then(res => {
+      //   if (res.status === 0) {
+      //     this.$message.success('保存成功')
+      //     if (!this.$store.state.task.taskData) {
+      //       this.$emit('next', 1)
+      //     } else {
+      //       this.$emit('refresh')
+      //     }
+      //   } else {
+      //     this.$message.error(res.msg || '保存失败')
+      //   }
+      // })
+    }
+  },
+  computed: {
+    getOutputFields () {
+      return this.outputFields.sources.concat(this.outputFields.targets)
     }
   },
   watch: {
@@ -397,6 +544,9 @@ export default {
         })
         this.tableMap = tmp
       }
+    },
+    filterText (val) {
+      this.$refs.treeList.filter(val)
     },
     step () {
       if (this.step === 1) {
