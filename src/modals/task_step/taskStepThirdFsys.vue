@@ -1,9 +1,10 @@
 <template>
-  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.DATABASE">
+  <div class="step-body" v-show="step === 2 && taskStep === CONSTANT.taskStep.DATABASE">
     <div class="flow-sys-main">
       <div class="sys-header">
         <span>连接配置</span>
         <span>推送数据库是默认实时推送</span>
+
       </div>
       <div class="grid-main sys-main">
         <div class="item r-span">
@@ -125,18 +126,16 @@ export default {
         database: {
           ...this.taskData
         },
-        id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
+        id: this.$store.state.task.taskId
       }
       console.log(pushData)
-      const service = this.$store.state.task.taskData ? this.tcService.editStep2ByDBorAPI(pushData) : this.tcService.saveTask2SettingByDBorAPI(pushData)
+      const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {
-        if (res.state === 0) {
+        if (res.status === 0) {
           this.$message.success('保存成功')
-          if (!this.$store.state.task.taskData) {
-            this.$emit('next', 1)
-          } else {
-            this.$emit('refresh')
-          }
+          this.$emit('finish')
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },

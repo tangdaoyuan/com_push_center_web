@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.USER">
+  <div class="step-body" v-show="step === 1 && taskStep !== CONSTANT.taskStep.NORMAL">
     <task-filter
       v-model="modals.taskFilterModal"
       :choose-index="chooseIndex"
@@ -239,7 +239,7 @@ export default {
       },
       targetTableData: {
         id: undefined,
-        tbName: '',
+        name: '',
         filterLogic: 0,
         title_list: [],
         filterList: [
@@ -255,8 +255,7 @@ export default {
       relevanceRules: [
         {
           origin_field_id: '',
-          target_field_id: '',
-          origin_type: 1
+          target_field_id: ''
         }
       ],
       outputFields: {
@@ -291,7 +290,9 @@ export default {
       }
       if (this.$store.state.task.taskData) {
         const taskData = this.$store.state.task.taskData
+        console.log(taskData)
         this.chooseTag = [taskData.table_id]
+        this.sourceTbName = taskData.table_name
         this.chooseFilterType = taskData.filter_logic
         this.filterList = taskData.filter_list
         this.tbId = taskData.table_id
@@ -309,11 +310,47 @@ export default {
             this.$store.commit('setTaskTableData', res.data)
           }
         })
+
+        if (taskData.stream_rules && taskData.stream_rules.length > 0) {
+          const streamRule = taskData.stream_rules[0]
+          this.targetTableData.id = streamRule.table_id
+          this.targetTableData.name = streamRule.table_name
+
+          if (streamRule.relevance_rules && streamRule.relevance_rules.length > 0) {
+            this.relevanceRules = streamRule.relevance_rules
+          }
+
+          this.wtService.getprewData({
+            page_no: 1,
+            page_size: 100,
+            tb_id: this.targetTableData.id
+          }).then(res => {
+            if (res.status === 0) {
+              this.targetTableData.title_list = res.data.title_list
+            }
+          })
+        }
+        if (taskData.output_fields) {
+          taskData.output_fields.forEach(item => {
+            if (item.table_id === this.tbId) {
+              this.outputFields.sources.push({
+                id: item.field_id,
+                name: item.field_name,
+                table_id: item.table_id
+              })
+            }
+            if (item.table_id === this.targetTableData.id) {
+              this.outputFields.targets.push({
+                id: item.field_id,
+                name: item.field_name,
+                table_id: item.table_id
+              })
+            }
+          })
+        }
       }
     },
-    changeTab (tab, event) {
-      console.log(tab)
-    },
+    changeTab (tab, event) {},
     addRelRow (index) {
       this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
     },
@@ -335,7 +372,7 @@ export default {
         ...this.$options.data().targetTableData,
         ...targetTableData
       }
-      this.outputFields.targets = targetTableData.title_list
+      this.outputFields.targets = [...targetTableData.title_list]
       this.closeFlowSelectTable()
     },
     resetTargetTable () {
@@ -358,6 +395,10 @@ export default {
         this.$message.warning('编辑过程中不允许更换数据表')
       } else {
         if (this.utils.getType(node.id) === 'field') {
+          if (this.targetTableData.id === node.id) {
+            this.$message.error('维度表与工作表重复')
+            return
+          }
           this.sourceTbName = node.name
           this.chooseTag = [node.id]
           this.chooseItem = node
@@ -374,7 +415,7 @@ export default {
             if (res.status === 0) {
               this.tableData = res.data
               this.filterList = []
-              this.outputFields.sources = res.data.title_list
+              this.outputFields.sources = [...res.data.title_list]
               this.$store.commit('setTableId', node.id)
               this.$store.commit('setTaskTableData', res.data)
             }
@@ -514,20 +555,20 @@ export default {
       }
 
       console.log(putData)
-
-      // const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
-      // service.then(res => {
-      //   if (res.status === 0) {
-      //     this.$message.success('保存成功')
-      //     if (!this.$store.state.task.taskData) {
-      //       this.$emit('next', 1)
-      //     } else {
-      //       this.$emit('refresh')
-      //     }
-      //   } else {
-      //     this.$message.error(res.msg || '保存失败')
-      //   }
-      // })
+      console.log(this.$store.state.task.taskData)
+      const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
+      service.then(res => {
+        if (res.status === 0) {
+          this.$message.success('保存成功')
+          if (!this.$store.state.task.taskData) {
+            this.$emit('next', 1)
+          } else {
+            this.$emit('refresh')
+          }
+        } else {
+          this.$message.error(res.msg || '保存失败')
+        }
+      })
     }
   },
   computed: {

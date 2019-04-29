@@ -1,6 +1,7 @@
 import http from 'axios'
 import moment from 'moment'
 import $ from 'jquery'
+import Vue from 'vue'
 
 class Utils {
   fileCheck (checkList, str) {
@@ -48,6 +49,23 @@ class Utils {
       }
     } else {
       return ''
+    }
+  }
+
+  getTaskStep (tableType, targetType) {
+    const CONSTANT = Vue.prototype.CONSTANT
+
+    if (tableType === CONSTANT.tableType.NORMAL) {
+      return CONSTANT.taskStep.NORMAL
+    } else if (tableType === CONSTANT.tableType.FLOW) {
+      switch (targetType) {
+        case CONSTANT.pushType.USER:
+          return CONSTANT.taskStep.USER
+        case CONSTANT.pushType.DATABASE:
+          return CONSTANT.taskStep.DATABASE
+        case CONSTANT.pushType.API:
+          return CONSTANT.taskStep.API
+      }
     }
   }
 

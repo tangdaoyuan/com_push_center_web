@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.API">
+  <div class="step-body" v-show="step === 2 && taskStep === CONSTANT.taskStep.API">
     <div class="flow-api-main">
       <div class="api-header">
         <span>连接配置</span>
@@ -11,7 +11,7 @@
           <span>API地址</span>
         </div>
         <div class="item">
-          <input v-model="taskData.host" type="text">
+          <input v-model="taskData.url" type="text">
         </div>
         <div class="item r-span">
           <span>起止时间</span>
@@ -45,7 +45,7 @@ export default {
     return {
       date: null,
       taskData: {
-        host: '',
+        url: '',
         start_time: undefined,
         end_time: undefined
       }
@@ -62,7 +62,7 @@ export default {
       this.$emit('prev')
     },
     next () {
-      if (!this.taskData.host) {
+      if (!this.taskData.url) {
         this.$message.error('API地址不可为空')
         return
       }
@@ -70,20 +70,18 @@ export default {
         api: {
           ...this.taskData
         },
-        id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
+        id: this.$store.state.task.taskId
       }
 
       console.log(pushData)
-      const service = this.$store.state.task.taskData ? this.tcService.editStep2ByDBorAPI(pushData) : this.tcService.saveTask2SettingByDBorAPI(pushData)
+      const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
 
       service.then(res => {
-        if (res.state === 0) {
+        if (res.status === 0) {
           this.$message.success('保存成功')
-          if (!this.$store.state.task.taskData) {
-            this.$emit('next', 1)
-          } else {
-            this.$emit('refresh')
-          }
+          this.$emit('finish')
+        } else {
+          this.$message.error(res.msg)
         }
       })
     }

@@ -43,15 +43,15 @@ class TcService extends Service {
     })
   }
 
-  saveTask2SettingByDBorAPI (data) {
-    return new Promise((resolve) => {
-      this.TEMPLATE_POST('/api/task/database_api', data, resolve)
-    })
-  }
-
   saveTask3Seting (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_POST('/api/task/push_users', data, resolve)
+    })
+  }
+
+  saveTask3SettingByDBorAPI (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_POST('/api/task/database_api', data, resolve)
     })
   }
 
@@ -121,12 +121,6 @@ class TcService extends Service {
     })
   }
 
-  editStep2ByDBorAPI (data) {
-    return new Promise((resolve) => {
-      this.TEMPLATE_PUT('', data, resolve)
-    })
-  }
-
   editStep2Filter (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_PUT('/api/task/task_fields', data, resolve)
@@ -136,6 +130,12 @@ class TcService extends Service {
   editstep3 (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_PUT('/api/task/task_users', data, resolve)
+    })
+  }
+
+  editStep3ByDBorAPI (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_PUT('', data, resolve)
     })
   }
 

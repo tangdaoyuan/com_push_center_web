@@ -24,14 +24,14 @@
       <div class="np-item seperator"></div>
       <div class="np-item">
         <span class="item-title radio-title">选择工作表</span>
-        <RadioGroup v-model="taskData.tableType">
+        <RadioGroup v-model="taskData.table_type">
           <Radio :label="1">普通工作表</Radio>
           <Radio :label="2">流式工作表</Radio>
         </RadioGroup>
       </div>
-      <div class="np-item" v-show="taskData.tableType > 1">
+      <div class="np-item" v-show="taskData.table_type > 1">
         <span class="item-title radio-title">选择推送对象</span>
-        <RadioGroup v-model="taskData.pushType">
+        <RadioGroup v-model="taskData.target_type">
           <Radio :label="1">推送用户</Radio>
           <Radio :label="2">推送数据库</Radio>
           <Radio :label="3">推送API</Radio>
@@ -55,8 +55,8 @@ export default {
         type: '',
         describe: '',
         id: '',
-        tableType: 1,
-        pushType: 1
+        table_type: 1,
+        target_type: 1
       },
       taskTypelist: []
     }
@@ -91,14 +91,15 @@ export default {
         id: this.$store.state.task.taskData ? this.$store.state.task.taskId : undefined
       }
 
-      this.$emit('next', 0, this.taskStep())
       const service = this.$store.state.task.taskData ? this.tcService.saveTaskEdit(putData) : this.tcService.addTask(putData)
       service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
           if (!this.$store.state.task.taskData) {
             this.$store.commit('setTaskId', res.data.task_id)
-            this.$emit('next', 0, this.taskStep())
+            this.$emit('next', 0,
+              this.utils.getTaskStep(this.taskData.table_type, this.taskData.target_type)
+            )
           } else {
             this.$emit('refresh')
           }
@@ -106,21 +107,8 @@ export default {
           this.$message.error(res.msg)
         }
       })
-    },
-    taskStep () {
-      if (this.taskData.tableType === this.CONSTANT.tableType.NORMAL) {
-        return this.CONSTANT.taskStep.NORMAL
-      } else if (this.taskData.tableType === this.CONSTANT.tableType.FLOW) {
-        switch (this.taskData.pushType) {
-          case this.CONSTANT.pushType.USER:
-            return this.CONSTANT.taskStep.USER
-          case this.CONSTANT.pushType.DATABASE:
-            return this.CONSTANT.taskStep.DATABASE
-          case this.CONSTANT.pushType.API:
-            return this.CONSTANT.taskStep.API
-        }
-      }
     }
+
   },
   watch: {
     step () {

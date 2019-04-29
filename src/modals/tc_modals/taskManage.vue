@@ -33,18 +33,31 @@
       <task-step-second
         :task-step="taskStep"
         @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-second-fuser
+      <task-step-second-flow
         :task-step="taskStep"
         @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-second-fsys
+      <task-step-third
         :task-step="taskStep"
-        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-second-fapi
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next"
+        @prev="prev"/>
+      <task-step-third-fsys
         :task-step="taskStep"
-        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-third @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-forth @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-fifth @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next"
+        @prev="prev"
+        @finish="finish"/>
+      <task-step-third-fapi
+        :task-step="taskStep"
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next"
+        @prev="prev"
+        @finish="finish"/>
+      <task-step-forth :task-step="taskStep" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-fifth :task-step="taskStep" @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
     </div>
     <div class="task-footer" v-show="false" slot="footer"></div>
   </Modal>
@@ -97,6 +110,8 @@ export default {
       this.close()
       this.currentStep = -1
       this.taskStep = -1
+      console.log(this.currentStep)
+      console.log(this.taskStep)
       this.$store.commit('resetTaskEdit')
       this.$emit('refresh')
     }
@@ -107,11 +122,10 @@ export default {
         if (this.$store.state.task.taskId) {
           this.$store.dispatch('getEditDetail', {
             id: this.$store.state.task.taskId
-          }).then(() => {
+          }).then((data) => {
             this.currentStep = 1
-            // TODO
-            // receive taskStep status and set taskStep
-            this.taskStep = 0
+            console.log(this.utils.getTaskStep(data.table_type, data.target_type))
+            this.taskStep = this.utils.getTaskStep(data.table_type, data.target_type)
           })
         } else {
           this.currentStep = 0
