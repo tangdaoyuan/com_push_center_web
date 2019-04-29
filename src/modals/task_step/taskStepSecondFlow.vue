@@ -203,7 +203,9 @@
     </div>
     <flow-data-table
       v-model="modals.flowDataTable"
-      @close="closeFlowDataTable"></flow-data-table>
+      @close="closeFlowDataTable"
+      :table-id="targetTableData.id"
+      :table-name="targetTableData.name"></flow-data-table>
     <flow-select-table
       v-model="modals.flowSelectTable"
       @ok="chooseTargetTable"
@@ -242,6 +244,7 @@ export default {
         name: '',
         filterLogic: 0,
         title_list: [],
+        data_list: [],
         filterList: [
           {
             op: 'eq',
@@ -290,7 +293,6 @@ export default {
       }
       if (this.$store.state.task.taskData) {
         const taskData = this.$store.state.task.taskData
-        console.log(taskData)
         this.chooseTag = [taskData.table_id]
         this.sourceTbName = taskData.table_name
         this.chooseFilterType = taskData.filter_logic
@@ -327,6 +329,7 @@ export default {
           }).then(res => {
             if (res.status === 0) {
               this.targetTableData.title_list = res.data.title_list
+              this.targetTableData.data_list = res.data.data_list
             }
           })
         }
@@ -555,7 +558,6 @@ export default {
       }
 
       console.log(putData)
-      console.log(this.$store.state.task.taskData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
       service.then(res => {
         if (res.status === 0) {

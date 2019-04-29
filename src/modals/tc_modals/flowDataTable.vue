@@ -8,44 +8,24 @@
     <div
       class="modal-header"
       slot="header">
-      <span>武汉铁路流式表</span>
+      <span>{{tableName}}</span>
       <Icon type="md-close" @click="close" />
     </div>
     <div class="flow-data-body">
       <div class="body-header">
-        <span >显示最新 1000 条数据，共 5000 条数据</span>
-        <span>最近更新时间：2017-11-20 00:04:44</span>
-        <span class="refresh"></span>
+        <span >显示最新 1000 条数据，共 {{datas.total}} 条数据</span>
+        <span>最近更新时间：{{utils.momentDate(datas.update_time, 'date_time')}}</span>
+        <span  @click="refresh" class="refresh"></span>
       </div>
       <div class="body-main">
         <el-table
-        :data="datas"
+        :data="datas.data_list"
         stripe>
         <el-table-column
-          prop="alert_level"
-          label="预警级别"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="date"
-          label="预警时间"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名">
-        </el-table-column>
-        <el-table-column
-          prop="number"
-          label="证件号码">
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          label="人员类别">
-        </el-table-column>
-        <el-table-column
-          prop="place"
-          label="发生地派出所">
+          v-for="k in datas.title_list"
+          :key="k.id"
+          :prop="k.id"
+          :label="k.name">
         </el-table-column>
       </el-table>
       </div>
@@ -60,138 +40,13 @@
 export default {
   props: {
     value: Boolean,
-    name: String
+    name: String,
+    tableId: String,
+    tableName: String
   },
   data () {
     return {
       datas: [
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        }, {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
-        {
-          alert_level: '橙色',
-          date: '2018/03/26 07:39:46',
-          name: '张警官',
-          number: '101383299476384731',
-          type: '重点上访人员,精神病人',
-          place: '杨家铺派出所'
-        },
         {
           alert_level: '橙色',
           date: '2018/03/26 07:39:46',
@@ -204,11 +59,29 @@ export default {
     }
   },
   methods: {
+    refresh () {
+      this.wtService.getprewData({
+        page_no: 1,
+        page_size: 100,
+        tb_id: this.tableId
+      }).then(res => {
+        if (res.status === 0) {
+          this.datas = res.data
+        }
+      })
+    },
     ok () {
       console.log('ok')
     },
     close () {
       this.$emit('close')
+    }
+  },
+  watch: {
+    value () {
+      if (this.value) {
+        this.refresh()
+      }
     }
   }
 }
