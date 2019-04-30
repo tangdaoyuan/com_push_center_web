@@ -23,6 +23,15 @@ export default class Img {
           case '消息队列':
             this.img = require(`@/assets/imgs/dm-message.png`)
             break
+          case 'Kafka':
+            this.img = require(`@/assets/imgs/dm-kafka.png`)
+            break
+          case 'Oracle流式数据源':
+            this.img = require(`@/assets/imgs/dm-oracle.png`)
+            break
+          case 'Hive':
+            this.img = require(`@/assets/imgs/dm-hive.png`)
+            break
           case '手机短信':
             this.img = require(`@/assets/imgs/nm_msg.png`)
             break
