@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 2">
+  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER)">
     <div class="ts-field-step">
       <div class="ts-item item1">
         <div class="item-header">
@@ -241,7 +241,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   computed: {
     dragOptions () {

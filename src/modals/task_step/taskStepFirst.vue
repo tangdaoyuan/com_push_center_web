@@ -21,6 +21,22 @@
       <div class="np-item tip">
         最多支持500字输入
       </div>
+      <div class="np-item seperator"></div>
+      <div class="np-item">
+        <span class="item-title radio-title">选择工作表</span>
+        <RadioGroup v-model="taskData.table_type">
+          <Radio :label="1">普通工作表</Radio>
+          <Radio :label="2">流式工作表</Radio>
+        </RadioGroup>
+      </div>
+      <div class="np-item" v-show="taskData.table_type > 1">
+        <span class="item-title radio-title">选择推送对象</span>
+        <RadioGroup v-model="taskData.target_type">
+          <Radio :label="1">推送用户</Radio>
+          <Radio :label="2">推送数据库</Radio>
+          <Radio :label="3">推送API</Radio>
+        </RadioGroup>
+      </div>
     </div>
     <div class="step-footer">
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
@@ -38,7 +54,9 @@ export default {
         name: '',
         type: '',
         describe: '',
-        id: ''
+        id: '',
+        table_type: 1,
+        target_type: 1
       },
       taskTypelist: []
     }
@@ -79,7 +97,9 @@ export default {
           this.$message.success('保存成功')
           if (!this.$store.state.task.taskData) {
             this.$store.commit('setTaskId', res.data.task_id)
-            this.$emit('next', 0)
+            this.$emit('next', 0,
+              this.utils.getTaskStep(this.taskData.table_type, this.taskData.target_type)
+            )
           } else {
             this.$emit('refresh')
           }
@@ -88,6 +108,7 @@ export default {
         }
       })
     }
+
   },
   watch: {
     step () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1">
+  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.NORMAL">
     <task-filter
       v-model="taskFilterModal"
       :choose-index="chooseIndex"
@@ -128,7 +128,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -272,7 +273,6 @@ export default {
       this.chooseFilter = item
       this.chooseIndex = index
       this.taskFilterModal = true
-      console.log(item)
     },
     addTaskFilter () {
       this.chooseIndex = -1
@@ -290,6 +290,7 @@ export default {
           chooseIndex: undefined
         }]
       }
+      this.closeTaskFilter()
     },
     deleteFilter (item, index) {
       item.deleteModal = false

@@ -1,6 +1,7 @@
 import http from 'axios'
 import moment from 'moment'
 import $ from 'jquery'
+import Vue from 'vue'
 
 class Utils {
   fileCheck (checkList, str) {
@@ -51,6 +52,23 @@ class Utils {
     }
   }
 
+  getTaskStep (tableType, targetType) {
+    const CONSTANT = Vue.prototype.CONSTANT
+
+    if (tableType === CONSTANT.tableType.NORMAL) {
+      return CONSTANT.taskStep.NORMAL
+    } else if (tableType === CONSTANT.tableType.FLOW) {
+      switch (targetType) {
+        case CONSTANT.pushType.USER:
+          return CONSTANT.taskStep.USER
+        case CONSTANT.pushType.DATABASE:
+          return CONSTANT.taskStep.DATABASE
+        case CONSTANT.pushType.API:
+          return CONSTANT.taskStep.API
+      }
+    }
+  }
+
   getType (str) {
     const fieldReg = RegExp(/tb/)
     const folderReg = RegExp(/folder/)
@@ -77,6 +95,17 @@ class Utils {
       }
     })
     return res
+  }
+
+  filterEmptyField (obj) {
+    if (obj) {
+      return obj.filter(item => {
+        for (const k in item) {
+          if (item[k] === undefined || item[k] == null || item[k] === '') return false
+        }
+        return true
+      })
+    }
   }
 
   viewGo (url) {
