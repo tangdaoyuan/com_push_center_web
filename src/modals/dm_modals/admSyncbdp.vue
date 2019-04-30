@@ -694,7 +694,6 @@ export default {
           table_list: [],
           type: 1
         }
-        console.log(this.paramsList2, this.tableInfo)
         Object.keys(this.paramsList2).forEach(k => {
           // 最后根据fields单独处理field_type
           let fieldList
@@ -870,7 +869,9 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.close()
+            setTimeout(() => {
+              this.close()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }
@@ -916,7 +917,6 @@ export default {
           }
         }
       })
-      console.log(this.paramsList2)
       this.showTable(0)
       this.currentStep = 1
     },

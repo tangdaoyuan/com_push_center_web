@@ -148,7 +148,6 @@ export default {
         return
       }
 
-      console.log(putData)
       this.$emit('changeMsgDate', putData)
       this.$message.success('设置成功')
       this.close()

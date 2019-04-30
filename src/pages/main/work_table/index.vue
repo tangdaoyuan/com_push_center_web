@@ -500,11 +500,11 @@ export default {
               'folder': this.utils.getType(data.id) === 'folder' || this.utils.getType(data.id) === 'ds',
               'file': this.utils.getType(data.id) === 'field',
               'file-ds': this.utils.getType(data.id) === 'field' && data.type === 1,
-              'file-aggr': this.utils.getType(data.id) === 'field' && data.type === 2,
+              'file-aggr': this.utils.getType(data.id) === 'field' && (data.type === 2 || data.type === 7),
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
-              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 5,
-              'file-oracle': this.utils.getType(data.id) === 'field' && data.type === 6
+              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
+              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6
 
             }
           }),
