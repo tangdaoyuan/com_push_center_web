@@ -10,21 +10,27 @@
     </div>
     <div class="modal-body">
       <div class="transfer-main">
-        <div class="tm-left">
-          <div class="tm-left-header">
-            <span>字段</span>
+        <div class="source-con">
+          <div class="source-header">
+            <Checkbox @on-change="checkSource">
+              <span>字段</span>
+            </Checkbox>
           </div>
           <div class="filter-box">
             <input class="search-input" v-model="sourceText" @keyup="searchSource" type="text" required>
             <Icon class="search-icon" type="md-search" />
           </div>
-          <div class="tm-left-body">
-            <li v-for="(item, index) in dataList" :key="item.id">
-                <Checkbox v-model="item.isChoose">
-                  <span>{{item.name}}</span>
-                </Checkbox>
-                <Icon type="ios-close-circle" @click="removeItem(item, index)" />
-            </li>
+          <div class="source-body">
+            <ul class="source-ul">
+              <li v-for="item in dataList" :key="item.id">
+                  <Checkbox v-model="item.isChoose">
+                    <span>{{item.name}}</span>
+                  </Checkbox>
+              </li>
+            </ul>
+          </div>
+          <div @click="clearSource" class="source-footer">
+            <a class="clear">清空</a>
           </div>
         </div>
         <div class="tm-mid">
@@ -35,23 +41,27 @@
             <Icon type="ios-arrow-back" />
           </Button>
         </div>
-        <div class="tm-right">
-          <div class="tm-right-header">
-            <span>已添加</span>
+        <div class="source-con">
+          <div class="source-header">
+            <Checkbox @on-change="checkTarget">
+              <span>已添加</span>
+            </Checkbox>
           </div>
           <div class="filter-box">
             <input class="search-input" v-model="targetText" @keyup="searchTarget" type="text" required>
             <Icon class="search-icon" type="md-search" />
           </div>
-          <div class="tm-right-body">
-            <ul class="tm-right-ul">
-              <li v-for="(item, index) in triggerList" :key="item.id">
+          <div class="source-body">
+            <ul class="source-ul">
+              <li v-for="item in triggerList" :key="item.id">
                 <Checkbox v-model="item.isChoose">
                   <span>{{item.name}}</span>
                 </Checkbox>
-                <Icon type="ios-close-circle" @click="removeItem(item, index)" />
               </li>
             </ul>
+          </div>
+          <div class="source-footer">
+            <a @click="clearTarget" class="clear">清空</a>
           </div>
         </div>
       </div>
@@ -67,90 +77,112 @@ export default {
   props: {
     value: Boolean,
     prKey: String,
-    sourceText: String,
-    targetText: String,
     sourceList: Array,
     targetList: Array,
     selectedList: Array
   },
   data () {
     return {
+      sourceText: '',
+      targetText: '',
+      dataList: [],
+      dataListRef: [],
       triggerList: [],
-      filterText: '',
-      chooseTag: [],
-      expandList: []
+      triggerListRef: []
     }
   },
   methods: {
-    choose (data, node, event) {
-      node.checked = !node.checked
+    clearTarget () {
+      this.checkTarget(false)
     },
-    searchSource (e) {
-      if (e.keyCode === 13) {
-
-      }
+    checkTarget (status) {
+      this.triggerList.forEach(item => {
+        item.isChoose = status
+      })
+    },
+    clearSource () {
+      this.checkSource(false)
+    },
+    checkSource (status) {
+      this.dataList.forEach(item => {
+        item.isChoose = status
+      })
     },
     searchTarget (e) {
-      if (e.keyCode === 13) {
-
+      if (e.keyCode === 13 && this.targetText) {
+        const targets = []
+        this.triggerListRef.forEach(item => {
+          if (item.alias.indexOf(this.targetText) > -1 || item.name.indexOf(this.targetText) > -1) {
+            targets.push(item)
+          }
+        })
+        this.triggerList = targets
+      } else if (e.keyCode === 13 && !this.targetText) {
+        this.triggerList = this.triggerListRef
+      }
+    },
+    searchSource (e) {
+      if (e.keyCode === 13 && this.sourceText) {
+        const sources = []
+        this.dataListRef.forEach(item => {
+          if (item.alias.indexOf(this.sourceText) > -1 || item.name.indexOf(this.sourceText) > -1) {
+            sources.push(item)
+          }
+        })
+        this.dataList = sources
+      } else if (e.keyCode === 13 && !this.sourceText) {
+        this.dataList = this.dataListRef
       }
     },
     toRight (e) {
-      const tmpData = []
-      const treeData = this.$refs.treeList
-      treeData.getCheckedKeys().forEach(item => {
-        if (treeData.getNode(item).data.type === 3) {
-          tmpData.push(treeData.getNode(item).data)
+      const restData = []
+      const checkData = []
+      this.dataListRef.forEach(item => {
+        if (!item.isChoose) {
+          restData.push(item)
+        } else {
+          checkData.push(item)
         }
       })
-      tmpData.forEach(item => {
-        if (!this.utils.checkListInner(this.triggerList, item, 'id')) {
-          this.triggerList.push(item)
-        }
-      })
-    },
-    removeItem (item, index) {
-      this.triggerList.splice(index, 1)
+      this.dataListRef = restData
+      this.triggerListRef = this.triggerListRef.concat(checkData)
+
+      this.searchSource({ keyCode: 13 })
+      this.searchTarget({ keyCode: 13 })
     },
     toLeft (e) {
-      const tmpData = []
-      this.triggerList.forEach(item => {
+      const restData = []
+      const checkData = []
+      this.triggerListRef.forEach(item => {
         if (!item.isChoose) {
-          tmpData.push(item)
+          restData.push(item)
+        } else {
+          checkData.push(item)
         }
       })
-      this.triggerList = tmpData
+      this.dataListRef = this.dataListRef.concat(checkData)
+      this.triggerListRef = restData
+
+      this.searchSource({ keyCode: 13 })
+      this.searchTarget({ keyCode: 13 })
     },
     close () {
       this.$emit('close')
     },
     ok () {
-      this.$emit('finish', this.triggerList)
+      this.$emit('ok', this.triggerList.map(item => item.id))
+    },
+    search () {
+
     }
   },
   watch: {
     value () {
       if (this.value) {
-        const sources = this.sourceList.map(item => {
-          return {
-            ...item,
-            key: item.id,
-            label: item.alias || item.name,
-            isChoose: false
-          }
-        })
-
-        const targets = this.targetList.map(item => {
-          return {
-            ...item,
-            key: item.id,
-            label: item.alias || item.name,
-            isChoose: false
-          }
-        })
-        this.dataList = sources.concat(targets)
+        const keys = new Set()
         if (this.selectedList && this.selectedList.length) {
-          this.triggerList = this.selectedList.map(item => {
+          this.triggerListRef = this.triggerList = this.selectedList.map(item => {
+            keys.add(item.id)
             return {
               ...item,
               key: item.id,
@@ -159,6 +191,31 @@ export default {
             }
           })
         }
+
+        const sources = []
+        this.sourceList.forEach(item => {
+          if (!keys.has(item.id)) {
+            sources.push({
+              ...item,
+              key: item.id,
+              label: item.alias || item.name,
+              isChoose: false
+            })
+          }
+        })
+
+        const targets = []
+        this.targetList.forEach(item => {
+          if (!keys.has(item.id)) {
+            targets.push({
+              ...item,
+              key: item.id,
+              label: item.alias || item.name,
+              isChoose: false
+            })
+          }
+        })
+        this.dataListRef = this.dataList = sources.concat(targets)
       } else {
         Object.assign(this.$data, this.$options.data())
       }
