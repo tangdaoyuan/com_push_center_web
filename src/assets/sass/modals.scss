@@ -171,6 +171,9 @@
 
         &.ts-left-flow {
           width: 216px;
+          .left-body {
+            height: calc(100% - 72px);
+          }
           .search-box {
             width: 100%;
             height: 36px;
