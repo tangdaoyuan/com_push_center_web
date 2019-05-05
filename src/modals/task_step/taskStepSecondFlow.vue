@@ -190,7 +190,7 @@
               :key="item.id"
               class="output-field">
               <span class="dot" :class="item.table_id==targetTableData.id?'b-dot':'y-dot'"></span>
-              <span>{{item.alias || item.name}}</span>
+              <span class="output-con">{{item.alias || item.name}}</span>
               <span @click="removeOutputField(index, item.table_id)" class="el-icon-close hide"></span>
             </div>
           </div>
@@ -210,6 +210,14 @@
       v-model="modals.flowSelectTable"
       @ok="chooseTargetTable"
       @close="closeFlowSelectTable"></flow-select-table>
+    <add-output-field
+      v-model="modals.addFieldOutput"
+      :source-list="tableData.title_list"
+      :target-list="targetTableData.title_list"
+      :selected-list="getOutputFields"
+      @close="closeOutputField"
+      @ok="chooseOutputField"
+    ></add-output-field>
   </div>
 </template>
 <script>
@@ -226,7 +234,8 @@ export default {
       modals: {
         flowDataTable: false,
         flowSelectTable: false,
-        taskFilterModal: false
+        taskFilterModal: false,
+        addFieldOutput: false
       },
       treeList: [],
       chooseTag: [],
@@ -282,6 +291,9 @@ export default {
     },
     closeTaskFilter () {
       this.modals.taskFilterModal = false
+    },
+    closeOutputField () {
+      this.modals.addFieldOutput = false
     },
     init () {
       if (!this.treeList || this.treeList.length === 0) {
@@ -383,7 +395,33 @@ export default {
       this.outputFields.targets = []
     },
     addOutputField () {
-
+      if (this.tableData.title_list.length ||
+        this.targetTableData.title_list.length) {
+        this.modals.addFieldOutput = true
+      } else {
+        this.$message.error('请选择流式表或维度表')
+      }
+    },
+    chooseOutputField (selectedList) {
+      let sources = []
+      selectedList.forEach(id => {
+        for (let obj of this.tableData.title_list) {
+          if (obj.id && obj.id === id) {
+            sources.push({ ...obj })
+          }
+        }
+      })
+      const targets = []
+      selectedList.forEach(id => {
+        for (let obj of this.targetTableData.title_list) {
+          if (obj.id && obj.id === id) {
+            targets.push({ ...obj })
+          }
+        }
+      })
+      this.outputFields.sources = sources
+      this.outputFields.targets = targets
+      this.closeOutputField()
     },
     removeOutputField (index) {
       const len = this.outputFields.sources.length
