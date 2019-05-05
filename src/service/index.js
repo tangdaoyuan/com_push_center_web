@@ -71,7 +71,6 @@ export default class Service {
 
     this.http = axios
   }
-
   TEMPLATE_GET (str, data, resolve) {
     this.http.get(str, {
       params: data || {}

@@ -31,6 +31,10 @@ class CONSTANT {
     {
       label: 'Oracle(流式)',
       value: 8
+    },
+    {
+      label: 'Hive',
+      value: 9
     }
   ]
   SYS_TYPE = 1

@@ -75,6 +75,7 @@
     <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle" :is-flow="isFlow.oracle"/>
     <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" @close="closeAdmApi"/>
+    <adm-hive v-model="modals.admHiveModal" @refresh="init" :hive-id="datasourceID.hiveID" @close="closeAdmHive"/>
   </div>
 </template>
 <script>
@@ -118,7 +119,8 @@ export default {
         admMysqlModal: false,
         admOracleModal: false,
         admMsgModal: false,
-        admApiModal: false
+        admApiModal: false,
+        admHiveModal: false
       },
       pageParams: {
         type: '',
@@ -148,7 +150,8 @@ export default {
         msgID: '',
         mysqlID: '',
         oracleID: '',
-        bdpID: ''
+        bdpID: '',
+        hiveID: ''
       }
     }
   },
@@ -178,6 +181,9 @@ export default {
     },
     closeAdmApi () {
       this.modals.admApiModal = false
+    },
+    closeAdmHive () {
+      this.modals.admHiveModal = false
     },
     closeAbnReason () {
       this.modals.abnormalVisible = false
@@ -320,6 +326,10 @@ export default {
           this.modals.admOracleModal = true
           this.isFlow.oracle = true
           this.datasourceID.oracleID = item.id
+          break
+        case 9:
+          this.modals.admHiveModal = true
+          this.datasourceID.hiveID = item.id
           break
       }
     },

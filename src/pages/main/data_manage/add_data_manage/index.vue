@@ -111,6 +111,7 @@
     <adm-oracle v-model="modals.admOracleModal" :oracle-id="dataID" @close="closeAdmOracle" :is-flow="isFlow.oracle"/>
     <adm-msg v-model="modals.admMsgModal" :msg-id="dataID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" :api-item="apiData" @close="closeAdmApi" />
+    <adm-hive v-model="modals.admHiveModal" :hive-id="dataID"  @close="closeAdmHive" />
   </div>
 </template>
 <script>
@@ -125,7 +126,8 @@ export default {
         admMysqlModal: false,
         admOracleModal: false,
         admMsgModal: false,
-        admApiModal: false
+        admApiModal: false,
+        admHiveModal: false
       },
       isFlow: {
         oracle: false,
@@ -149,6 +151,9 @@ export default {
     closeAdmApi () {
       this.modals.admApiModal = false
     },
+    closeAdmHive () {
+      this.modals.admHiveModal = false
+    },
     chooseType (e, type, subType) {
       switch (type) {
         case 'syncbdp':
@@ -167,6 +172,9 @@ export default {
           break
         case 'api':
           this.modals.admApiModal = true
+          break
+        case 'hive':
+          this.modals.admHiveModal = true
           break
       }
     },
