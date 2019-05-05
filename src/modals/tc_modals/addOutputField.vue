@@ -111,7 +111,6 @@ export default {
             return item.id
           })
         }
-        console.log(this.dataList)
       } else {
         Object.assign(this.$data, this.$options.data())
       }

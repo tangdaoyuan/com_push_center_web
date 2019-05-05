@@ -210,14 +210,14 @@
       v-model="modals.flowSelectTable"
       @ok="chooseTargetTable"
       @close="closeFlowSelectTable"></flow-select-table>
-    <add-output-field
+    <add-output-field-new
       v-model="modals.addFieldOutput"
       :source-list="tableData.title_list"
       :target-list="targetTableData.title_list"
       :selected-list="getOutputFields"
       @close="closeOutputField"
       @ok="chooseOutputField"
-    ></add-output-field>
+    ></add-output-field-new>
   </div>
 </template>
 <script>
