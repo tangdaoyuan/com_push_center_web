@@ -84,7 +84,7 @@ export default {
       shouldShowDicMenu: false
     }
   },
-  mounted () {
+  beforeCreate () {
     const params = {
       sys_type: this.CONSTANT.SYS_TYPE
     }
