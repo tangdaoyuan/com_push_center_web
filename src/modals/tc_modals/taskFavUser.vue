@@ -2,7 +2,9 @@
   <Modal
     class="tfu-modal"
     title="配置关注用户"
-    v-model="value">
+    v-model="value"
+    :mask-closable="false"
+    :closable="false">
     <div class="modal-body">
       <transfer v-model="traList" @changeList="changeViewList" pr-key="id" show-text="name" @changeTarget="changeTarget" :push-list="viewGroupList" />
     </div>
