@@ -4,7 +4,7 @@
     <div class="login-main-con">
       <div class="login-header">
         <div class="header-left">
-          <div class="login-logo"></div>
+          <div class="login-logo" ref="logo"></div>
           <div class="logo-text">
             <span>智能推送中心</span>
             <span>Intelligent Push Center</span>
@@ -53,6 +53,21 @@ export default {
           $(e.target).parent('.item-input').parent('.ivu-form-item-content').find('label').attr('class', '')
         }
       })
+    })
+  },
+  mounted () {
+    const params = {
+      sys_type: this.CONSTANT.SYS_TYPE
+    }
+    this.tmService.currentLogoTitle(params).then(res => {
+      if (res.status === 0) {
+        if (res.data.logo) {
+          window.$(this.$refs.logo).css('backgroundImage', `url(${res.data.logo})`)
+        }
+        if (res.data.title) {
+          window.document.title = res.data.title
+        }
+      }
     })
   },
   data () {
