@@ -12,7 +12,7 @@
       <div class="transfer-main">
         <div class="source-con">
           <div class="source-header">
-            <Checkbox @on-change="checkSource">
+            <Checkbox v-model="sourceChecked" @on-change="checkSource">
               <span>字段</span>
             </Checkbox>
           </div>
@@ -43,7 +43,7 @@
         </div>
         <div class="source-con">
           <div class="source-header">
-            <Checkbox @on-change="checkTarget">
+            <Checkbox v-model="targetChecked" @on-change="checkTarget">
               <span>已添加</span>
             </Checkbox>
           </div>
@@ -83,6 +83,8 @@ export default {
   },
   data () {
     return {
+      targetChecked: false,
+      sourceChecked: false,
       sourceText: '',
       targetText: '',
       dataList: [],
@@ -94,6 +96,7 @@ export default {
   methods: {
     clearTarget () {
       this.checkTarget(false)
+      this.targetChecked = false
     },
     checkTarget (status) {
       this.triggerList.forEach(item => {
@@ -102,6 +105,7 @@ export default {
     },
     clearSource () {
       this.checkSource(false)
+      this.sourceChecked = false
     },
     checkSource (status) {
       this.dataList.forEach(item => {
@@ -177,6 +181,38 @@ export default {
     }
   },
   watch: {
+    dataList: {
+      handler () {
+        if (this.dataList.length > 0) {
+          for (let item of this.dataList) {
+            if (!item.isChoose) {
+              this.sourceChecked = false
+              return
+            }
+          }
+          this.sourceChecked = true
+        } else {
+          this.sourceChecked = false
+        }
+      },
+      deep: true
+    },
+    triggerList: {
+      handler () {
+        if (this.triggerList.length > 0) {
+          for (let item of this.triggerList) {
+            if (!item.isChoose) {
+              this.targetChecked = false
+              return
+            }
+          }
+          this.targetChecked = true
+        } else {
+          this.targetChecked = false
+        }
+      },
+      deep: true
+    },
     value () {
       if (this.value) {
         const keys = new Set()
