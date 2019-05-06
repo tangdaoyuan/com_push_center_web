@@ -37,7 +37,6 @@ const actions = {
       tcService.getTaskEditDetail(data).then(res => {
         if (res.status === 0) {
           commit('setTaskEditData', res.data.task)
-
           resolve()
         }
       })

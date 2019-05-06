@@ -304,12 +304,15 @@ export default {
         }
       })
       if (this.$store.state.task.tableData) {
+        console.log('Step third tableData exsit')
+        console.log(this.$store.state.task.taskData)
         this.tbList = this.$store.state.task.tableData.title_list
         if (this.$store.state.task.taskData) {
           this.initEdit()
         }
       } else {
         if (this.$store.state.task.taskData) {
+          console.log('Step second taskData exsit')
           this.wtService.getprewData({
             page_no: 1,
             page_size: 100,

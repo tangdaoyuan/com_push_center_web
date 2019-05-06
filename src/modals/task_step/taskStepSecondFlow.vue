@@ -348,18 +348,22 @@ export default {
         if (taskData.output_fields) {
           taskData.output_fields.forEach(item => {
             if (item.table_id === this.tbId) {
-              this.outputFields.sources.push({
+              const sources = []
+              sources.push({
                 id: item.field_id,
                 name: item.field_name,
                 table_id: item.table_id
               })
+              this.outputFields.sources = sources
             }
             if (item.table_id === this.targetTableData.id) {
-              this.outputFields.targets.push({
+              const targets = []
+              targets.push({
                 id: item.field_id,
                 name: item.field_name,
                 table_id: item.table_id
               })
+              this.outputFields.targets = targets
             }
           })
         }
