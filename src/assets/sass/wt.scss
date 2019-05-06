@@ -30,6 +30,23 @@
         .ivu-menu-item {
           line-height: 36px;
           font-size: 12px;
+
+          .ivu-dropdown {
+            .ivu-dropdown-rel {
+              & > a {
+
+                & > i {
+                  position: relative;
+                  top: -3px;
+                  display: inline-block;
+                  width: 12px;
+                  color: #000;
+                  opacity: .5;
+                  background-image: none;
+                }
+              }
+            }
+          }
         }
       }
 
@@ -176,6 +193,38 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+            }
+          }
+
+          .el-menu--collapse {
+            &.el-menu {
+              width: 20px;
+              border-right: 0;
+
+              .el-submenu {
+                width: 100%;
+                height: 100%;
+
+                .el-submenu__title {
+                  padding: 0 !important;
+                  height: 100%;
+
+                  .more-btn {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .more {
+                      display: block;
+                      width: 12px;
+                      height: 12px;
+                      @include more-icon;
+                    }
+                  }
+                }
+              }
             }
           }
 
@@ -833,7 +882,7 @@
             justify-content: center;
             align-items: center;
 
-            &:nth-child(4) {
+            &:nth-child(5) {
               margin-bottom: 100px;
             }
 
@@ -846,6 +895,10 @@
             }
 
             .ivu-input-wrapper {
+              width: 400px;
+            }
+
+            .el-radio-group {
               width: 400px;
             }
 
