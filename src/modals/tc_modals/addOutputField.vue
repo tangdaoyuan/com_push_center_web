@@ -9,20 +9,62 @@
       <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
-      <Transfer
-        filterable
-        :titles="['字段', '已添加']"
-        :data="dataList"
-        :targetKeys="triggerList"
-        :render-format="renderText"
-        :selected-keys="selectedKeys"
-        :filter-method="filterMethod"
-        @on-selected-change="checkedList"
-        @on-change="changeList">
-        <div class="content-footer">
-          <a @click="clear" class="clear">清空</a>
+      <div class="transfer-main">
+        <div class="source-con">
+          <div class="source-header">
+            <Checkbox @on-change="checkSource">
+              <span>字段</span>
+            </Checkbox>
+          </div>
+          <div class="filter-box">
+            <input class="search-input" v-model="sourceText" @keyup="searchSource" type="text" required>
+            <Icon class="search-icon" type="md-search" />
+          </div>
+          <div class="source-body">
+            <ul class="source-ul">
+              <li v-for="item in dataList" :key="item.id">
+                  <Checkbox v-model="item.isChoose">
+                    <span>{{item.name}}</span>
+                  </Checkbox>
+              </li>
+            </ul>
+          </div>
+          <div @click="clearSource" class="source-footer">
+            <a class="clear">清空</a>
+          </div>
         </div>
-      </Transfer>
+        <div class="tm-mid">
+          <Button type="primary" @click="toRight($event)">
+            <Icon type="ios-arrow-forward" />
+          </Button>
+          <Button type="default" @click="toLeft($event)">
+            <Icon type="ios-arrow-back" />
+          </Button>
+        </div>
+        <div class="source-con">
+          <div class="source-header">
+            <Checkbox @on-change="checkTarget">
+              <span>已添加</span>
+            </Checkbox>
+          </div>
+          <div class="filter-box">
+            <input class="search-input" v-model="targetText" @keyup="searchTarget" type="text" required>
+            <Icon class="search-icon" type="md-search" />
+          </div>
+          <div class="source-body">
+            <ul class="source-ul">
+              <li v-for="item in triggerList" :key="item.id">
+                <Checkbox v-model="item.isChoose">
+                  <span>{{item.name}}</span>
+                </Checkbox>
+              </li>
+            </ul>
+          </div>
+          <div class="source-footer">
+            <a @click="clearTarget" class="clear">清空</a>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer" slot="footer">
       <el-button type="text" class="sure-btn" @click="ok">确定</el-button>
@@ -34,83 +76,146 @@
 export default {
   props: {
     value: Boolean,
+    prKey: String,
     sourceList: Array,
     targetList: Array,
     selectedList: Array
   },
-  mounted () {
-    this.$query('.output-field-modal .clear').eq(0).attr('clearbtn', 'left')
-    this.$query('.output-field-modal .clear').eq(1).attr('clearbtn', 'right')
-  },
   data () {
     return {
+      sourceText: '',
+      targetText: '',
       dataList: [],
+      dataListRef: [],
       triggerList: [],
-      selectedKeys: [],
-      sourceSelectedKeys: [],
-      targetSelectedKeys: []
+      triggerListRef: []
     }
   },
   methods: {
-    clear (e) {
-      const target = e.target || e.srcElement
-      const direction = target.getAttribute('clearbtn')
-      console.log([...this.targetSelectedKeys])
-      console.log([...this.sourceSelectedKeys])
-      if (direction === 'left') {
-        this.selectedKeys = [...this.targetSelectedKeys]
-        console.log(this.selectedKeys)
-      } else if (direction === 'right') {
-        this.selectedKeys = [...this.sourceSelectedKeys]
-        console.log(this.selectedKeys)
+    clearTarget () {
+      this.checkTarget(false)
+    },
+    checkTarget (status) {
+      this.triggerList.forEach(item => {
+        item.isChoose = status
+      })
+    },
+    clearSource () {
+      this.checkSource(false)
+    },
+    checkSource (status) {
+      this.dataList.forEach(item => {
+        item.isChoose = status
+      })
+    },
+    searchTarget (e) {
+      if (e.keyCode === 13 && this.targetText) {
+        const targets = []
+        this.triggerListRef.forEach(item => {
+          if (item.alias.indexOf(this.targetText) > -1 || item.name.indexOf(this.targetText) > -1) {
+            targets.push(item)
+          }
+        })
+        this.triggerList = targets
+      } else if (e.keyCode === 13 && !this.targetText) {
+        this.triggerList = this.triggerListRef
       }
     },
-    filterMethod (data, query) {
-      return data.label.indexOf(query) > -1 ||
-        data.name.indexOf(query) > -1 ||
-        data.alias.indexOf(query) > -1
+    searchSource (e) {
+      if (e.keyCode === 13 && this.sourceText) {
+        const sources = []
+        this.dataListRef.forEach(item => {
+          if (item.alias.indexOf(this.sourceText) > -1 || item.name.indexOf(this.sourceText) > -1) {
+            sources.push(item)
+          }
+        })
+        this.dataList = sources
+      } else if (e.keyCode === 13 && !this.sourceText) {
+        this.dataList = this.dataListRef
+      }
     },
-    ok () {
-      this.$emit('ok', this.triggerList)
+    toRight (e) {
+      const restData = []
+      const checkData = []
+      this.dataListRef.forEach(item => {
+        if (!item.isChoose) {
+          restData.push(item)
+        } else {
+          checkData.push(item)
+        }
+      })
+      this.dataListRef = restData
+      this.triggerListRef = this.triggerListRef.concat(checkData)
+
+      this.searchSource({ keyCode: 13 })
+      this.searchTarget({ keyCode: 13 })
+    },
+    toLeft (e) {
+      const restData = []
+      const checkData = []
+      this.triggerListRef.forEach(item => {
+        if (!item.isChoose) {
+          restData.push(item)
+        } else {
+          checkData.push(item)
+        }
+      })
+      this.dataListRef = this.dataListRef.concat(checkData)
+      this.triggerListRef = restData
+
+      this.searchSource({ keyCode: 13 })
+      this.searchTarget({ keyCode: 13 })
     },
     close () {
       this.$emit('close')
     },
-    renderText (item) {
-      return item.name
+    ok () {
+      this.$emit('ok', this.triggerList.map(item => item.id))
     },
-    checkedList (sourceSelectedKeys, targetSelectedKeys) {
-      this.sourceSelectedKeys = sourceSelectedKeys
-      this.targetSelectedKeys = targetSelectedKeys
-    },
-    changeList (newList) {
-      this.triggerList = newList
+    search () {
+
     }
   },
   watch: {
     value () {
       if (this.value) {
-        const sources = this.sourceList.map(item => {
-          return {
-            ...item,
-            key: item.id,
-            label: item.alias || item.name
+        const keys = new Set()
+        if (this.selectedList && this.selectedList.length) {
+          this.triggerListRef = this.triggerList = this.selectedList.map(item => {
+            keys.add(item.id)
+            return {
+              ...item,
+              key: item.id,
+              label: item.alias || item.name,
+              isChoose: false
+            }
+          })
+        }
+
+        const sources = []
+        this.sourceList.forEach(item => {
+          if (!keys.has(item.id)) {
+            sources.push({
+              ...item,
+              key: item.id,
+              label: item.alias || item.name,
+              isChoose: false
+            })
           }
         })
 
-        const targets = this.targetList.map(item => {
-          return {
-            ...item,
-            key: item.id,
-            label: item.alias || item.name
+        const targets = []
+        this.targetList.forEach(item => {
+          if (!keys.has(item.id)) {
+            targets.push({
+              ...item,
+              key: item.id,
+              label: item.alias || item.name,
+              isChoose: false
+            })
           }
         })
-        this.dataList = sources.concat(targets)
-        if (this.selectedList && this.selectedList.length) {
-          this.triggerList = this.selectedList.map(item => {
-            return item.id
-          })
-        }
+        this.dataListRef = this.dataList = sources.concat(targets)
       } else {
         Object.assign(this.$data, this.$options.data())
       }
