@@ -295,7 +295,6 @@ export default {
         if (this.mysqlId) {
           this.dmService.editApiData({
             ...this.mysqlData,
-            params: undefined,
             id: this.mysqlList.id
           }).then(res => {
             if (res.status === 0) {
@@ -347,6 +346,10 @@ export default {
 
       if (putData.params.period === null) {
         this.$message.error('请选择更新频率')
+        return
+      }
+      if (!putData.params.increment_field) {
+        this.$message.error('请选择更新字段')
         return
       }
 

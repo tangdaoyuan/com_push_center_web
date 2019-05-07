@@ -503,9 +503,8 @@ export default {
               'file-aggr': this.utils.getType(data.id) === 'field' && (data.type === 2 || data.type === 7),
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
-              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
+              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8 || data.type === 9),
               'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6
-
             }
           }),
           h('span', {

@@ -25,6 +25,10 @@
                 </el-select>
               </div>
               <div class="item-form">
+                <label class="item-form-title"><span>*</span>数据源名称</label>
+                <Input class="item-input" v-model="hiveData.name" :maxlength="16" />
+              </div>
+              <div class="item-form">
                 <label class="item-form-title"><span>*</span>数据库地址</label>
                 <Input class="item-input right" v-model="hiveData.params.host" :maxlength="32" :disabled="hiveId !== ''"/>
               </div>
@@ -33,68 +37,74 @@
                 <Input-number class="item-input right" :max="65535" :min="1"  v-model="hiveData.params.port" :disabled="hiveId !== ''"></Input-number>
               </div>
               <div class="item-form">
-                <label class="item-form-title"><span>*</span>用户名</label>
-                <Input class="item-input right" v-model="hiveData.params.username" :disabled="hiveId !== ''"/>
-              </div>
-              <div class="item-form">
-                <label class="item-form-title"><span>*</span>密码</label>
-                <Input class="item-input right" type="password" v-model="hiveData.params.password" :disabled="hiveId !== ''"/>
-              </div>
-              <div class="item-form">
                 <label class="item-form-title"><span>*</span>数据库名</label>
                 <Input class="item-input right" v-model="hiveData.params.database" :disabled="hiveId !== ''"/>
+              </div>
+              <div class="item-form">
+                <label class="item-form-title">用户名</label>
+                <Input class="item-input right" v-model="hiveData.params.username"/>
+              </div>
+              <div class="item-form">
+                <label class="item-form-title">密码</label>
+                <Input class="item-input right" type="password" v-model="hiveData.params.password"/>
               </div>
             </div>
           </div>
           <div class="step-item hive-right">
             <div class="title">
-              <span class="import">导入已有链接设置</span>
+              <!-- <span class="import">导入已有链接设置</span> -->
             </div>
             <div class="item-body">
               <div class="item-form">
                 <label class="item-form-title">krb_user</label>
-                <Input class="item-input right" v-model="hiveData.params.krb_user" :maxlength="32" :disabled="hiveId !== ''"/>
+                <Input class="item-input right" v-model="hiveData.params.krb_user" :maxlength="32"/>
               </div>
               <div class="item-form">
                 <label class="item-form-title">krb5_path</label>
-                <Input class="item-input right" v-model="hiveData.params.krb5_path" :disabled="hiveId !== ''"/>
+                <Input class="item-input right" v-model="hiveData.params.krb5_path"/>
               </div>
               <div class="item-form">
-                <label class="item-form-title">kabtab_path</label>
-                <Input class="item-input right" v-model="hiveData.params.kabtab_path" :disabled="hiveId !== ''"/>
+                <label class="item-form-title">keytab_path</label>
+                <Input class="item-input right" v-model="hiveData.params.keytab_path"/>
               </div>
-              <div class="item-form">
+              <!-- <div class="item-form">
                 <label class="item-form-title">krb_path</label>
-                <Input class="item-input right" type="password" v-model="hiveData.params.krb_path" :disabled="hiveId !== ''"/>
+                <Input class="item-input right" type="password" v-model="hiveData.params.krb_path"/>
               </div>
               <div class="item-form">
                 <label class="item-form-title">kerberos_jdbc_str</label>
-                <Input class="item-input right" v-model="hiveData.params.kerberos_jdbc_str" :disabled="hiveId !== ''"/>
-              </div>
+                <Input class="item-input right" v-model="hiveData.params.kerberos_jdbc_str"/>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
-      <div class="adm-step-mysql adm-step2" v-show="currentStep === 1">
+      <div class="adm-step-mysql adm-step2 hive" v-show="currentStep === 1">
         <word-setting
-         :datas="chooseWords"
-         :dataSchema="mysqlSchema"
+         :datas="allWords"
+         :dataSchema="hiveSchema"
          @finish="finishWordSetting"
          @close="closeWoSetting"
          v-model="wsModal" />
+        <div class="table-list" v-if="!hiveId">
+          <ul>
+            <li @click="chooseTable(item,index)" v-for="(item,index) in hiveTables" :key="index" :class="{'active': item.active}">{{item.name}}</li>
+          </ul>
+        </div>
         <div class="step-body">
           <div class="item-body">
             <div class="item-form item-form1">
-              <span>预览表格--{{mysqlSchema.table_name}}</span>
+              <span>预览表格--{{tableName}}</span>
               <span @click="filedSetting"><i></i>字段设置</span>
             </div>
             <div class="item-form item-form2">
-              <el-table :data="mysqlSchema.data"
+
+              <el-table :data="hiveSchema.data"
                   border
                   stripe
                   width="100%">
                 <el-table-column
-                  v-for="(item, index) in mysqlSchema.fields"
+                  v-for="(item, index) in hiveSchema.fields"
                   :key="index"
                   show-overflow-tooltip
                   min-width="120"
@@ -108,29 +118,29 @@
             </div>
             <div class="item-form form-select">
               <label class="item-form-title">定时同步</label>
-              <RadioGroup v-model="mysqlData2.params.is_timed_sync" class="item-input">
+              <RadioGroup v-model="hiveData2.params.is_timed_sync" class="item-input">
                 <Radio :label="1">开启</Radio>
                 <Radio :label="0">关闭</Radio>
               </RadioGroup>
             </div>
-            <div class="item-form form-select" v-show="mysqlData2.params.is_timed_sync">
+            <div class="item-form form-select" v-show="hiveData2.params.is_timed_sync">
               <label class="item-form-title">更新频率</label>
               <span class="per">每</span>
-              <Input-number v-model="mysqlData2.params.period" :min="1" :max="9999" class="item-input double"></Input-number>
-              <el-select v-model="mysqlData2.params.period_type" class="item-select double">
+              <Input-number v-model="hiveData2.params.period" :min="1" :max="9999" class="item-input double"></Input-number>
+              <el-select v-model="hiveData2.params.period_type" class="item-select double">
                 <el-option v-for="(item, index) in CONSTANT.timeList" :value="item.value" :key="index" :label="item.label"></el-option>
               </el-select>
             </div>
-            <div class="item-form form-select" v-show="mysqlData2.params.is_timed_sync">
+            <div class="item-form form-select" v-show="hiveData2.params.is_timed_sync">
               <label class="item-form-title">增量更新字段</label>
-              <el-select v-model="mysqlData2.params.increment_field" class="item-select">
-                <el-option v-for="(item, index) in mysqlSchema.fields" :value="item.name" :key="index" :label="item.name"></el-option>
+              <el-select v-model="hiveData2.params.increment_field" class="item-select">
+                <el-option v-for="(item, index) in chooseFields" :value="item.name" :key="index" :label="item.name"></el-option>
               </el-select>
               <label class="mark">(增量更新字段只支持索引字段)</label>
             </div>
-            <div class="item-form form-select" v-show="mysqlData2.params.is_timed_sync">
+            <div class="item-form form-select" v-show="hiveData2.params.is_timed_sync">
               <label class="item-form-title">增量类型</label>
-              <RadioGroup v-model="mysqlData2.params.increment_type" class="item-input">
+              <RadioGroup v-model="hiveData2.params.increment_type" class="item-input">
                 <Radio :label="0">序列</Radio>
                 <Radio :label="1">时间</Radio>
               </RadioGroup>
@@ -143,7 +153,7 @@
       <div class="step-footer">
         <el-button type="primary" @click="prev()" v-show="currentStep === 1">上一步</el-button>
         <el-button type="primary" @click="next()" v-show="currentStep === 0">下一步</el-button>
-        <el-button type="primary" @click="finishMysql($event)" v-show="currentStep === 1">完成{{(hiveId) ? ('编辑') : ('创建')}}</el-button>
+        <el-button type="primary" @click="finishHive($event)" v-show="currentStep === 1">完成{{(hiveId) ? ('编辑') : ('创建')}}</el-button>
       </div>
     </div>
   </Modal>
@@ -157,7 +167,7 @@ export default {
   data () {
     return {
       currentStep: 0,
-      mysqlList: {},
+      hiveList: {},
       sync_fields: [],
       hiveData: {
         type: 9,
@@ -165,17 +175,19 @@ export default {
         desc: '',
         params: {
           host: '',
-          port: 23306,
+          port: 10000,
           username: '',
           password: '',
-          database: '',
-          table: ''
+          database: ''
         }
       },
-      chooseWords: [],
-      mysqlSchema: {},
+      allWords: [],
+      chooseFields: [],
+      tableName: '',
+      hiveSchema: {},
       wsModal: false,
-      mysqlData2: {
+      hiveTables: [],
+      hiveData2: {
         temp_id: '',
         params: {
           is_timed_sync: 0,
@@ -214,46 +226,53 @@ export default {
         this.$message.error('新建不允许使用步骤条')
       }
     },
+    chooseTable (item, currentIndex) {
+      if (this.hiveId) return // 编辑
+      this.hiveTables = this.hiveTables.map((item, index) => {
+        return index === currentIndex ? { ...item, active: true } : { ...item, active: false }
+      })
+      this.getHiveTableSchema({
+        tableName: item.name,
+        type: 'add'
+      })
+    },
     search () {
       this.dmService.openDetail({
         id: this.hiveId
       }).then(res => {
-        this.mysqlList = res.data.data_source
+        this.hiveList = res.data.data_source
+        this.tableName = this.hiveList.table
         this.hiveData = {
-          type: 6,
-          name: this.mysqlList.name,
-          desc: this.mysqlList.desc,
+          type: 9,
+          name: this.hiveList.name,
+          desc: this.hiveList.desc,
           params: {
-            host: this.mysqlList.host,
-            port: this.mysqlList.port,
-            username: this.mysqlList.username,
-            password: this.mysqlList.password,
-            database: this.mysqlList.database,
-            table: this.mysqlList.table
+            host: this.hiveList.host,
+            port: this.hiveList.port,
+            username: this.hiveList.username,
+            password: this.hiveList.password,
+            database: this.hiveList.database,
+            table: this.hiveList.table
           }
         }
-        if (this.mysqlList.is_timed_sync) {
-          this.mysqlData2.params = {
+        if (this.hiveList.is_timed_sync) {
+          this.hiveData2.params = {
             is_timed_sync: 1,
-            period: this.mysqlList.period,
-            period_type: this.mysqlList.period_type,
-            increment_type: this.mysqlList.increment_type,
-            increment_field: this.mysqlList.increment_field
+            period: this.hiveList.period,
+            period_type: this.hiveList.period_type,
+            increment_type: this.hiveList.increment_type,
+            increment_field: this.hiveList.increment_field
           }
         }
         this.editData2 = {
           tb_id: res.data.table_id,
-          type: 6,
-          ds_id: this.mysqlList.id
+          type: 9,
+          ds_id: this.hiveList.id
         }
       })
-      this.dmService.getMysqlSchema({
-        id: this.hiveId
-      }).then(res => {
-        this.mysqlSchema = res.data.schema
-        this.mysqlSchema.fields.forEach(item => {
-          this.chooseWords.push(item.name)
-        })
+      this.getHiveTableSchema({
+        id: this.hiveId,
+        type: 'update'
       })
     },
     next () {
@@ -278,31 +297,14 @@ export default {
           return null
         }
 
-        if (!this.hiveData.params.username) {
-          this.$message.error('用户名不能为空')
-          return null
-        }
-
-        if (!this.hiveData.params.password) {
-          this.$message.error('密码不能为空')
-          return null
-        }
-
         if (!this.hiveData.params.database) {
           this.$message.error('数据库名不能为空')
           return null
         }
-
-        if (!this.hiveData.params.table) {
-          this.$message.error('数据表不能为空')
-          return null
-        }
-
         if (this.hiveId) {
           this.dmService.editApiData({
             ...this.hiveData,
-            params: undefined,
-            id: this.mysqlList.id
+            id: this.hiveList.id
           }).then(res => {
             if (res.status === 0) {
               this.currentStep = 1
@@ -313,11 +315,8 @@ export default {
         } else {
           this.dmService.saveMsgTmpData(this.hiveData).then(res => {
             if (res.status === 0) {
-              this.mysqlSchema = res.data.schema
-              this.mysqlData2.temp_id = res.data.temp_id
-              this.mysqlSchema.fields.forEach(item => {
-                this.chooseWords.push(item.name)
-              })
+              this.hiveData2.temp_id = res.data.temp_id
+              this.getHiveTableList()
               this.currentStep = 1
             } else {
               this.$message.error(res.msg)
@@ -326,33 +325,81 @@ export default {
         }
       }
     },
+    async getHiveTableList () {
+      let res = await this.dmService.getHiveTableList({
+        redis_key: this.hiveData2.temp_id
+      })
+      if (res.status === 0) {
+        this.hiveTables = res.data.map((item, index) => {
+          return index === 0 ? { name: item, active: true } : { name: item, active: false }
+        })
+        this.getHiveTableSchema({
+          tableName: this.hiveTables[0].name,
+          type: 'add'
+        })
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
+    getHiveTableSchema (option) {
+      let params
+      if (option.type === 'add') {
+        this.tableName = option.tableName
+        params = {
+          redis_key: this.hiveData2.temp_id,
+          table_name: this.tableName
+        }
+      } else if (option.type === 'update') {
+        params = { id: option.id }
+      }
+      this.dmService.getHiveTableSchema(params).then(res => {
+        if (res.status === 0) {
+          this.hiveSchema = res.data.schema
+          this.chooseFields = this.hiveSchema.fields
+          this.hiveSchema.fields.forEach(item => {
+            this.allWords.push(item.name)
+          })
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     prev () {
       this.currentStep--
     },
-    finishMysql () {
+    finishHive () {
       const putData = {
-        type: 6,
-        temp_id: this.mysqlData2.temp_id,
+        type: 9,
+        temp_id: this.hiveData2.temp_id,
         params: {}
       }
 
-      if (this.chooseWords.length === 0) {
+      if (this.allWords.length === 0) {
         this.$message.error('请配置同步字段')
         return
       }
-      putData.params.sync_fields = (this.sync_fields.length > 0) ? (this.sync_fields) : (this.chooseWords)
-      if (this.mysqlData2.params.is_timed_sync) {
+      putData.params.table = this.tableName
+      putData.params.sync_fields = (this.sync_fields.length > 0) ? (this.sync_fields) : (this.hiveSchema.fields)
+      putData.params.sync_fields = putData.params.sync_fields.map(item => {
+        return { name: item.name, type: item.sys_type }
+      })
+
+      if (this.hiveData2.params.is_timed_sync) {
         putData.params.is_timed_sync = true
-        putData.params.period = this.mysqlData2.params.period
-        putData.params.period_type = this.mysqlData2.params.period_type
-        putData.params.increment_field = this.mysqlData2.params.increment_field
-        putData.params.increment_type = this.mysqlData2.params.increment_type
+        putData.params.period = this.hiveData2.params.period
+        putData.params.period_type = this.hiveData2.params.period_type
+        putData.params.increment_field = this.hiveData2.params.increment_field
+        putData.params.increment_type = this.hiveData2.params.increment_type
       } else {
         putData.params.is_timed_sync = false
       }
 
       if (putData.params.period === null) {
         this.$message.error('请选择更新频率')
+        return
+      }
+      if (!putData.params.increment_field) {
+        this.$message.error('请选择更新字段')
         return
       }
 
@@ -382,8 +429,19 @@ export default {
       }
     },
     finishWordSetting (data) {
-      this.sync_fields = data.sync_fields
-      // this.chooseWords = data.sync_fields
+      // this.sync_fields = data.sync_fields
+      this.sync_fields = data.fields
+      this.chooseFields = data.fields
+
+      let increment_field = this.hiveData2.params.increment_field
+      if (increment_field) {
+        let chooseNames = this.chooseFields.map(item => {
+          return item.name
+        })
+        if (!chooseNames.includes(increment_field)) {
+          this.hiveData2.params.increment_field = ''
+        }
+      }
     },
     filedSetting () {
       this.wsModal = true
