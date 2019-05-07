@@ -221,6 +221,12 @@
                   &.file-oracle {
                     @include file-oracle-icon;
                   }
+                  &.file-hive {
+                    @include file-hive-icon;
+                  }
+                  &.file-kafka {
+                    @include file-kafka-icon;
+                  }
                 }
 
                 span {
@@ -1175,6 +1181,12 @@
 
                     &.file-oracle {
                       @include file-oracle-icon;
+                    }
+                    &.file-hive {
+                      @include file-hive-icon;
+                    }
+                    &.file-kafka {
+                      @include file-kafka-icon;
                     }
                   }
 
