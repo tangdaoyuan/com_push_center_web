@@ -78,7 +78,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    currentStep: Number
   },
   data () {
     return {

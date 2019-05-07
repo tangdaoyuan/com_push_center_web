@@ -1,4 +1,19 @@
 class CONSTANT {
+  tableType = {
+    'NORMAL': 1,
+    'FLOW': 2
+  }
+  pushType = {
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
+  }
+  taskStep = {
+    'NORMAL': 0,
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
+  }
   dmTypeList = [
     {
       label: 'BDP同步客户端',
@@ -31,6 +46,10 @@ class CONSTANT {
     {
       label: 'Oracle(流式)',
       value: 8
+    },
+    {
+      label: 'Hive',
+      value: 9
     }
   ]
   SYS_TYPE = 1

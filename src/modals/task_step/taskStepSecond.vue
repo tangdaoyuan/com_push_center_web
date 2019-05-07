@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1">
+  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.NORMAL">
     <task-filter
       v-model="taskFilterModal"
       :choose-index="chooseIndex"
@@ -128,7 +128,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -252,8 +253,10 @@ export default {
               'file-aggr': this.utils.getType(data.id) === 'field' && data.type === 2,
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
-              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 5,
-              'file-oracle': this.utils.getType(data.id) === 'field' && data.type === 6
+              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
+              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6,
+              'file-kafka': this.utils.getType(data.id) === 'field' && data.type === 7,
+              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9
             }
           }),
           h('span', {
@@ -272,7 +275,6 @@ export default {
       this.chooseFilter = item
       this.chooseIndex = index
       this.taskFilterModal = true
-      console.log(item)
     },
     addTaskFilter () {
       this.chooseIndex = -1
@@ -290,6 +292,7 @@ export default {
           chooseIndex: undefined
         }]
       }
+      this.closeTaskFilter()
     },
     deleteFilter (item, index) {
       item.deleteModal = false

@@ -29,7 +29,7 @@ export default class Img {
           case 'Oracle流式数据源':
             this.img = require(`@/assets/imgs/dm-oracle.png`)
             break
-          case 'Hive':
+          case 'hive':
             this.img = require(`@/assets/imgs/dm-hive.png`)
             break
           case '手机短信':

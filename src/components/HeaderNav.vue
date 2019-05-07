@@ -92,6 +92,8 @@ export default {
       if (res.status === 0) {
         if (res.data.logo) {
           window.$(this.$refs.logo).css('backgroundImage', `url(${res.data.logo})`)
+        }
+        if (res.data.title) {
           window.document.title = res.data.title
         }
       }
