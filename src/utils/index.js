@@ -406,6 +406,15 @@ class Utils {
     each(list)
     return res
   }
+
+  inList (key, list) {
+    if (list && list.length > 0) {
+      for (let k of list) {
+        if (k === key) return true
+      }
+    }
+    return false
+  }
 }
 
 export default new Utils()
