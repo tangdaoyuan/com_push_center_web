@@ -500,12 +500,13 @@ export default {
               'folder': this.utils.getType(data.id) === 'folder' || this.utils.getType(data.id) === 'ds',
               'file': this.utils.getType(data.id) === 'field',
               'file-ds': this.utils.getType(data.id) === 'field' && data.type === 1,
-              'file-aggr': this.utils.getType(data.id) === 'field' && (data.type === 2 || data.type === 7),
+              'file-aggr': this.utils.getType(data.id) === 'field' && (data.type === 2),
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
               'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
-              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6
-
+              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6,
+              'file-kafka': this.utils.getType(data.id) === 'field' && data.type === 7,
+              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9
             }
           }),
           h('span', {

@@ -75,11 +75,13 @@ export default {
     },
     save () {
       const putData = {
-        sync_fields: []
+        sync_fields: [],
+        fields: []
       }
       if (this.$refs.schema_table.selection && this.$refs.schema_table.selection.length > 0) {
         this.$refs.schema_table.selection.forEach(item => {
           putData.sync_fields.push(item.name)
+          putData.fields.push(item)
         })
         this.$message.success('配置成功')
         this.$emit('finish', putData)

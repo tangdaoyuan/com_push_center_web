@@ -69,12 +69,14 @@
     <detail-api v-model="modals.daModal" :detailID="detailID" @close="closeDaApi"></detail-api>
     <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo" :is-flow="isFlow.msg"></detail-info>
     <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle" :is-flow="isFlow.oracle"></detail-oracle>
+     <detail-hive v-model="modals.dhModal" :detailID="detailID" @close="closeDetailHive" ></detail-hive>
     <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
     <adm-syncbdp v-model="modals.admBdpModal" @refresh="init" :bdp-id="datasourceID.bdpID"/>
     <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID" @close="closeAdmMysql"/>
     <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle" :is-flow="isFlow.oracle"/>
     <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" @close="closeAdmApi"/>
+    <adm-hive v-model="modals.admHiveModal" @refresh="init" :hive-id="datasourceID.hiveID" @close="closeAdmHive"/>
   </div>
 </template>
 <script>
@@ -113,12 +115,14 @@ export default {
         daModal: false,
         diModal: false,
         doModal: false,
+        dhModal: false,
         abnormalVisible: false,
         admBdpModal: false,
         admMysqlModal: false,
         admOracleModal: false,
         admMsgModal: false,
-        admApiModal: false
+        admApiModal: false,
+        admHiveModal: false
       },
       pageParams: {
         type: '',
@@ -148,7 +152,8 @@ export default {
         msgID: '',
         mysqlID: '',
         oracleID: '',
-        bdpID: ''
+        bdpID: '',
+        hiveID: ''
       }
     }
   },
@@ -167,6 +172,9 @@ export default {
     closeDaApi () {
       this.modals.daModal = false
     },
+    closeDetailHive () {
+      this.modals.dhModal = false
+    },
     closeAdmOracle () {
       this.modals.admOracleModal = false
     },
@@ -178,6 +186,9 @@ export default {
     },
     closeAdmApi () {
       this.modals.admApiModal = false
+    },
+    closeAdmHive () {
+      this.modals.admHiveModal = false
     },
     closeAbnReason () {
       this.modals.abnormalVisible = false
@@ -261,6 +272,9 @@ export default {
           this.isFlow.oracle = true
           this.modals.doModal = true
           break
+        case 9:
+          this.modals.dhModal = true
+          break
       }
     },
     addDataManage (e) {
@@ -320,6 +334,10 @@ export default {
           this.modals.admOracleModal = true
           this.isFlow.oracle = true
           this.datasourceID.oracleID = item.id
+          break
+        case 9:
+          this.modals.admHiveModal = true
+          this.datasourceID.hiveID = item.id
           break
       }
     },

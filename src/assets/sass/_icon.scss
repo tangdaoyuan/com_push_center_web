@@ -145,6 +145,15 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/file_oracle.png');
 }
 
+@mixin file-hive-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_hive.png');
+}
+
+@mixin file-kafka-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_kafka.png');
+}
 @mixin more-icon {
   @include icon;
   background-image: url('#{$root_url}/more.png');

@@ -141,7 +141,7 @@
             <div class="item-form form-select" v-show="oracleData2.params.is_timed_sync">
               <label class="item-form-title">增量更新字段</label>
               <el-select v-model="oracleData2.params.increment_field" class="item-select">
-                <el-option v-for="(item, index) in oracleSchema.fields" :value="item.name" :key="index" :label="item.name"></el-option>
+                <el-option v-for="(item, index) in chooseFields" :value="item.name" :key="index" :label="item.name"></el-option>
               </el-select>
               <label class="mark">(增量更新字段只支持索引字段)</label>
             </div>
@@ -181,6 +181,7 @@ export default {
     return {
       currentStep: 0,
       chooseWords: [],
+      chooseFields: [],
       mysqlSchema: {},
       oracleList: {},
       wsModal: false,
@@ -292,6 +293,7 @@ export default {
       }).then(res => {
         if (res.status === 0) {
           this.oracleSchema = res.data.schema
+          this.chooseFields = this.oracleSchema.fields
           this.oracleSchema.fields.forEach(item => {
             this.chooseWords.push(item.name)
           })
@@ -356,7 +358,6 @@ export default {
         if (this.oracleId) {
           this.dmService.editApiData({
             ...putData,
-            params: undefined,
             type: this.dmType,
             id: this.oracleList.id
           }).then(res => {
@@ -373,6 +374,7 @@ export default {
           }).then(res => {
             if (res.status === 0) {
               this.oracleSchema = res.data.schema
+              this.chooseFields = this.oracleSchema.fields
               this.oracleSchema.fields.forEach(item => {
                 this.chooseWords.push(item.name)
               })
@@ -408,6 +410,14 @@ export default {
       } else {
         putData.params.is_timed_sync = false
       }
+      if (putData.params.period === null) {
+        this.$message.error('请选择更新频率')
+        return
+      }
+      if (!putData.params.increment_field) {
+        this.$message.error('请选择更新字段')
+        return
+      }
       if (this.oracleId) {
         this.editData2.params = putData.params
         this.dmService.saveEditData(this.editData2).then(res => {
@@ -434,7 +444,7 @@ export default {
     },
     finishWordSetting (data) {
       this.sync_fields = data.sync_fields
-      // this.chooseWords = data.sync_fields
+      this.chooseFields = data.fields
     },
     filedSetting () {
       this.wsModal = true
