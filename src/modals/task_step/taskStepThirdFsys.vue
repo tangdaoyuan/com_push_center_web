@@ -9,6 +9,19 @@
       <div class="grid-main sys-main">
         <div class="item r-span">
           <i class="red-dot"></i>
+          <span>数据库种类</span>
+        </div>
+        <div class="item">
+          <i class="red-dot"></i>
+          <RadioGroup v-model="dbType">
+            <Radio label="mysql" ></Radio>
+            <Radio label="oracle"></Radio>
+          </RadioGroup>
+        </div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item r-span">
+          <i class="red-dot"></i>
           <span>数据库地址</span>
         </div>
         <div class="item">
@@ -81,6 +94,7 @@ export default {
   data () {
     return {
       date: null,
+      dbType: 'mysql',
       taskData: {
         host: '',
         port: undefined,
@@ -122,12 +136,22 @@ export default {
         this.$message.error('数据表名不能为空')
         return
       }
+      let extraData = {}
+      if (this.dbType.indexOf('oracle') > -1) {
+        extraData = {
+          connection_type: 0,
+          sid: 'xe'
+        }
+      }
+
       const pushData = {
         database: {
-          ...this.taskData
+          ...this.taskData,
+          ...extraData
         },
         id: this.$store.state.task.taskId
       }
+
       console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {

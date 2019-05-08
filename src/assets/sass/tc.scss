@@ -1501,15 +1501,15 @@
     }
   }
   .sys-main {
-    grid: auto 32px 32px 32px 32px 32px / 100px 350px 100px 350px;
+    grid: auto 32px 32px 32px 32px 32px 32px/ 100px 350px 100px 350px;
     justify-content: start;
     height: calc(100% - 120px);
     background-color: #fff;
     .user-input {
-      grid-area: 3/2/4/5;
+      grid-area: 4/2/5/5;
     }
     .pwd-input {
-      grid-area: 4/2/5/5;
+      grid-area: 5/2/6/5;
     }
   }
 }
