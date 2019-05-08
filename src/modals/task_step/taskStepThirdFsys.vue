@@ -108,6 +108,7 @@ export default {
     }
   },
   methods: {
+    init () {},
     prev () {
       this.$emit('prev')
     },
@@ -156,10 +157,13 @@ export default {
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {
         if (res.status === 0) {
-          this.$message.success('保存成功')
-          this.$emit('finish')
+          if (!this.$store.state.task.taskData) {
+            this.$emit('next', 2)
+          } else {
+            this.$emit('refresh')
+          }
         } else {
-          this.$message.error(res.msg)
+          this.$message.error(res.msg || '保存失败')
         }
       })
     },
@@ -172,6 +176,10 @@ export default {
   },
   watch: {
     step () {
+      if (this.step === 2 &&
+        this.taskStep === this.CONSTANT.taskStep.DATABASE) {
+        this.init()
+      }
       if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())
       }

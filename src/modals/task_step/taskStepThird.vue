@@ -311,7 +311,6 @@ export default {
           } else if (this.$store.getters.outputFields) {
             fieldList = this.$store.getters.outputFields
           }
-          console.log(fieldList)
           this.tbList = fieldList.map(item => {
             return {
               ...item,

@@ -25,6 +25,9 @@
             title="设置推送信息"
             @click.native="editStep($event, 2)" content=""></Step>
           <Step
+            v-if="taskStep === CONSTANT.taskStep.DATABASE"
+            title="设置字段映射" @click.native="editStep($event, 3)" content=""></Step>
+          <Step
             v-if="taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER"
             title="设置推送用户" @click.native="editStep($event, 3)" content=""></Step>
           <Step
@@ -56,8 +59,7 @@
         @refresh="refresh"
         :step="currentStep"
         @next="next"
-        @prev="prev"
-        @finish="finish"/>
+        @prev="prev"/>
       <task-step-third-fapi
         :task-step="taskStep"
         @refresh="refresh"
@@ -66,6 +68,13 @@
         @prev="prev"
         @finish="finish"/>
       <task-step-forth :task-step="taskStep" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-forth-db
+        :task-step="taskStep"
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next"
+        @prev="prev"
+        @finish="finish"/>
       <task-step-fifth :task-step="taskStep" @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
     </div>
     <div class="task-footer" v-show="false" slot="footer"></div>
