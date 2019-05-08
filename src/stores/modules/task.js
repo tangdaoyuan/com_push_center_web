@@ -12,7 +12,8 @@ const state = {
   userDicMap: null,
   fieldData: null,
   fieldConfig: null,
-  dictConfig: null
+  dictConfig: null,
+  outputFields: []
 }
 
 const actions = {
@@ -71,7 +72,14 @@ const actions = {
   }
 }
 
-const getters = {}
+const getters = {
+  taskData: function (state) {
+    return state.taskData
+  },
+  outputFields: function (state) {
+    return state.outputFields
+  }
+}
 
 const mutations = {
   setTaskId: (state, id) => {
@@ -103,6 +111,12 @@ const mutations = {
   },
   setUserMapDic: (state, data) => {
     state.userDicMap = data
+  },
+  setOutputFields: (state, data) => {
+    state.outputFields = data
+  },
+  resetOutputFields: (state, data) => {
+    state.outputFields = []
   },
   resetFieldData: (state) => {
     [

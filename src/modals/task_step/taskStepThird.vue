@@ -304,15 +304,30 @@ export default {
         }
       })
       if (this.$store.state.task.tableData) {
-        console.log('Step third tableData exsit')
-        console.log(this.$store.state.task.taskData)
-        this.tbList = this.$store.state.task.tableData.title_list
+        if (this.taskStep === this.CONSTANT.taskStep.USER) {
+          let fieldList = []
+          if (this.$store.getters.taskData) {
+            fieldList = this.$store.getters.taskData.outputFields
+          } else if (this.$store.getters.outputFields) {
+            fieldList = this.$store.getters.outputFields
+          }
+          console.log(fieldList)
+          this.tbList = fieldList.map(item => {
+            return {
+              ...item,
+              id: item.id || item.field_id,
+              name: item.name || item.field_name
+            }
+          })
+          console.log(this.tbList)
+        } else {
+          this.tbList = this.$store.state.task.tableData.title_list
+        }
         if (this.$store.state.task.taskData) {
           this.initEdit()
         }
       } else {
         if (this.$store.state.task.taskData) {
-          console.log('Step second taskData exsit')
           this.wtService.getprewData({
             page_no: 1,
             page_size: 100,
@@ -783,7 +798,9 @@ export default {
   },
   watch: {
     step () {
-      if (this.step === 2) {
+      if (this.step === 2 &&
+        (this.taskStep === this.CONSTANT.taskStep.NORMAL ||
+          this.taskStep === this.CONSTANT.taskStep.USER)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

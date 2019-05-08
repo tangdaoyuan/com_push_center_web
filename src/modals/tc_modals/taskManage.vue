@@ -8,15 +8,17 @@
       <span>{{($store.state.task.taskId) ? '编辑' : '新建'}}任务</span>
     </div>
     <div class="manage-body">
-      <task-step-first @refresh="refresh" :step="currentStep" @next="next"/>
       <div class="step-box" v-show="currentStep > 0">
         <Steps :current="currentStep">
           <Step
-            v-show="taskStep === CONSTANT.taskStep.NORMAL"
+            title="创建基本信息"
+            @click.native="editStep($event, 0)" content=""></Step>
+          <Step
+            v-if="taskStep === CONSTANT.taskStep.NORMAL"
             title="选择工作表"
             @click.native="editStep($event, 1)" content=""></Step>
           <Step
-            v-show="taskStep != CONSTANT.taskStep.NORMAL"
+            v-if="taskStep != CONSTANT.taskStep.NORMAL"
             title="设置任务字段"
             @click.native="editStep($event, 1)" content=""></Step>
           <Step
@@ -30,9 +32,16 @@
             title="设置推送通道" @click.native="editStep($event, 4)" content=""></Step>
         </Steps>
       </div>
+      <task-step-first
+        :task-step="taskStep"
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next"/>
       <task-step-second
         :task-step="taskStep"
-        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next" @prev="prev"/>
       <task-step-second-flow
         :task-step="taskStep"
         @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
@@ -110,9 +119,8 @@ export default {
       this.close()
       this.currentStep = -1
       this.taskStep = -1
-      console.log(this.currentStep)
-      console.log(this.taskStep)
       this.$store.commit('resetTaskEdit')
+      this.$store.commit('resetOutputFields')
       this.$emit('refresh')
     }
   },
@@ -130,8 +138,7 @@ export default {
         } else {
           this.currentStep = 0
         }
-      }
-      if (!this.value) {
+      } else {
         Object.assign(this.$data, this.$options.data())
       }
     }

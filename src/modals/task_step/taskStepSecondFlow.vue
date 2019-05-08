@@ -346,26 +346,27 @@ export default {
           })
         }
         if (taskData.output_fields) {
+          console.log(taskData.output_fields)
+          const sources = []
+          const targets = []
           taskData.output_fields.forEach(item => {
             if (item.table_id === this.tbId) {
-              const sources = []
               sources.push({
                 id: item.field_id,
                 name: item.field_name,
                 table_id: item.table_id
               })
-              this.outputFields.sources = sources
             }
             if (item.table_id === this.targetTableData.id) {
-              const targets = []
               targets.push({
                 id: item.field_id,
                 name: item.field_name,
                 table_id: item.table_id
               })
-              this.outputFields.targets = targets
             }
           })
+          this.outputFields.sources = sources
+          this.outputFields.targets = targets
         }
       }
     },
@@ -590,6 +591,12 @@ export default {
         }
       }
 
+      this.$store.commit('setOutputFields',
+        {
+          ...this.outputFields.sources,
+          ...this.outputFields.targets
+        }
+      )
       const putData = {
         id: this.$store.state.task.taskId,
         table_id: this.tbId,
@@ -604,6 +611,7 @@ export default {
       service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
+          this.$store.commit('setOutputFields', [...this.outputFields.sources, ...this.outputFields.targets])
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 1)
           } else {
