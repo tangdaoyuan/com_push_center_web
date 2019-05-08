@@ -24,17 +24,17 @@
       <div class="np-item seperator"></div>
       <div class="np-item">
         <span class="item-title radio-title">选择工作表</span>
-        <RadioGroup v-model="taskData.table_type">
-          <Radio :label="1">普通工作表</Radio>
-          <Radio :label="2">流式工作表</Radio>
+        <RadioGroup  v-model="taskData.table_type">
+          <Radio :label="1" :disabled="editStatus">普通工作表</Radio>
+          <Radio :label="2" :disabled="editStatus">流式工作表</Radio>
         </RadioGroup>
       </div>
       <div class="np-item" v-show="taskData.table_type > 1">
         <span class="item-title radio-title">选择推送对象</span>
         <RadioGroup v-model="taskData.target_type">
-          <Radio :label="1">推送用户</Radio>
-          <Radio :label="2">推送数据库</Radio>
-          <Radio :label="3">推送API</Radio>
+          <Radio :label="1" :disabled="editStatus">推送用户</Radio>
+          <Radio :label="2" :disabled="editStatus">推送数据库</Radio>
+          <Radio :label="3" :disabled="editStatus">推送API</Radio>
         </RadioGroup>
       </div>
     </div>
@@ -46,7 +46,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -108,7 +109,11 @@ export default {
         }
       })
     }
-
+  },
+  computed: {
+    editStatus () {
+      return !!this.$store.state.task.taskData
+    }
   },
   watch: {
     step () {
