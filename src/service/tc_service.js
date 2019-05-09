@@ -7,6 +7,12 @@ class TcService extends Service {
     })
   }
 
+  getTaskSchema (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_GET('/api/task/database/schema', data, resolve)
+    })
+  }
+
   getStatusCount (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_GET('/api/task/statistics', data, resolve)

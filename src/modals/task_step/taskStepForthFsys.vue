@@ -64,19 +64,32 @@ export default {
       } else if (this.$store.getters.outputFields) {
         fieldList = this.$store.getters.outputFields
       }
+      console.log(fieldMapping)
       this.outputFields = fieldList.map(item => {
+        const extraData = {
+          id: item.id || item.field_id,
+          name: item.name || item.field_name
+        }
+
         return {
           ...item,
-          id: item.id || item.field_id,
-          name: item.name || item.field_name,
-          mappingName: fieldMapping[item.name || item.field_name] || '',
+          ...extraData,
+          mappingName: fieldMapping[`${extraData.id}:${extraData.name}`] || '',
           isChoose: true
         }
       })
-      if (this.$store.getters.schemaFields) {
+      if (this.$store.getters.schemaFields.length > 0) {
         this.dbFields = this.$store.getters.schemaFields.fields
       } else {
-
+        this.tcService.getTaskSchema({
+          id: this.$store.state.task.taskId
+        }).then(res => {
+          if (res.status === 0) {
+            this.dbFields = res.data.schema.fields
+          } else {
+            this.$message.error('获取任务Schema列表失败')
+          }
+        })
       }
     },
     prev () {
