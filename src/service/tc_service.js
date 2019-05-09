@@ -61,6 +61,12 @@ class TcService extends Service {
     })
   }
 
+  saveTask4SettingByDB (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_POST('/api/task/database/field_mapping', data, resolve)
+    })
+  }
+
   saveTask5Setting (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_POST('/api/task/task_remains', data, resolve)
@@ -142,6 +148,12 @@ class TcService extends Service {
   editstep4 (data) {
     return new Promise((resolve) => {
       this.TEMPLATE_PUT('/api/task/task_channels', data, resolve)
+    })
+  }
+
+  editstep4ByDB (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_PUT('/api/task/database/field_mapping', data, resolve)
     })
   }
 

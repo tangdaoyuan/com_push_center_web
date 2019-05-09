@@ -4,7 +4,6 @@
       <div class="sys-header">
         <span>连接配置</span>
         <span>推送数据库是默认实时推送</span>
-
       </div>
       <div class="grid-main sys-main">
         <div class="item r-span">
@@ -13,9 +12,13 @@
         </div>
         <div class="item">
           <i class="red-dot"></i>
-          <RadioGroup v-model="dbType">
-            <Radio label="mysql" ></Radio>
-            <Radio label="oracle"></Radio>
+          <RadioGroup v-model="taskData.type">
+            <Radio :label="1" >
+              <span>mysql</span>
+            </Radio>
+            <Radio :label="2">
+              <span>oracle</span>
+            </Radio>
           </RadioGroup>
         </div>
         <div class="item"></div>
@@ -43,6 +46,7 @@
           <input v-model.number="taskData.port" type="number"  min="1" required>
         </div>
         <div class="item r-span">
+          <i class="red-dot"></i>
           <span>起止时间</span>
         </div>
         <div class="item">
@@ -94,10 +98,10 @@ export default {
   data () {
     return {
       date: null,
-      dbType: 'mysql',
       taskData: {
+        type: 1,
         host: '',
-        port: undefined,
+        port: 0,
         username: '',
         password: '',
         database: '',
@@ -108,7 +112,12 @@ export default {
     }
   },
   methods: {
-    init () {},
+    init () {
+      if (this.$store.getters.taskData) {
+        this.taskData = { ...this.$store.getters.taskData.database }
+        this.date = [new Date(this.taskData.start_time), new Date(this.taskData.end_time)]
+      }
+    },
     prev () {
       this.$emit('prev')
     },
@@ -137,8 +146,12 @@ export default {
         this.$message.error('数据表名不能为空')
         return
       }
+      if (!this.taskData.start_time || !this.taskData.end_time) {
+        this.$message.error('起止时间不能为空')
+        return
+      }
       let extraData = {}
-      if (this.dbType.indexOf('oracle') > -1) {
+      if (this.taskData.type === 2) {
         extraData = {
           connection_type: 0,
           sid: 'xe'
@@ -157,6 +170,9 @@ export default {
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {
         if (res.status === 0) {
+          if (res.data.schema) {
+            this.$store.commit('setSchemaFields', res.data.schema)
+          }
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 2)
           } else {
@@ -179,8 +195,7 @@ export default {
       if (this.step === 2 &&
         this.taskStep === this.CONSTANT.taskStep.DATABASE) {
         this.init()
-      }
-      if (this.step === -1) {
+      } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())
       }
     }

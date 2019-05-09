@@ -1,5 +1,43 @@
 <template>
   <div class="step-body" v-show="step === 3 && taskStep === CONSTANT.taskStep.DATABASE">
+    <div class="flow-mapping-main">
+      <div class="mapping-header">
+        <span>映射配置</span>
+      </div>
+      <div class="mapping-con">
+        <div class="header">
+          <div class="row">
+            <Checkbox  v-model="AllCheck" @on-change="checkAll" class="item">
+              <span class="title">输出字段</span>
+            </Checkbox>
+            <span class="item"></span>
+            <span class="item title">数据表目标字段</span>
+          </div>
+        </div>
+        <div class="body">
+          <div class="row" v-for="item in outputFields" :key="item.id">
+            <Checkbox class="item" v-model="item.isChoose">
+              <span class="field-name">{{item.alias || item.name}}</span>
+            </Checkbox>
+            <span class="equal">=</span>
+            <el-select
+              class="item"
+              v-model="item.mappingName">
+              <el-option
+                v-for="item in dbFields"
+                :key="item.name"
+                :value="item.name"
+                :label="item.name">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <el-button v-show="!$store.state.task.taskData" @click="prev()">上一步</el-button>
+      <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -9,17 +47,68 @@ export default {
     taskStep: Number
   },
   data () {
-    return {}
+    return {
+      AllCheck: true,
+      outputFields: [],
+      dbFields: []
+    }
   },
-  method: {
+  methods: {
     init () {
       let fieldList = []
+      let fieldMapping = {}
       if (this.$store.getters.taskData) {
-        fieldList = this.$store.getters.taskData.outputFields
+        const taskData = this.$store.getters.taskData
+        fieldList = taskData.output_fields
+        fieldMapping = taskData.database.field_mapping
       } else if (this.$store.getters.outputFields) {
         fieldList = this.$store.getters.outputFields
       }
-      console.log(fieldList)
+      this.outputFields = fieldList.map(item => {
+        return {
+          ...item,
+          id: item.id || item.field_id,
+          name: item.name || item.field_name,
+          mappingName: fieldMapping[item.name || item.field_name] || '',
+          isChoose: true
+        }
+      })
+      if (this.$store.getters.schemaFields) {
+        this.dbFields = this.$store.getters.schemaFields.fields
+      } else {
+
+      }
+    },
+    prev () {
+      this.$emit('prev')
+    },
+    next () {
+      let fieldMapping = {}
+      this.outputFields.forEach(item => {
+        if (item.isChoose) {
+          fieldMapping[item.id] = item.mappingName
+        }
+      })
+      const pushData = {
+        task_id: this.$store.state.task.taskId,
+        field_mapping: fieldMapping
+      }
+      console.log(pushData)
+      const service = this.$store.state.task.taskData ? this.tcService.editstep4ByDB(pushData) : this.tcService.saveTask4SettingByDB(pushData)
+
+      service.then(res => {
+        if (res.status === 0) {
+          this.$message.success('保存成功')
+          this.$emit('finish')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    checkAll (status) {
+      this.outputFields.forEach(item => {
+        item.isChoose = status
+      })
     }
   },
   watch: {

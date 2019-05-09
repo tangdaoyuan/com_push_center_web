@@ -1513,3 +1513,62 @@
     }
   }
 }
+.flow-mapping-main {
+  width: 100%;
+  height: calc(100% - 64px);
+  background-color: #fff;
+  .mapping-header {
+    width: 100%;
+    height: 36px;
+    background-color: rgba(41, 121, 255, .08);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+  .mapping-con {
+    height: calc(100% - 36px);
+    display: grid;
+    grid-template-rows: 36px;
+    justify-content: center;
+    .body {
+      overflow: auto;
+    }
+    .header,
+    .body {
+      .row {
+        &:first-child {
+          .title {
+            font-weight: bold;
+            font-size: 16px;
+          }
+        }
+        width: 450px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .item {
+          width: 40%;
+          margin-right: 0;
+          font-size: 14px;
+          &.el-select {
+            height: auto;
+          }
+          .field-name {
+            display: inline-block;
+            width: calc(100% - 30px);
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+        .equal {
+          width: 20%;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

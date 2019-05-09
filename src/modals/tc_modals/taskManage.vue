@@ -68,7 +68,7 @@
         @prev="prev"
         @finish="finish"/>
       <task-step-forth :task-step="taskStep" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
-      <task-step-forth-db
+      <task-step-forth-fsys
         :task-step="taskStep"
         @refresh="refresh"
         :step="currentStep"
@@ -96,7 +96,7 @@ export default {
       this.$emit('close')
     },
     back () {
-      this.$store.commit('resetTaskEdit')
+      this.resetStore()
       this.currentStep = -1
       this.taskStep = -1
       this.close()
@@ -128,9 +128,13 @@ export default {
       this.close()
       this.currentStep = -1
       this.taskStep = -1
+      this.resetStore()
+      this.$emit('refresh')
+    },
+    resetStore () {
       this.$store.commit('resetTaskEdit')
       this.$store.commit('resetOutputFields')
-      this.$emit('refresh')
+      this.$store.commit('resetSchemaFields')
     }
   },
   watch: {
