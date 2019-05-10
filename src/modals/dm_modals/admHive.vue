@@ -212,6 +212,9 @@ export default {
       }
     }
   },
+  beforeDestroy () {
+
+  },
   methods: {
     close () {
       this.$emit('close')
