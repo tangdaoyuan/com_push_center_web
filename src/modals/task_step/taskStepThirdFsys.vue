@@ -23,6 +23,50 @@
         </div>
         <div class="item"></div>
         <div class="item"></div>
+
+        <div class="item r-span" v-show="taskData.type === 2">
+          <i class="red-dot"></i>
+          <span>连接方式</span>
+        </div>
+        <div v-show="taskData.type === 2" class="item">
+          <i class="red-dot"></i>
+          <RadioGroup v-model="oracleData.connection_type">
+            <Radio :label="0" >
+              <span>BASIC</span>
+            </Radio>
+            <Radio :label="1">
+              <span>TNS</span>
+            </Radio>
+          </RadioGroup>
+        </div>
+        <div v-show="taskData.type === 2" class="item"></div>
+        <div v-show="taskData.type === 2" class="item"></div>
+        <div class="item r-span" v-show="taskData.type === 2">
+          <i class="red-dot"></i>
+          <span>服务器类型</span>
+        </div>
+        <div v-show="taskData.type === 2" class="item">
+          <RadioGroup v-model="oracleData.server_type.key">
+            <Radio label="server_name" >
+              <span>ServerName</span>
+            </Radio>
+            <Radio label="sid">
+              <span>Sid</span>
+            </Radio>
+          </RadioGroup>
+        </div>
+        <div v-show="taskData.type === 2" class="item"></div>
+        <div v-show="taskData.type === 2" class="item"></div>
+        <div class="item r-span" v-show="taskData.type === 2">
+          <i class="red-dot"></i>
+          <span>{{oracleData.server_type.key}}</span>
+        </div>
+        <div v-show="taskData.type === 2" class="item">
+           <input v-model="oracleData.server_type.value" type="text" required>
+        </div>
+        <div v-show="taskData.type === 2" class="item"></div>
+        <div v-show="taskData.type === 2" class="item"></div>
+
         <div class="item r-span">
           <i class="red-dot"></i>
           <span>数据库地址</span>
@@ -53,7 +97,7 @@
            <el-date-picker
             v-model="date"
             @change="changeDate"
-            type="daterange"
+            type="datetimerange"
             :editable="false"
             range-separator="至"
             start-placeholder="开始日期"
@@ -64,16 +108,20 @@
           <i class="red-dot"></i>
           <span>用户名</span>
         </div>
-        <div class="item user-input">
+        <div class="item">
           <input v-model="taskData.username" type="text" required>
         </div>
+        <div class="item"></div>
+        <div class="item"></div>
         <div class="item r-span pwd-label">
           <i class="red-dot"></i>
           <span>密码</span>
         </div>
-        <div class="item pwd-input">
+        <div class="item">
           <input v-model="taskData.password" type="text" required>
         </div>
+        <div class="item"></div>
+        <div class="item"></div>
         <div class="item r-span">
           <i class="red-dot"></i>
           <span>数据库名</span>
@@ -81,6 +129,9 @@
         <div class="item">
           <input v-model="taskData.database" type="text" required>
         </div>
+        <div class="item"></div>
+        <div class="item"></div>
+
       </div>
     </div>
     <div class="step-footer">
@@ -108,6 +159,13 @@ export default {
         table: '',
         start_time: undefined,
         end_time: undefined
+      },
+      oracleData: {
+        connection_type: 0,
+        server_type: {
+          key: 'server_name',
+          value: ''
+        }
       }
     }
   },
@@ -152,9 +210,13 @@ export default {
       }
       let extraData = {}
       if (this.taskData.type === 2) {
+        if (!this.oracleData.server_type.value) {
+          this.$message.error(`${this.oracleData.server_type.key} 不能为空`)
+          return
+        }
         extraData = {
-          connection_type: 0,
-          sid: 'xe'
+          connection_type: this.oracleData.connection_type,
+          [this.oracleData.server_type.key]: this.oracleData.server_type.value
         }
       }
 
