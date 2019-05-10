@@ -38,6 +38,7 @@
           <template
             slot-scope="scope">
               <el-button
+                v-show="scope.row.current!==1"
                 class="tip-ref-btn"
                 type="text"
                 size="small"
@@ -88,6 +89,7 @@ export default {
         this.tmService.setLogoTitle(params).then(res => {
           if (res.status === 0) {
             this.$message.success('LOGO设置完成')
+            this.search()
           }
         })
       })
