@@ -374,10 +374,6 @@ export default {
         params: {}
       }
 
-      if (this.allWords.length === 0) {
-        this.$message.error('请配置同步字段')
-        return
-      }
       putData.params.table = this.tableName
       putData.params.sync_fields = (this.sync_fields.length > 0) ? (this.sync_fields) : (this.hiveSchema.fields)
       putData.params.sync_fields = putData.params.sync_fields.map(item => {
@@ -390,17 +386,17 @@ export default {
         putData.params.period_type = this.hiveData2.params.period_type
         putData.params.increment_field = this.hiveData2.params.increment_field
         putData.params.increment_type = this.hiveData2.params.increment_type
+
+        if (putData.params.period === null) {
+          this.$message.error('请选择更新频率')
+          return
+        }
+        if (!putData.params.increment_field) {
+          this.$message.error('请选择更新字段')
+          return
+        }
       } else {
         putData.params.is_timed_sync = false
-      }
-
-      if (putData.params.period === null) {
-        this.$message.error('请选择更新频率')
-        return
-      }
-      if (!putData.params.increment_field) {
-        this.$message.error('请选择更新字段')
-        return
       }
 
       if (this.hiveId) {
