@@ -307,11 +307,10 @@ export default {
         if (this.taskStep === this.CONSTANT.taskStep.USER) {
           let fieldList = []
           if (this.$store.getters.taskData) {
-            fieldList = this.$store.getters.taskData.outputFields
+            fieldList = this.$store.getters.taskData.output_fields
           } else if (this.$store.getters.outputFields) {
             fieldList = this.$store.getters.outputFields
           }
-          console.log(fieldList)
           this.tbList = fieldList.map(item => {
             return {
               ...item,

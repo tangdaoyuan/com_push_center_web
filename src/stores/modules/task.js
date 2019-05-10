@@ -13,7 +13,8 @@ const state = {
   fieldData: null,
   fieldConfig: null,
   dictConfig: null,
-  outputFields: []
+  outputFields: [],
+  schemaFields: []
 }
 
 const actions = {
@@ -78,6 +79,9 @@ const getters = {
   },
   outputFields: function (state) {
     return state.outputFields
+  },
+  schemaFields: function (state) {
+    return state.schemaFields
   }
 }
 
@@ -115,8 +119,14 @@ const mutations = {
   setOutputFields: (state, data) => {
     state.outputFields = data
   },
+  setSchemaFields: (state, data) => {
+    state.schemaFields = data
+  },
   resetOutputFields: (state, data) => {
     state.outputFields = []
+  },
+  resetSchemaFields: (state, data) => {
+    state.schemaFields = []
   },
   resetFieldData: (state) => {
     [

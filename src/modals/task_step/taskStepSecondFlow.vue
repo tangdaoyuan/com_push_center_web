@@ -346,7 +346,6 @@ export default {
           })
         }
         if (taskData.output_fields) {
-          console.log(taskData.output_fields)
           const sources = []
           const targets = []
           taskData.output_fields.forEach(item => {
@@ -590,13 +589,6 @@ export default {
           }))
         }
       }
-
-      this.$store.commit('setOutputFields',
-        {
-          ...this.outputFields.sources,
-          ...this.outputFields.targets
-        }
-      )
       const putData = {
         id: this.$store.state.task.taskId,
         table_id: this.tbId,
