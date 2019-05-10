@@ -9,10 +9,14 @@
       <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
+      <div>
+        <el-radio v-model="sysType" :label="1">推送中心</el-radio>
+        <el-radio v-model="sysType" :label="2">消息中心</el-radio>
+      </div>
       <div class="upload-box">
         <Upload
           ref="logoUpload"
-          :action="`/api/logo_title/upload?sys_type=${CONSTANT.SYS_TYPE}`"
+          :action="`/api/logo_title/upload?sys_type=${sysType}`"
           type="drag"
           name="upload"
           :headers="fileHead"
@@ -44,6 +48,7 @@ export default {
   },
   data () {
     return {
+      sysType: 1,
       fileHead: null,
       files: [],
       base64Img: null
