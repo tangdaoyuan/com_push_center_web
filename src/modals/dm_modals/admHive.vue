@@ -212,6 +212,9 @@ export default {
       }
     }
   },
+  beforeDestroy () {
+
+  },
   methods: {
     close () {
       this.$emit('close')
@@ -326,6 +329,7 @@ export default {
       }
     },
     async getHiveTableList () {
+      debugger
       let res = await this.dmService.getHiveTableList({
         redis_key: this.hiveData2.temp_id
       })
@@ -333,6 +337,7 @@ export default {
         this.hiveTables = res.data.map((item, index) => {
           return index === 0 ? { name: item, active: true } : { name: item, active: false }
         })
+        debugger
         this.getHiveTableSchema({
           tableName: this.hiveTables[0].name,
           type: 'add'

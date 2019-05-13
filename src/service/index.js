@@ -7,7 +7,7 @@ import iView from 'iview'
 import VueCookies from 'vue-cookies'
 
 export default class Service {
-  constructor () {
+  static initAxiosInterceptor = () => {
     let reqCount = 0
 
     axios.defaults.timeout = 45000
@@ -68,11 +68,9 @@ export default class Service {
         return Promise.reject(error)
       }
     )
-
-    this.http = axios
   }
   TEMPLATE_GET (str, data, resolve) {
-    this.http.get(str, {
+    axios.get(str, {
       params: data || {}
     }).then(res => {
       if (res.status === 200 && res.data.status === 0) {
@@ -87,7 +85,7 @@ export default class Service {
   }
 
   TEMPLATE_DELETE (str, data, resolve) {
-    this.http.delete(str, {
+    axios.delete(str, {
       params: data || {}
     }).then(res => {
       if (res.status === 200 && res.data.status === 0) {
@@ -102,7 +100,7 @@ export default class Service {
   }
 
   TEMPLATE_POST (str, data, resolve) {
-    this.http.post(str, data).then(res => {
+    axios.post(str, data).then(res => {
       if (res.status === 200 && res.data.status === 0) {
         resolve(res.data)
       } else {
