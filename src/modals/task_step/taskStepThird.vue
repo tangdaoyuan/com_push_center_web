@@ -417,7 +417,7 @@ export default {
             this.tbList1.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList1[index].display_type = -1
+            this.tbList1[index].display_type = 1
           }
         })
       }
@@ -434,7 +434,7 @@ export default {
             this.tbList3.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList3[index].display_type = -1
+            this.tbList3[index].display_type = 1
           }
         })
       }

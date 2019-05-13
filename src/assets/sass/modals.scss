@@ -27,7 +27,7 @@
   .manage-body {
     width: 100%;
     max-width: 1200px;
-    height: calc(100% - 64px);
+    // height: calc(100% - 64px);
     margin: 0 auto;
     overflow: hidden;
 
@@ -302,6 +302,12 @@
 
                   &.file-oracle {
                     @include file-oracle-icon;
+                  }
+                  &.file-hive {
+                    @include file-hive-icon;
+                  }
+                  &.file-kafka {
+                    @include file-kafka-icon;
                   }
                 }
 
@@ -1605,6 +1611,12 @@
 
                     &.file-oracle {
                       @include file-oracle-icon;
+                    }
+                    &.file-hive {
+                      @include file-hive-icon;
+                    }
+                    &.file-kafka {
+                      @include file-kafka-icon;
                     }
                   }
 

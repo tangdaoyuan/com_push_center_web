@@ -38,6 +38,18 @@ class CONSTANT {
     {
       label: 'MySql',
       value: 6
+    },
+    {
+      label: 'Kafka',
+      value: 7
+    },
+    {
+      label: 'Oracle(流式)',
+      value: 8
+    },
+    {
+      label: 'Hive',
+      value: 9
     }
   ]
   SYS_TYPE = 1

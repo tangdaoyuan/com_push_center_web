@@ -67,14 +67,16 @@
       </div>
     </div>
     <detail-api v-model="modals.daModal" :detailID="detailID" @close="closeDaApi"></detail-api>
-    <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo"></detail-info>
-    <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle"></detail-oracle>
+    <detail-info v-model="modals.diModal" :detailID="detailID" @close="closeDaInfo" :is-flow="isFlow.msg"></detail-info>
+    <detail-oracle v-model="modals.doModal" :detailID="detailID" @close="closedoOracle" :is-flow="isFlow.oracle"></detail-oracle>
+     <detail-hive v-model="modals.dhModal" :detailID="detailID" @close="closeDetailHive" ></detail-hive>
     <abnormal-reason type="data" v-model="modals.abnormalVisible" @close="closeAbnReason"></abnormal-reason>
     <adm-syncbdp v-model="modals.admBdpModal" @refresh="init" :bdp-id="datasourceID.bdpID"/>
     <adm-mysql v-model="modals.admMysqlModal" @refresh="init" :mysql-id="datasourceID.mysqlID" @close="closeAdmMysql"/>
-    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle"/>
-    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg"/>
+    <adm-oracle v-model="modals.admOracleModal" @refresh="init" :oracle-id="datasourceID.oracleID"  @close="closeAdmOracle" :is-flow="isFlow.oracle"/>
+    <adm-msg v-model="modals.admMsgModal" @refresh="init" :msg-id="datasourceID.msgID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" @refresh="init" :api-item="apiData" @close="closeAdmApi"/>
+    <adm-hive v-model="modals.admHiveModal" @refresh="init" :hive-id="datasourceID.hiveID" @close="closeAdmHive"/>
   </div>
 </template>
 <script>
@@ -105,16 +107,22 @@ export default {
       tableData: [],
       statistics: {},
       apiData: {},
+      isFlow: {
+        oracle: false,
+        msg: false
+      },
       modals: {
         daModal: false,
         diModal: false,
         doModal: false,
+        dhModal: false,
         abnormalVisible: false,
         admBdpModal: false,
         admMysqlModal: false,
         admOracleModal: false,
         admMsgModal: false,
-        admApiModal: false
+        admApiModal: false,
+        admHiveModal: false
       },
       pageParams: {
         type: '',
@@ -144,7 +152,8 @@ export default {
         msgID: '',
         mysqlID: '',
         oracleID: '',
-        bdpID: ''
+        bdpID: '',
+        hiveID: ''
       }
     }
   },
@@ -163,6 +172,9 @@ export default {
     closeDaApi () {
       this.modals.daModal = false
     },
+    closeDetailHive () {
+      this.modals.dhModal = false
+    },
     closeAdmOracle () {
       this.modals.admOracleModal = false
     },
@@ -174,6 +186,9 @@ export default {
     },
     closeAdmApi () {
       this.modals.admApiModal = false
+    },
+    closeAdmHive () {
+      this.modals.admHiveModal = false
     },
     closeAbnReason () {
       this.modals.abnormalVisible = false
@@ -231,6 +246,7 @@ export default {
           break
         case 2:
           // info详情
+          this.isFlow.msg = false
           this.modals.diModal = true
           break
         case 3:
@@ -241,9 +257,23 @@ export default {
           this.$message.info('excel表格无详情页')
           break
         case 5:
+          this.isFlow.oracle = false
+          this.modals.doModal = true
+          break
         case 6:
           this.modals.doModal = true
           // this.detailID = id
+          break
+        case 7:
+          this.isFlow.msg = true
+          this.modals.diModal = true
+          break
+        case 8:
+          this.isFlow.oracle = true
+          this.modals.doModal = true
+          break
+        case 9:
+          this.modals.dhModal = true
           break
       }
     },
@@ -279,10 +309,12 @@ export default {
           break
         case 2:
           this.modals.admMsgModal = true
+          this.isFlow.msg = false
           this.datasourceID.msgID = item.id
           break
         case 5:
           this.modals.admOracleModal = true
+          this.isFlow.oracle = false
           this.datasourceID.oracleID = item.id
           break
         case 6:
@@ -292,6 +324,20 @@ export default {
         case 1:
           this.modals.admBdpModal = true
           this.datasourceID.bdpID = item.id
+          break
+        case 7:
+          this.modals.admMsgModal = true
+          this.isFlow.msg = true
+          this.datasourceID.msgID = item.id
+          break
+        case 8:
+          this.modals.admOracleModal = true
+          this.isFlow.oracle = true
+          this.datasourceID.oracleID = item.id
+          break
+        case 9:
+          this.modals.admHiveModal = true
+          this.datasourceID.hiveID = item.id
           break
       }
     },

@@ -120,6 +120,23 @@ class DmService extends Service {
       this.TEMPLATE_GET('/api/data_source/table_list', data, resolve)
     })
   }
+
+  getHiveTableList (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_GET('/api/data_source/hive/table/list', data, resolve)
+    })
+  }
+
+  getHiveTableSchema (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_GET('/api/data_source/hive/table/schema', data, resolve)
+    })
+  }
+  getHiveTableData (data) {
+    return new Promise((resolve) => {
+      this.TEMPLATE_GET('/api/data_source/hive/table/date', data, resolve)
+    })
+  }
 }
 
 export default new DmService()

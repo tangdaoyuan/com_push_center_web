@@ -18,10 +18,6 @@
               <span>数据源名称</span>
               <span>{{detailOracleList.name}}</span>
             </div>
-            <div class="con-item">
-              <span>数据源描述</span>
-              <span>{{detailOracleList.desc}}</span>
-            </div>
           </div>
           <div class="con-right con">
             <div class="con-title">
@@ -29,7 +25,7 @@
             </div>
             <div class="con-item">
               <span>数据库类型</span>
-              <span>{{detailOracleList.type === 6 ? ' MySql' : 'Oracle' }}</span>
+              <span>hive</span>
             </div>
             <div class="con-item">
               <span>服务器</span>

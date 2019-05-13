@@ -432,3 +432,35 @@ fieldset[disabled] .ivu-input {
 
   }
 }
+
+.el-menu--vertical {
+  background-color: #fff;
+
+  .el-menu--popup {
+    padding: 0;
+    min-width: 120px;
+    &.el-menu--popup-right-start {
+      margin-left: 0;
+      margin-right: 0;
+
+      .el-menu-item {
+        line-height: 30px;
+      }
+
+      & > .el-submenu {
+        .el-submenu__title {
+          line-height: 30px;
+          height: 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .el-submenu__icon-arrow {
+            position: static;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}

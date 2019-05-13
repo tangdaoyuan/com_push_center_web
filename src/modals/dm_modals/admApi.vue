@@ -108,7 +108,9 @@ export default {
           if (res.status === 0) {
             this.$message.success('编辑api成功')
             this.$emit('refresh')
-            this.closeAdmApi()
+            setTimeout(() => {
+              this.closeAdmApi()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }

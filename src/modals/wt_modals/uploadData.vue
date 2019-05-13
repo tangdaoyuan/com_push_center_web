@@ -232,6 +232,14 @@
             <Input type="text" v-model="chooseFileSetData.name" :maxlength="16" />
           </div>
           <div class="step3-item">
+            <label>分类设置</label>
+              <el-radio-group v-model="tableType">
+                <el-radio :label="1">工作表</el-radio>
+                <el-radio :label="2">维度表</el-radio>
+                <el-radio :label="3">字典表</el-radio>
+              </el-radio-group>
+          </div>
+          <div class="step3-item">
             <label>文件夹</label>
             <span class="item-input">
               <span>{{chooseFileSetData.folderName}}</span>
@@ -267,6 +275,7 @@ export default {
   data () {
     return {
       uploadStart: false,
+      tableType: 1,
       cfModal: false,
       currentStep: 0,
       csvSize: 200 * 1024 * 1024,
@@ -418,7 +427,8 @@ export default {
           temp_id: `temp_${item.id}`,
           table_name: item.name,
           folder_id: item.folder_id || '',
-          desc: item.desc
+          desc: item.desc,
+          category: this.tableType
         }
         if (this.addId) {
           tmp.tb_id = this.addId
