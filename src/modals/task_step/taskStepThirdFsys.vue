@@ -8,7 +8,7 @@
       <div class="grid-main sys-main">
         <div class="item r-span">
           <i class="red-dot"></i>
-          <span>数据库种类</span>
+          <span>数据库种类</span>f
         </div>
         <div class="item">
           <i class="red-dot"></i>
@@ -231,6 +231,7 @@ export default {
       console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {
+        debugger
         if (res.status === 0) {
           if (res.data.schema) {
             this.$store.commit('setSchemaFields', res.data.schema)

@@ -78,7 +78,8 @@ export default {
           isChoose: true
         }
       })
-      if (this.$store.getters.schemaFields.length > 0) {
+      debugger
+      if (this.$store.getters.schemaFields.fields.length > 0) {
         this.dbFields = this.$store.getters.schemaFields.fields
       } else {
         this.tcService.getTaskSchema({

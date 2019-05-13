@@ -113,7 +113,7 @@ export default class Service {
   }
 
   TEMPLATE_PUT (str, data, resolve) {
-    this.http.put(str, data).then(res => {
+    axios.put(str, data).then(res => {
       if (res.status === 200 && res.data.status === 0) {
         resolve(res.data)
       } else {
