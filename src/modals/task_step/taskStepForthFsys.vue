@@ -78,7 +78,6 @@ export default {
           isChoose: true
         }
       })
-      debugger
       if (this.$store.getters.schemaFields.fields.length > 0) {
         this.dbFields = this.$store.getters.schemaFields.fields
       } else {

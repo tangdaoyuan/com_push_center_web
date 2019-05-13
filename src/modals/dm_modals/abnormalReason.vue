@@ -17,8 +17,8 @@
         </el-table-column>
         <el-table-column
           prop="content"
-          show-overflow-tooltip
           label="异常原因"
+          show-overflow-tooltip
           width="312">
         </el-table-column>
         <el-table-column
