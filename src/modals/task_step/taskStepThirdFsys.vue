@@ -12,8 +12,8 @@
         </div>
         <div class="item">
           <i class="red-dot"></i>
-          <RadioGroup v-model="taskData.type">
-            <Radio :label="1" >
+          <RadioGroup v-model="taskData.type" @on-change="changeDataBase">
+            <Radio :label="1">
               <span>mysql</span>
             </Radio>
             <Radio :label="2">
@@ -152,7 +152,7 @@ export default {
       taskData: {
         type: 1,
         host: '',
-        port: 0,
+        port: 13306,
         username: '',
         password: '',
         database: '',
@@ -178,6 +178,13 @@ export default {
     },
     prev () {
       this.$emit('prev')
+    },
+    changeDataBase (type) {
+      if (type === 1) {
+        this.taskData.port = '13306'
+      } else {
+        this.taskData.port = '1521'
+      }
     },
     next () {
       if (!this.taskData.host) {

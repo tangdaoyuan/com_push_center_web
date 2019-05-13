@@ -20,7 +20,7 @@
           <el-date-picker
             v-model="date"
             @change="changeDate"
-            type="daterange"
+            type="datetimerange"
             :editable="false"
             range-separator="至"
             start-placeholder="开始日期"

@@ -22,7 +22,9 @@
             <span class="equal">=</span>
             <el-select
               class="item"
-              v-model="item.mappingName">
+              v-model="item.mappingName"
+              @change="chooseTargetField"
+              >
               <el-option
                 v-for="item in dbFields"
                 :key="item.name"
@@ -92,16 +94,26 @@ export default {
         })
       }
     },
+    chooseTargetField (targetName) {
+      this.dbFields = this.dbFields.filter((item) => {
+        return item.name !== targetName
+      })
+      console.log(this.dbFields)
+    },
     prev () {
       this.$emit('prev')
     },
     next () {
       let fieldMapping = {}
-      this.outputFields.forEach(item => {
+      for (let item of this.outputFields) {
         if (item.isChoose) {
+          if (!item.mappingName) {
+            this.$message.error('请选择数据表目标字段')
+            return
+          }
           fieldMapping[item.id] = item.mappingName
         }
-      })
+      }
       const pushData = {
         task_id: this.$store.state.task.taskId,
         field_mapping: fieldMapping

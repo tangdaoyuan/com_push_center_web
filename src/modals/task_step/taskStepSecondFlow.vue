@@ -552,7 +552,10 @@ export default {
         this.$message.error('请配置全局条件')
         return
       }
-
+      if (!this.relevanceRules[0].origin_field_id || !this.relevanceRules[0].target_field_id) {
+        this.$message.error('请选择条件碰撞规则!')
+        return
+      }
       if (this.filterList && this.filterList.length > 0) {
         this.filterList = this.filterList.map(item => {
           return {
