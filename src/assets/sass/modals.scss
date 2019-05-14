@@ -29,7 +29,7 @@
     max-width: 1200px;
     height: calc(100% - 64px);
     margin: 0 auto;
-    overflow: hidden;
+    // overflow: hidden;
 
     .step-box {
       padding: 0 20px;
@@ -709,7 +709,7 @@
             margin-bottom: 8px;
             display: flex;
             align-items: center;
-            justify-content: start;
+            justify-content: flex-start;
             transition: 500ms;
 
             .table-selection {
@@ -778,7 +778,7 @@
                 width: 100%;
                 grid-column: 1/5;
                 display: grid;
-                grid: auto/1fr 40px 1fr 50px;
+                grid: auto/1fr 100px 1fr 50px;
                 align-items: center;
                 justify-items: center;
                 
@@ -842,7 +842,7 @@
               font-size: 12px;
               line-height: 26px;
               display: flex;
-              justify-content: start;
+              justify-content: flex-start;
               align-items: center;
 
               .output-con {

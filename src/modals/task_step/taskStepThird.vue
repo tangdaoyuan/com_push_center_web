@@ -19,7 +19,7 @@
             @end="moveEnd">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item">
@@ -66,7 +66,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList1"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -125,7 +125,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList2"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -183,7 +183,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList3"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -318,10 +318,10 @@ export default {
               name: item.name || item.field_name
             }
           })
-          console.log(this.tbList)
         } else {
           this.tbList = this.$store.state.task.tableData.title_list
         }
+        console.log('tbList', this.tbList)
         if (this.$store.state.task.taskData) {
           this.initEdit()
         }

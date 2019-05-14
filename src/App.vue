@@ -1,6 +1,9 @@
 <template>
   <div id="app" class="main">
     <router-view/>
+    <div class="global-loading" v-show="$store.getters.loading">
+      <Spin fix size="large"></Spin>
+    </div>
   </div>
 </template>
 <script>

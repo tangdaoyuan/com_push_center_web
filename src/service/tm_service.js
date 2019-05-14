@@ -31,9 +31,9 @@ class TmService extends Service {
       this.TEMPLATE_GET('/api/logo_title/title', data, resolve)
     })
   }
-  delTitle (data) {
+  delTitleOrLogo (data) {
     return new Promise((resolve) => {
-      this.TEMPLATE_GET('', data, resolve)
+      this.TEMPLATE_DELETE('/api/logo_title/item/delete', data, resolve)
     })
   }
 }
