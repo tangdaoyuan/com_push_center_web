@@ -152,7 +152,7 @@ export default {
       taskData: {
         type: 1,
         host: '',
-        port: 13306,
+        port: 3306,
         username: '',
         password: '',
         database: '',
@@ -181,7 +181,7 @@ export default {
     },
     changeDataBase (type) {
       if (type === 1) {
-        this.taskData.port = '13306'
+        this.taskData.port = '3306'
       } else {
         this.taskData.port = '1521'
       }
@@ -239,7 +239,6 @@ export default {
       service.then(res => {
         if (res.status === 0) {
           if (res.data.schema) {
-            debugger
             this.$store.commit('setSchemaFields', res.data.schema.fields)
           }
           if (!this.$store.state.task.taskData) {

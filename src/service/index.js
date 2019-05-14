@@ -13,21 +13,22 @@ axios.interceptors.request.use(config => {
     config.headers.Authorization = 'Bearer ' + VueCookies.get('pc_token')
     config.headers.userId = VueCookies.get('pc_user_id')
   }
-  console.log('request', reqCount)
-  console.log('request', config.url)
+  // console.log('request', reqCount)
+  // console.log('request', config.url)
   if (reqCount === 0) {
     // iView.Spin.show()
     store.commit('setLoading', true)
-    console.log('show Spin:', config.url)
+    // console.log('show Spin:', config.url)
   }
   reqCount++
   return config
 }, error => {
   reqCount--
   if (reqCount === 0) {
-    setTimeout(() => {
-      iView.Spin.hide()
-    }, 300)
+    // setTimeout(() => {
+    //   iView.Spin.hide()
+    // }, 300)
+    store.commit('setLoading', false)
   }
   iView.Message({
     message: '加载超时',
@@ -38,8 +39,8 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(
   response => {
     reqCount--
-    console.log('response', reqCount)
-    console.log('response', response.config.url)
+    // console.log('response', reqCount)
+    // console.log('response', response.config.url)
     if (reqCount === 0) {
       // setTimeout(() => {
       //   // iView.Spin.hide()
@@ -47,16 +48,17 @@ axios.interceptors.response.use(
       //   console.log('hide Spin', response.config.url)
       // }, 300)
       store.commit('setLoading', false)
-      console.log('hide Spin', response.config.url)
+      // console.log('hide Spin', response.config.url)
     }
     return response
   },
   error => {
     reqCount--
     if (reqCount === 0) {
-      setTimeout(() => {
-        iView.Spin.hide()
-      }, 300)
+      // setTimeout(() => {
+      //   iView.Spin.hide()
+      // }, 300)
+      store.commit('setLoading', false)
     }
     if (error.response) {
       switch (error.response.status) {

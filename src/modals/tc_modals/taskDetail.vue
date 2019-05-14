@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        <div class="td-body-item" v-if="detail.target_type === 1">>
+        <div class="td-body-item" v-if="detail.target_type === 1">
           <div class="item-header">
             <i></i>
             <span>推送规则</span>
@@ -184,7 +184,7 @@
           </div>
           <div class="item-main">
             <div class="item-box stream" v-for="(stream, index) in detail.stream_rules" :key="index">
-              <div class="item-title">流式数据表{{stream.table_name}}:</div>
+              <div class="item-title">{{detail.name}} - {{stream.table_name}}:</div>
               <div class="item-con" v-for="(item, index) in stream.relevance_rules" :key="index">
                 <span>{{item.origin_field_name}}等于{{item.target_field_name}}</span>
               </div>
@@ -198,7 +198,7 @@
           </div>
           <div class="item-main">
             <div class="item-box stream" v-for="(stream, index) in detail.stream_rules" :key="index">
-              <div class="item-title">流式数据表{{stream.table_name}}:</div>
+              <div class="item-title">{{detail.name}} - {{stream.table_name}}:</div>
               <div class="item-con" v-for="(item, index) in stream.filter_list" :key="index">
                 <span>{{item.field_name}}等于{{item.value}}</span>
               </div>

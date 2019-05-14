@@ -66,7 +66,6 @@ export default {
       } else if (this.$store.getters.outputFields) {
         fieldList = this.$store.getters.outputFields
       }
-      console.log('fieldMapping', fieldMapping)
       this.outputFields = fieldList.map(item => {
         const extraData = {
           id: item.id || item.field_id,
@@ -121,7 +120,6 @@ export default {
         task_id: this.$store.state.task.taskId,
         field_mapping: fieldMapping
       }
-      console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editstep4ByDB(pushData) : this.tcService.saveTask4SettingByDB(pushData)
 
       service.then(res => {
