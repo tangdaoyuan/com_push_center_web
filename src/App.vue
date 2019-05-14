@@ -9,13 +9,7 @@
 <script>
 export default {
   name: 'App',
-  data () {
-    return {
-      loading: false
-    }
-  },
   created () {
-    this.loading = this.$store.getters.loading
     this.loginService.getBackUrl({
       type: 'push-center'
     }).then(res => {

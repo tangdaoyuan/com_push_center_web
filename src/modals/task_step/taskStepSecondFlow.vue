@@ -163,7 +163,6 @@
                         :label="item.alias || item.name">
                       </el-option>
                     </el-select>
-                    <!-- <span class="equal">等于</span> -->
                     <el-select
                       class="select"
                       placeholder="匹配条件"
