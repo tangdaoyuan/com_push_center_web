@@ -709,7 +709,7 @@
             margin-bottom: 8px;
             display: flex;
             align-items: center;
-            justify-content: start;
+            justify-content: flex-start;
             transition: 500ms;
 
             .table-selection {
@@ -842,7 +842,7 @@
               font-size: 12px;
               line-height: 26px;
               display: flex;
-              justify-content: start;
+              justify-content: flex-start;
               align-items: center;
 
               .output-con {

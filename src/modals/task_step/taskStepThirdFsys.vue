@@ -239,7 +239,8 @@ export default {
       service.then(res => {
         if (res.status === 0) {
           if (res.data.schema) {
-            this.$store.commit('setSchemaFields', res.data.schema)
+            debugger
+            this.$store.commit('setSchemaFields', res.data.schema.fields)
           }
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 2)

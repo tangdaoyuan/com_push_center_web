@@ -316,9 +316,15 @@ export default {
             }
           })
         } else {
+          console.log('----saveMsgTmpData start---')
           this.dmService.saveMsgTmpData(this.hiveData).then(res => {
             if (res.status === 0) {
               this.hiveData2.temp_id = res.data.temp_id
+              // this.$nextTick(() => {
+              //    console.log('----saveMsgTmpData end---')
+              //   this.getHiveTableList()
+              // })
+              console.log('----saveMsgTmpData end---')
               this.getHiveTableList()
               this.currentStep = 1
             } else {
@@ -329,7 +335,7 @@ export default {
       }
     },
     async getHiveTableList () {
-      debugger
+      console.log('----getHiveTableList start---')
       let res = await this.dmService.getHiveTableList({
         redis_key: this.hiveData2.temp_id
       })
@@ -337,7 +343,7 @@ export default {
         this.hiveTables = res.data.map((item, index) => {
           return index === 0 ? { name: item, active: true } : { name: item, active: false }
         })
-        debugger
+        console.log('----getHiveTableList end---')
         this.getHiveTableSchema({
           tableName: this.hiveTables[0].name,
           type: 'add'
@@ -347,6 +353,7 @@ export default {
       }
     },
     getHiveTableSchema (option) {
+      console.log('----getHiveTableSchema start---')
       let params
       if (option.type === 'add') {
         this.tableName = option.tableName
@@ -358,6 +365,7 @@ export default {
         params = { id: option.id }
       }
       this.dmService.getHiveTableSchema(params).then(res => {
+        console.log('----getHiveTableSchema end---')
         if (res.status === 0) {
           this.hiveSchema = res.data.schema
           this.chooseFields = this.hiveSchema.fields

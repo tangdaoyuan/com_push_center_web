@@ -1147,7 +1147,12 @@
             .item-box {
               width: 100%;
               display: flex;
-
+              &.stream {
+                display: block;
+                .item-title {
+                  width: 100%;
+                }
+              }
               .item-title {
                 width: 60px;
                 margin-right: 16px;
@@ -1515,7 +1520,7 @@
   .sys-main {
     height: calc(100% - 120px);
     grid: auto 32px / 100px 350px 100px 350px;
-    justify-content: start;
+    justify-content: flex-start;
     background-color: #fff;
   }
 }
