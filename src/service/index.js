@@ -11,7 +11,6 @@ class Axios {
   static reqCount = 0
 
   static getAxios () {
-    console.log(this.reqCount)
     if (!this.axios) {
       this.axios = axios
       this.axios.defaults.timeout = 45000
