@@ -126,8 +126,6 @@ export default {
               name: item.name || item.field_name
             }
           })
-          console.log(this.$store.state.task.tableData.title_list)
-          console.log(fieldList)
         } else {
           this.tbList = this.$store.state.task.tableData.title_list
         }
