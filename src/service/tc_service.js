@@ -147,7 +147,7 @@ class TcService extends Service {
 
   editStep3ByDBorAPI (data) {
     return new Promise((resolve) => {
-      this.TEMPLATE_PUT('', data, resolve)
+      this.TEMPLATE_PUT('/api/task/database_api', data, resolve)
     })
   }
 

@@ -23,20 +23,20 @@
         <el-table-column
           label="环境名称">
           <template slot-scope="scope">
-            <span>{{CONSTANT.TM_TYPE_MAP[scope]}}</span>
+            <span>{{CONSTANT.TM_TYPE_MAP[scope.row.sys_type]}}</span>
           </template>
         </el-table-column>
         <el-table-column
           label="创建时间">
           <template slot-scope="scope">
-            <span>{{utils.momentDate(scope.row.create_date,'date_time')}}</span>
+            <span>{{utils.momentDate(scope.row.create_time,'date_time')}}</span>
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button @click="setTitle(scope.row)" type="text" size="small">设为标题</el-button>
+            <el-button v-show="scope.row.current!==1" @click="setTitle(scope.row)" type="text" size="small">设为标题</el-button>
             <el-button @click="delTitle(scope.row)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -93,15 +93,21 @@ export default {
           if (res.status === 0) {
             this.current_title_id = row.id
             this.$message.success('标题设置完成')
+            this.search()
           }
         })
       })
     },
     delTitle (row) {
       this.$confirm(`确认删除标题 ${row.title} 吗`).then(res => {
-        if (res.status === 0) {
-          this.$message.error('功能对接中ing...')
-        }
+        this.tmService.delTitleOrLogo({
+          id: row.id
+        }).then(res => {
+          if (res.status === 0) {
+            this.$message.success('标题删除成功')
+            this.search()
+          }
+        })
       })
     },
     search () {

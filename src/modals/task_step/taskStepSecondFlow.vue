@@ -153,7 +153,9 @@
                     class="select-box">
                     <el-select
                       class="select"
-                      v-model="targetTableData.filterList[index].field_id">
+                      v-model="targetTableData.filterList[index].field_id"
+                      @change="changeField"
+                      >
                       <el-option
                         v-for="item in targetTableData.title_list"
                         :key="item.id"
@@ -161,8 +163,21 @@
                         :label="item.alias || item.name">
                       </el-option>
                     </el-select>
-                    <span class="equal">等于</span>
+                    <el-select
+                      class="select"
+                      placeholder="匹配条件"
+                      v-show="targetTableData.filterList[index].field_id"
+                      v-model="targetTableData.filterList[index].op"
+                    >
+                      <el-option
+                        v-for="n in tsTypeListAll"
+                        :key="n.value"
+                        :value="n.value"
+                        :label="n.name">
+                      </el-option>
+                    </el-select>
                     <el-input
+                      v-show="targetTableData.filterList[index].op"
                       class="select"
                       v-model="targetTableData.filterList[index].value"
                       placeholder="请输入内容">
@@ -256,7 +271,7 @@ export default {
         data_list: [],
         filterList: [
           {
-            op: 'eq',
+            op: '',
             field_id: '',
             value: ''
           }
@@ -273,7 +288,8 @@ export default {
       outputFields: {
         sources: [],
         targets: []
-      }
+      },
+      tsTypeListAll: []
     }
   },
   methods: {
@@ -370,6 +386,12 @@ export default {
       }
     },
     changeTab (tab, event) {},
+    changeField (fieldId) {
+      let chooseField = this.targetTableData.title_list.find((item) => {
+        return fieldId === item.id
+      })
+      this.tsTypeListAll = this.CONSTANT.tsTypeListAll[chooseField.origin_type]
+    },
     addRelRow (index) {
       this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
     },
@@ -444,6 +466,8 @@ export default {
             this.$message.error('维度表与工作表重复')
             return
           }
+          // todo  清空筛选数据
+          this.resetRelevanceRules()
           this.sourceTbName = node.name
           this.chooseTag = [node.id]
           this.chooseItem = node
@@ -467,6 +491,14 @@ export default {
           })
         }
       }
+    },
+    resetRelevanceRules () {
+      this.relevanceRules = [
+        {
+          origin_field_id: '',
+          target_field_id: ''
+        }
+      ]
     },
     filterNode (value, data) {
       if (!value) return true
@@ -495,8 +527,10 @@ export default {
               'file-aggr': this.utils.getType(data.id) === 'field' && data.type === 2,
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
-              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 5,
-              'file-oracle': this.utils.getType(data.id) === 'field' && data.type === 6
+              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
+              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6,
+              'file-kafka': this.utils.getType(data.id) === 'field' && data.type === 7,
+              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9
             }
           }),
           h('span', {
@@ -550,7 +584,10 @@ export default {
         this.$message.error('请配置全局条件')
         return
       }
-
+      if (!this.relevanceRules[0].origin_field_id || !this.relevanceRules[0].target_field_id) {
+        this.$message.error('请选择条件碰撞规则!')
+        return
+      }
       if (this.filterList && this.filterList.length > 0) {
         this.filterList = this.filterList.map(item => {
           return {

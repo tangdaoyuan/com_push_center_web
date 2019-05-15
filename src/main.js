@@ -24,9 +24,6 @@ import CONSTANT from './beans/bean'
 import Utils from './utils'
 import router from './router'
 import draggable from 'vuedraggable'
-import http from './service'
-
-http.initAxiosInterceptor()
 
 const VueCookie = require('vue-cookies')
 

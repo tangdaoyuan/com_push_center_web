@@ -22,7 +22,8 @@
             <span class="equal">=</span>
             <el-select
               class="item"
-              v-model="item.mappingName">
+              v-model="item.mappingName"
+              >
               <el-option
                 v-for="item in dbFields"
                 :key="item.name"
@@ -57,6 +58,7 @@ export default {
     init () {
       let fieldList = []
       let fieldMapping = {}
+
       if (this.$store.getters.taskData) {
         const taskData = this.$store.getters.taskData
         fieldList = taskData.output_fields
@@ -64,7 +66,6 @@ export default {
       } else if (this.$store.getters.outputFields) {
         fieldList = this.$store.getters.outputFields
       }
-      console.log(fieldMapping)
       this.outputFields = fieldList.map(item => {
         const extraData = {
           id: item.id || item.field_id,
@@ -74,12 +75,12 @@ export default {
         return {
           ...item,
           ...extraData,
-          mappingName: fieldMapping[`${extraData.id}:${extraData.name}`] || '',
-          isChoose: true
+          mappingName: fieldMapping[`${extraData.id}`] || '',
+          isChoose: !!fieldMapping[extraData.id]
         }
       })
       if (this.$store.getters.schemaFields.length > 0) {
-        this.dbFields = this.$store.getters.schemaFields.fields
+        this.dbFields = this.$store.getters.schemaFields
       } else {
         this.tcService.getTaskSchema({
           id: this.$store.state.task.taskId
@@ -97,16 +98,28 @@ export default {
     },
     next () {
       let fieldMapping = {}
-      this.outputFields.forEach(item => {
+      let mappingNameList = []
+      let formatMappingNameList = []
+      for (let item of this.outputFields) {
         if (item.isChoose) {
+          if (!item.mappingName) {
+            this.$message.error('请选择数据表目标字段')
+            return
+          }
           fieldMapping[item.id] = item.mappingName
+          mappingNameList.push(item.mappingName)
         }
-      })
+      }
+      formatMappingNameList = Array.from(new Set(mappingNameList))
+      if (formatMappingNameList.length < mappingNameList.length) {
+        this.$message.error('目标表字段不允许重复')
+        return
+      }
+
       const pushData = {
         task_id: this.$store.state.task.taskId,
         field_mapping: fieldMapping
       }
-      console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editstep4ByDB(pushData) : this.tcService.saveTask4SettingByDB(pushData)
 
       service.then(res => {

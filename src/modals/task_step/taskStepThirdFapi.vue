@@ -20,7 +20,7 @@
           <el-date-picker
             v-model="date"
             @change="changeDate"
-            type="daterange"
+            type="datetimerange"
             :editable="false"
             range-separator="至"
             start-placeholder="开始日期"
@@ -52,6 +52,12 @@ export default {
     }
   },
   methods: {
+    init () {
+      if (this.$store.getters.taskData) {
+        this.taskData = { ...this.$store.getters.taskData.api }
+        this.date = [new Date(this.taskData.start_time), new Date(this.taskData.end_time)]
+      }
+    },
     changeDate (dates) {
       if (dates) {
         this.taskData.start_time = dates[0].getTime()
@@ -73,7 +79,7 @@ export default {
         id: this.$store.state.task.taskId
       }
 
-      console.log(pushData)
+      // console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
 
       service.then(res => {
@@ -88,7 +94,10 @@ export default {
   },
   watch: {
     step () {
-      if (this.step === -1) {
+      if (this.step === 2 &&
+        this.taskStep === this.CONSTANT.taskStep.API) {
+        this.init()
+      } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())
       }
     }

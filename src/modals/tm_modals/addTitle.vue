@@ -9,6 +9,10 @@
       <Icon type="md-close" @click="close" />
     </div>
     <div class="modal-body">
+      <div>
+        <el-radio v-model="sysType" :label="1">推送中心</el-radio>
+        <el-radio v-model="sysType" :label="2">消息中心</el-radio>
+      </div>
       <div class="title-box">
           <el-input
             placeholder="请输入标题"
@@ -32,6 +36,7 @@ export default {
   data () {
     return {
       title: '',
+      sysType: 1,
       params: {
         sys_type: this.CONSTANT.SYS_TYPE
       }
@@ -44,7 +49,8 @@ export default {
       const params = {
         id: '',
         title: this.title,
-        ...this.params }
+        sys_type: this.sysType
+      }
       this.tmService.addTitle(params).then(res => {
         if (res.status === 0) {
           this.$message.success('添加成功')

@@ -12,8 +12,8 @@
         </div>
         <div class="item">
           <i class="red-dot"></i>
-          <RadioGroup v-model="taskData.type">
-            <Radio :label="1" >
+          <RadioGroup v-model="taskData.type" @on-change="changeDataBase">
+            <Radio :label="1">
               <span>mysql</span>
             </Radio>
             <Radio :label="2">
@@ -118,7 +118,7 @@
           <span>密码</span>
         </div>
         <div class="item">
-          <input v-model="taskData.password" type="text" required>
+          <input v-model="taskData.password" type="password" required>
         </div>
         <div class="item"></div>
         <div class="item"></div>
@@ -152,7 +152,7 @@ export default {
       taskData: {
         type: 1,
         host: '',
-        port: 0,
+        port: 3306,
         username: '',
         password: '',
         database: '',
@@ -178,6 +178,13 @@ export default {
     },
     prev () {
       this.$emit('prev')
+    },
+    changeDataBase (type) {
+      if (type === 1) {
+        this.taskData.port = '3306'
+      } else {
+        this.taskData.port = '1521'
+      }
     },
     next () {
       if (!this.taskData.host) {
@@ -228,12 +235,11 @@ export default {
         id: this.$store.state.task.taskId
       }
 
-      console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
       service.then(res => {
         if (res.status === 0) {
           if (res.data.schema) {
-            this.$store.commit('setSchemaFields', res.data.schema)
+            this.$store.commit('setSchemaFields', res.data.schema.fields)
           }
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 2)
