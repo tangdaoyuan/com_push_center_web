@@ -7,10 +7,11 @@ import iView from 'iview'
 import VueCookies from 'vue-cookies'
 
 class Axios {
-  axios = null
-  reqCount = 0
+  static axios = null
+  static reqCount = 0
 
   static getAxios () {
+    console.log(this.reqCount)
     if (!this.axios) {
       this.axios = axios
       this.axios.defaults.timeout = 45000
