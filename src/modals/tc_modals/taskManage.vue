@@ -75,7 +75,12 @@
         @next="next"
         @prev="prev"
         @finish="finish"/>
-      <task-step-fifth :task-step="taskStep" @refresh="refresh" :step="currentStep" @finish="finish" @prev="prev"/>
+      <task-step-fifth
+        :task-step="taskStep"
+        @refresh="refresh"
+        :step="currentStep"
+        @finish="finish"
+        @prev="prev"/>
     </div>
     <div class="task-footer" v-show="false" slot="footer"></div>
   </Modal>
