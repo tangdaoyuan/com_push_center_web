@@ -258,7 +258,7 @@
              <div class="item-box">
               <div class="item-title">字段映射</div>
               <div class="item-con">
-                <span v-for="(item, index) in mappingFields" :key="index">{{item.field_name}}</span>
+                <span v-for="(item, index) in mappingFields" :key="index">{{item.field_name}}-{{item.targetName}}</span>
               </div>
             </div>
           </div>
@@ -376,6 +376,9 @@ export default {
       let targetList = Object.keys(this.detail.database.field_mapping)
       this.mappingFields = this.detail.output_fields.filter((item) => {
         return targetList.includes(item.field_id)
+      })
+      this.mappingFields.forEach(item => {
+        item.targetName = this.detail.database.field_mapping[item.field_id]
       })
     },
     back (e) {
