@@ -410,6 +410,7 @@ export default {
       })
     },
     moveEnd (evt) {
+      let self = this
       this.isDragging = false
       if (this.tbList1.length > 1) {
         this.tbList1.forEach((item, index) => {
@@ -417,7 +418,7 @@ export default {
             this.tbList1.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList1[index].display_type = 1
+            self.tbList1[index].display_type = 1
           }
         })
       }
@@ -431,12 +432,13 @@ export default {
       if (this.tbList3.length > 1) {
         this.tbList3.forEach((item, index) => {
           if (!item.id) {
-            this.tbList3.splice(index, 1)
+            self.tbList3.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList3[index].display_type = 1
+            self.tbList3[index] = { ...self.tbList3[index], display_type: 1 }
           }
         })
+        console.log('this.tbList3', this.tbList3)
       }
 
       this.tbList1 = this.lodash.uniqBy(this.tbList1, 'id')
@@ -600,6 +602,7 @@ export default {
           this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
       }
+      console.log('tbList3', this.tbList3)
     },
     closeSetDict () {
       this.$store.commit('resetDictConfig')
