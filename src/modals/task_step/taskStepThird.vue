@@ -418,7 +418,7 @@ export default {
             this.tbList1.splice(index, 1)
           }
           if (!item.display_type) {
-            self.tbList1[index].display_type = 1
+            self.tbList1[index] = { ...self.tbList1[index], display_type: 1 }
           }
         })
       }
@@ -438,7 +438,6 @@ export default {
             self.tbList3[index] = { ...self.tbList3[index], display_type: 1 }
           }
         })
-        console.log('this.tbList3', this.tbList3)
       }
 
       this.tbList1 = this.lodash.uniqBy(this.tbList1, 'id')
