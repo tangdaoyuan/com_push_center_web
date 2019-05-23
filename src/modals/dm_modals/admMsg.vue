@@ -64,11 +64,15 @@
               </div>
               <div class="item-form">
                 <label class="item-form-title"><span>*</span>Topic</label>
-                <Input class="item-input right" :maxlength="16" v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
+                <Input class="item-input right" :maxlength="16"
+                :disabled="msgId !== ''"
+                v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
               </div>
               <div class="item-form" v-if="isFlow">
                 <label class="item-form-title">Kafak地址</label>
-                <Input class="item-input right" :maxlength="16" v-model="msgData1.params.address"/>
+                <Input class="item-input right"
+                :disabled="msgId !== ''"
+                :maxlength="16" v-model="msgData1.params.address"/>
               </div>
             </div>
           </div>
