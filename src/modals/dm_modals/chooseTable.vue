@@ -1,5 +1,5 @@
 <template>
-  <Modal class="ct-modal-main" v-model="value">
+  <Modal class="ct-modal-main" :mask-closable="false" :closable="false" v-model="value">
     <div class="ct-header" slot="header">
       <span>选择数据表</span>
       <Icon type="md-close" @click="close" />

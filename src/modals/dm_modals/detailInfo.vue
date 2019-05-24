@@ -1,5 +1,5 @@
 <template>
-  <Modal class="dm-main-detail" v-model="value">
+  <Modal class="dm-main-detail" :mask-closable="false" :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>{{`${detailListInfo.dataSource.name} -- 详情信息`}}</span>
       <Icon type="md-close" @click="back($event)" />
