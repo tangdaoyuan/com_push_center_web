@@ -40,55 +40,113 @@
             <span>{{sourceTbName || "请选择流式表"}}</span>
           </div>
           <div class="filter-body" :class="{'hide-body': filterToogle}">
-            <div class="filter-text">
-              <span>条件筛选</span>
-            </div>
-            <div class="filter-con-head">
-              <div class="filter-toa">
-                <label class="filter-title">满足下列</label>
-                <el-select class="filter-head-select" v-model="chooseFilterType">
-                  <el-option v-for="item in CONSTANT.tsFilterTypeList" :key="item.value" :value="item.value" :label="item.name"></el-option>
-                </el-select>
-              </div>
-              <el-button class="filter-btn" icon="el-icon-plus" circle type="primary" @click="addTaskFilter()" />
-            </div>
-            <div class="filter-con-body">
-              <div class="filter-item" v-for="(item, index) in filterList" :key="index">
-                <div class="title-box">
-                  <span>{{(tableMap[item.field_id]) ? (tableMap[item.field_id].alias || tableMap[item.field_id].name) : ''}}</span>
-                  &nbsp;
-                  <span v-show="item.op !== 'range'">{{utils.getTaskOp(item.op)}}</span>
-                  &nbsp;
-                  <span v-show="item.op !== 'range'">{{item.value || ''}}</span>
-                  &nbsp;
-                  <span v-show="item.op === 'range'">
-                    <span v-if="item.value && item.value[0] && item.value[1]">
-                      在{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}~{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之间
-                    </span>
-                    <span v-else-if="item.value && item.value[0]">
-                      从{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}开始
-                    </span>
-                    <span v-else-if="item.value && item.value[1]">
-                      在{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之前
-                    </span>
+            <Tabs size="small" v-model="tabName1">
+              <TabPane label="字典翻译" name="dictionaryRule">
+                <div class="dict-table-header">
+                  <span @click="showFlowDictTable" class="table-selection">选择字典表</span>
+                  <div v-show="dictTableData.id" class="table-item">
+                    <span class="item-title">{{ dictTableData.name }}</span>
+                    <span @click="resetDictTable" class="el-icon-close item-del"></span>
+                  </div>
+                  <span
+                    v-show="dictTableData.id"
+                    @click="showFlowDataTable(CONSTANT.tableCategory.DICT)"
+                    class="table-preview">
+                    数据预览
                   </span>
                 </div>
-                <div class="op-box">
-                  <span class="icon icon-edit" @click="editFilter(item, index)"></span>
-                  <el-popover
-                    placement="top"
-                    width="160"
-                    v-model="item.deleteModal">
-                    <p>确定删除该条匹配规则么？</p>
-                    <div style="text-align: right; margin: 0">
-                      <el-button size="mini" type="text" @click="item.deleteModal = false">取消</el-button>
-                      <el-button type="primary" size="mini" @click="deleteFilter(item, index)">确定</el-button>
+                <div class="dict-table-body">
+                  <div class="table-panel">
+                    <div class="select-box"
+                      v-for="(row, index) in translateRules"
+                      :key="index">
+                      <el-select class="select"
+                        @change="translateRuleChange(row, index)"
+                        v-model="translateRules[index].source_field_id">
+                        <el-option
+                          v-for="item in tableData.title_list"
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.alias || item.name">
+                        </el-option>
+                      </el-select>
+                      <span class="equal">等于</span>
+                      <el-select class="select"
+                        @change="translateRuleChange(row, index)"
+                        v-model="translateRules[index].dictionary_field_id">
+                        <el-option
+                          v-for="item in dictTableData.title_list"
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.alias || item.name">
+                        </el-option>
+                      </el-select>
+                      <el-select class="select"
+                        @change="translateRuleChange(row, index)"
+                        v-model="translateRules[index].display_field_id">
+                        <el-option
+                          v-for="item in dictTableData.title_list"
+                          :key="item.id"
+                          :value="item.id"
+                          :label="item.alias || item.name"></el-option>
+                      </el-select>
+                      <div class="op-box">
+                        <span @click="addTransRow(index)" class="el-icon-plus"></span>
+                        <span v-show="translateRules.length > 1" @click="removeTransRow(index)" class="el-icon-minus"></span>
+                      </div>
                     </div>
-                    <div slot="reference" class="icon icon-del" @click.native="item.deleteModal = true"></div>
-                  </el-popover>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </TabPane>
+              <TabPane label="条件筛选" name="conditionRule">
+                <div class="filter-con-head">
+                  <div class="filter-toa">
+                    <label class="filter-title">满足下列</label>
+                    <el-select class="filter-head-select" v-model="chooseFilterType">
+                      <el-option v-for="item in CONSTANT.tsFilterTypeList" :key="item.value" :value="item.value" :label="item.name"></el-option>
+                    </el-select>
+                  </div>
+                  <el-button class="filter-btn" icon="el-icon-plus" circle type="primary" @click="addTaskFilter()" />
+                </div>
+                <div class="filter-con-body">
+                  <div class="filter-item" v-for="(item, index) in filterList" :key="index">
+                    <div class="title-box">
+                      <span>{{(tableMap[item.field_id]) ? (tableMap[item.field_id].alias || tableMap[item.field_id].name) : ''}}</span>
+                      &nbsp;
+                      <span v-show="item.op !== 'range'">{{utils.getTaskOp(item.op)}}</span>
+                      &nbsp;
+                      <span v-show="item.op !== 'range'">{{item.value || ''}}</span>
+                      &nbsp;
+                      <span v-show="item.op === 'range'">
+                        <span v-if="item.value && item.value[0] && item.value[1]">
+                          在{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}~{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之间
+                        </span>
+                        <span v-else-if="item.value && item.value[0]">
+                          从{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}开始
+                        </span>
+                        <span v-else-if="item.value && item.value[1]">
+                          在{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之前
+                        </span>
+                      </span>
+                    </div>
+                    <div class="op-box">
+                      <span class="icon icon-edit" @click="editFilter(item, index)"></span>
+                      <el-popover
+                        placement="top"
+                        width="160"
+                        v-model="item.deleteModal">
+                        <p>确定删除该条匹配规则么？</p>
+                        <div style="text-align: right; margin: 0">
+                          <el-button size="mini" type="text" @click="item.deleteModal = false">取消</el-button>
+                          <el-button type="primary" size="mini" @click="deleteFilter(item, index)">确定</el-button>
+                        </div>
+                        <div slot="reference" class="icon icon-del" @click.native="item.deleteModal = true"></div>
+                      </el-popover>
+                    </div>
+                  </div>
+                </div>
+              </TabPane>
+            </Tabs>
           </div>
           <div class="seperator"></div>
         </div>
@@ -101,13 +159,13 @@
             </div>
             <span
               v-show="targetTableData.id"
-              @click="showFlowDataTable"
+              @click="showFlowDataTable(CONSTANT.tableCategory.DIM)"
               class="table-preview">
               数据预览
             </span>
           </div>
           <div v-show="true || sourceTbName" class="table-body">
-            <Tabs size="small" v-model="tabName">
+            <Tabs size="small" v-model="tabName2">
               <TabPane label="条件碰撞" name="relevanceTab">
                 <div class="table-panel">
                   <span class="source-table">{{sourceTbName || "请选择流式表"}}</span>
@@ -167,8 +225,7 @@
                       class="select"
                       placeholder="匹配条件"
                       v-show="targetTableData.filterList[index].field_id"
-                      v-model="targetTableData.filterList[index].op"
-                    >
+                      v-model="targetTableData.filterList[index].op">
                       <el-option
                         v-for="n in tsTypeListAll"
                         :key="n.value"
@@ -204,7 +261,7 @@
               v-for="(item, index) in getOutputFields"
               :key="item.id"
               class="output-field">
-              <span class="dot" :class="item.table_id==targetTableData.id?'b-dot':'y-dot'"></span>
+              <span class="dot" :class="outputFieldDot(item.table_id)"></span>
               <span class="output-con">{{item.alias || item.name}}</span>
               <span @click="removeOutputField(index, item.table_id)" class="el-icon-close hide"></span>
             </div>
@@ -219,20 +276,25 @@
     <flow-data-table
       v-model="modals.flowDataTable"
       @close="closeFlowDataTable"
-      :table-id="targetTableData.id"
-      :table-name="targetTableData.name"></flow-data-table>
+      :table-id="dataTableTag.id"
+      :table-name="dataTableTag.name"></flow-data-table>
     <flow-select-table
       v-model="modals.flowSelectTable"
+      :category="CONSTANT.tableCategory.DIM"
       @ok="chooseTargetTable"
-      @close="closeFlowSelectTable"></flow-select-table>
+      @close="closeFlowSelectTable"/>
+    <flow-select-table
+      v-model="modals.flowDictTable"
+      :category="CONSTANT.tableCategory.DICT"
+      @ok="chooseDictTable"
+      @close="closeFlowDictTable"/>
     <add-output-field
       v-model="modals.addFieldOutput"
       :source-list="tableData.title_list"
       :target-list="targetTableData.title_list"
       :selected-list="getOutputFields"
       @close="closeOutputField"
-      @ok="chooseOutputField"
-    ></add-output-field>
+      @ok="chooseOutputField"/>
   </div>
 </template>
 <script>
@@ -244,11 +306,17 @@ export default {
   data () {
     return {
       tbId: undefined,
-      tabName: 'relevanceTab',
+      tabName1: 'dictionaryRule',
+      tabName2: 'relevanceTab',
       filterText: '',
+      dataTableTag: {
+        id: undefined,
+        name: ''
+      },
       modals: {
         flowDataTable: false,
         flowSelectTable: false,
+        flowDictTable: false,
         taskFilterModal: false,
         addFieldOutput: false
       },
@@ -277,6 +345,11 @@ export default {
           }
         ]
       },
+      dictTableData: {
+        id: undefined,
+        name: '',
+        title_list: []
+      },
       chooseFilter: {},
       filterList: [],
       relevanceRules: [
@@ -285,15 +358,40 @@ export default {
           target_field_id: ''
         }
       ],
+      translateRules: [
+        {
+          source_field_id: '',
+          dictionary_field_id: '',
+          display_field_id: ''
+        }
+      ],
       outputFields: {
         sources: [],
-        targets: []
+        targets: [],
+        dictionaries: []
       },
       tsTypeListAll: []
     }
   },
   methods: {
-    showFlowDataTable () {
+    showFlowDataTable (tableCategory) {
+      if (tableCategory === this.CONSTANT.tableCategory.DIM) {
+        [
+          this.dataTableTag.id,
+          this.dataTableTag.name
+        ] = [
+          this.targetTableData.id,
+          this.targetTableData.name
+        ]
+      } else if (tableCategory === this.CONSTANT.tableCategory.DICT) {
+        [
+          this.dataTableTag.id,
+          this.dataTableTag.name
+        ] = [
+          this.dictTableData.id,
+          this.dictTableData.name
+        ]
+      }
       this.modals.flowDataTable = true
     },
     closeFlowDataTable () {
@@ -304,6 +402,12 @@ export default {
     },
     closeFlowSelectTable () {
       this.modals.flowSelectTable = false
+    },
+    showFlowDictTable () {
+      this.modals.flowDictTable = true
+    },
+    closeFlowDictTable () {
+      this.modals.flowDictTable = false
     },
     closeTaskFilter () {
       this.modals.taskFilterModal = false
@@ -356,14 +460,45 @@ export default {
             tb_id: this.targetTableData.id
           }).then(res => {
             if (res.status === 0) {
-              this.targetTableData.title_list = res.data.title_list
-              this.targetTableData.data_list = res.data.data_list
+              [
+                this.targetTableData.title_list,
+                this.targetTableData.data_list
+              ] = [
+                res.data.title_list,
+                res.data.data_list
+              ]
             }
           })
         }
+
+        if (taskData.translate_rules && taskData.translate_rules.length > 0) {
+          const translateRules = taskData.translate_rules
+          this.dictTableData.id = translateRules[0].table_id
+          this.dictTableData.name = translateRules[0].table_name
+
+          this.translateRules = translateRules
+
+          this.wtService.getprewData({
+            page_no: 1,
+            page_size: 100,
+            tb_id: this.dictTableData.id
+          }).then(res => {
+            if (res.status === 0) {
+              [
+                this.dictTableData.title_list,
+                this.dictTableData.data_list
+              ] = [
+                res.data.title_list,
+                res.data.data_list
+              ]
+            }
+          })
+        }
+
         if (taskData.output_fields) {
           const sources = []
           const targets = []
+          const dictionaries = []
           taskData.output_fields.forEach(item => {
             if (item.table_id === this.tbId) {
               sources.push({
@@ -380,8 +515,17 @@ export default {
               })
             }
           })
+          this.translateRules.forEach(item => {
+            dictionaries.push({
+              id: item.display_field_id,
+              name: item.display_field_name,
+              table_id: item.table_id
+            })
+          })
+
           this.outputFields.sources = sources
           this.outputFields.targets = targets
+          this.outputFields.dictionaries = dictionaries
         }
       }
     },
@@ -391,6 +535,50 @@ export default {
         return fieldId === item.id
       })
       this.tsTypeListAll = this.CONSTANT.tsTypeListAll[chooseField.origin_type]
+    },
+    translateRuleChange (row, index) {
+      if (row.source_field_id && row.dictionary_field_id && row.display_field_id) {
+        for (let obj of this.dictTableData.title_list) {
+          if (obj.id && obj.id === row.display_field_id) {
+            this.outputFields.dictionaries[index] = { ...obj }
+            this.$set(
+              this.outputFields.dictionaries,
+              index,
+              this.outputFields.dictionaries[index])
+          }
+        }
+      }
+    },
+    addTransRow (index) {
+      if (index >= 0) {
+        const data = this.translateRules[index]
+        if (data.source_field_id && data.dictionary_field_id && data.display_field_id) {
+          this.translateRules.splice(
+            index + 1,
+            0,
+            this.$options.data().translateRules[0])
+        } else {
+          this.$message.error('请先完成当前字典规则')
+        }
+      }
+    },
+    removeTransRow (index) {
+      if (this.translateRules.length > 1) {
+        this.translateRules.splice(index, 1)
+      } else {
+        this.resetTranslateRules()
+      }
+      // cascade delete
+      this.outputFields.dictionaries.splice(index, 1)
+    },
+    removeTransRowById (dictionaries) {
+      const rules = []
+      dictionaries.forEach(item => {
+        this.translateRules.forEach(rule => {
+          if (rule.display_field_id === item.id) rules.push({ ...rule })
+        })
+      })
+      this.translateRules = rules
     },
     addRelRow (index) {
       this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
@@ -409,6 +597,8 @@ export default {
         this.$message.error('维度表与工作表重复')
         return
       }
+      this.resetTargetTable()
+      this.resetRelevanceRules()
       this.targetTableData = {
         ...this.$options.data().targetTableData,
         ...targetTableData
@@ -416,9 +606,27 @@ export default {
       this.outputFields.targets = [...targetTableData.title_list]
       this.closeFlowSelectTable()
     },
+    chooseDictTable (dictTableData) {
+      if (dictTableData.id === this.tbId) {
+        this.$message.error('字典表与工作表重复')
+        return
+      }
+      this.resetDictTable()
+      this.resetTranslateRules()
+      this.dictTableData = {
+        ...this.$options.data().dictTableData,
+        ...dictTableData
+      }
+      this.outputFields.dictionaries = []
+      this.closeFlowDictTable()
+    },
     resetTargetTable () {
       Object.assign(this.targetTableData, this.$options.data().targetTableData)
       this.outputFields.targets = []
+    },
+    resetDictTable () {
+      Object.assign(this.dictTableData, this.$options.data().dictTableData)
+      this.outputFields.dictionaries = []
     },
     addOutputField () {
       if (this.tableData.title_list.length ||
@@ -432,29 +640,36 @@ export default {
       let sources = []
       selectedList.forEach(id => {
         for (let obj of this.tableData.title_list) {
-          if (obj.id && obj.id === id) {
-            sources.push({ ...obj })
-          }
+          if (obj.id && obj.id === id) sources.push({ ...obj })
         }
       })
       const targets = []
       selectedList.forEach(id => {
         for (let obj of this.targetTableData.title_list) {
-          if (obj.id && obj.id === id) {
-            targets.push({ ...obj })
-          }
+          if (obj.id && obj.id === id) targets.push({ ...obj })
+        }
+      })
+      const dictionaries = []
+      selectedList.forEach(id => {
+        for (let obj of this.dictTableData.title_list) {
+          if (obj.id && obj.id === id) dictionaries.push({ ...obj })
         }
       })
       this.outputFields.sources = sources
       this.outputFields.targets = targets
+      this.outputFields.dictionaries = dictionaries
+      this.removeTransRowById(dictionaries)
       this.closeOutputField()
     },
     removeOutputField (index) {
-      const len = this.outputFields.sources.length
-      if (index > len - 1) {
-        this.outputFields.targets.splice(index - len, 1)
-      } else {
+      const s_len = this.outputFields.sources.length
+      const t_len = this.outputFields.targets.length
+      if (index <= s_len - 1) {
         this.outputFields.sources.splice(index, 1)
+      } else if (index <= s_len + t_len - 1) {
+        this.outputFields.targets.splice(index - s_len, 1)
+      } else {
+        this.removeTransRow(index - s_len - t_len, 1)
       }
     },
     choose (node) {
@@ -497,6 +712,15 @@ export default {
         {
           origin_field_id: '',
           target_field_id: ''
+        }
+      ]
+    },
+    resetTranslateRules () {
+      this.translateRules = [
+        {
+          source_field_id: '',
+          dictionary_field_id: '',
+          display_field_id: ''
         }
       ]
     },
@@ -597,7 +821,7 @@ export default {
         })
       }
 
-      let streamRules = []
+      const streamRules = []
       if (this.targetTableData.id) {
         streamRules.push({
           table_id: this.targetTableData.id,
@@ -607,7 +831,20 @@ export default {
         })
       }
 
-      let outputFields = []
+      const translateRules = []
+      if (this.dictTableData.id) {
+        translateRules.push(
+          ...this.utils.filterEmptyField(this.translateRules)
+            .map(item => {
+              return {
+                ...item,
+                table_id: this.dictTableData.id
+              }
+            })
+        )
+      }
+
+      const outputFields = []
       if (this.outputFields) {
         outputFields.push(...this.outputFields.sources.map(item => {
           return {
@@ -625,12 +862,23 @@ export default {
             }
           }))
         }
+        if (this.dictTableData.id) {
+          outputFields.push(...this.outputFields.dictionaries.map(item => {
+            return {
+              field_id: item.id,
+              table_id: this.dictTableData.id,
+              origin_type: 1
+            }
+          }))
+        }
       }
+
       const putData = {
         id: this.$store.state.task.taskId,
         table_id: this.tbId,
         filter_list: this.filterList,
         filter_logic: this.chooseFilterType,
+        translate_rules: translateRules,
         stream_rules: streamRules,
         output_fields: outputFields
       }
@@ -640,7 +888,12 @@ export default {
       service.then(res => {
         if (res.status === 0) {
           this.$message.success('保存成功')
-          this.$store.commit('setOutputFields', [...this.outputFields.sources, ...this.outputFields.targets])
+          this.$store.commit('setOutputFields',
+            [
+              ...this.outputFields.sources,
+              ...this.outputFields.targets,
+              ...this.outputFields.dictionaries
+            ])
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 1)
           } else {
@@ -650,11 +903,21 @@ export default {
           this.$message.error(res.msg || '保存失败')
         }
       })
+    },
+    outputFieldDot (id) {
+      switch (id) {
+        case this.targetTableData.id:
+          return 'b-dot'
+        case this.dictTableData.id:
+          return 'g-dot'
+        case this.tbId:
+          return 'y-dot'
+      }
     }
   },
   computed: {
     getOutputFields () {
-      return this.outputFields.sources.concat(this.outputFields.targets)
+      return this.outputFields.sources.concat(this.outputFields.targets).concat(this.outputFields.dictionaries)
     }
   },
   watch: {

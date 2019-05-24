@@ -62,6 +62,11 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/blue_dot.png');
 }
 
+@mixin green-dot {
+  @include icon;
+  background-image: url('#{$root_url}/green_dot.png')
+}
+
 @mixin li-h {
   @include bg;
   background-image: url('#{$root_url}/li_h.png');

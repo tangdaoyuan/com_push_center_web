@@ -618,12 +618,98 @@
               font-weight: bold;
             }
 
+            .ivu-tabs {
+              padding: 0 16px;
+              .ivu-tabs-nav {
+                color: #B4B7BD;
+                font-weight: bold;
+              }
+              .ivu-tabs-bar {
+                margin-bottom: 0;
+              }
+            }
+
+            .dict-table-header {
+              margin: 8px 0;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              transition: 500ms;
+
+              .table-selection {
+                color: #051021;
+                text-decoration: underline;
+                margin-right: 16px;
+                cursor: pointer;
+              }
+              .table-item {
+                height: 28px;
+                padding: 4px 16px;
+                margin-right: 8px;
+                background-color: rgba(245, 166, 35, .2);
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .item-title {
+                  color: #F5A623;
+                  margin-right: 4px;
+                }
+                .item-del {
+                  cursor: pointer;
+                }
+              }
+              .table-preview {
+                color: #2979FF;
+                text-decoration: underline;
+                cursor: pointer;
+              }
+            }
+            .dict-table-body {
+              width: 100%;
+              font-size: 12px;
+              font-weight: bold;
+
+              .table-panel {
+                width: 100%;
+                display: grid;
+                grid: auto/1fr 40px 1fr 50px;
+                align-items: center;
+                justify-items: center;
+
+                .select-box {
+                  width: 100%;
+                  grid-column: 1/5;
+                  display: grid;
+                  grid: auto/1fr 50px 1fr 1fr 50px;
+                  align-items: center;
+                  justify-items: center;
+                  
+                  .select {
+                    width: 100%;
+                    padding: 0 4px;
+                  }
+                  .op-box {
+                    & > span {
+                      font-weight: bold;
+                      &:last-child {
+                        margin-left: 12px;
+                      }
+                      &.el-icon-plus,
+                      &.el-icon-minus {
+                        cursor: pointer;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
             .filter-con-head {
               width: 100%;
               height: 48px;
               display: flex;
               align-items: center;
-              padding: 0 16px;
               .filter-toa {
                 .filter-title {
                   width: 60px;
@@ -746,6 +832,7 @@
             width: 100%;
             font-size: 12px;
             font-weight: bold;
+
             .ivu-tabs {
               height: 100%;
               .ivu-tabs-content {
@@ -856,11 +943,16 @@
                 height: 8px;
                 padding: 4px;
                 margin-left: 16px;
+                border-radius: 50%;
+
                 &.y-dot {
-                  @include yellow-dot;
+                  background-color: #F5A623;
                 }
                 &.b-dot {
-                  @include blue-dot;
+                  background-color: #2979FF;
+                }
+                &.g-dot {
+                  background-color: #2FCD49;
                 }
               }
               .hide {

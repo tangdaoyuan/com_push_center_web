@@ -40,7 +40,8 @@
 <script>
 export default {
   props: {
-    value: Boolean
+    value: Boolean,
+    category: Number
   },
   data () {
     return {
@@ -56,11 +57,21 @@ export default {
   methods: {
     init () {
       if (!this.treeList || this.treeList.length === 0) {
-        this.wtService.getFolder().then(res => {
-          if (res.status === 0) {
-            this.treeList = res.data
-          }
-        })
+        if (this.category) {
+          this.wtService.getFolder({
+            category: this.category
+          }).then(res => {
+            if (res.status === 0) {
+              this.treeList = res.data
+            }
+          })
+        } else {
+          this.wtService.getFolder().then(res => {
+            if (res.status === 0) {
+              this.treeList = res.data
+            }
+          })
+        }
       }
     },
     choose (node) {
