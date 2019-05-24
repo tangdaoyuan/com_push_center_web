@@ -39,6 +39,10 @@
               <span>Kafka地址</span>
               <span>{{detailListInfo.dataSource.address}}</span>
             </div>
+            <div v-if="isFlow" class="con-item">
+              <span>Group.Id</span>
+              <span>{{detailListInfo.dataSource.group_id}}</span>
+            </div>
              <div v-if="isFlow" class="con-item">
               <span>线程数量</span>
               <span>{{detailListInfo.dataSource.consumer_no}}</span>

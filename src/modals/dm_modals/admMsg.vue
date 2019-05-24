@@ -69,10 +69,16 @@
                 v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
               </div>
               <div class="item-form" v-if="isFlow">
-                <label class="item-form-title">Kafak地址</label>
+                <label class="item-form-title"><span>*</span>Kafak地址</label>
                 <Input class="item-input right"
                 :disabled="msgId !== ''"
-                :maxlength="16" v-model="msgData1.params.address"/>
+                v-model="msgData1.params.address"/>
+              </div>
+              <div class="item-form" v-if="isFlow">
+                <label class="item-form-title">Group.Id</label>
+                <Input class="item-input right"
+                v-model="msgData1.params.group_id"
+                placeholder="如不填，系统默认生成" />
               </div>
             </div>
           </div>
@@ -150,7 +156,8 @@ export default {
         params: {
           topic: '',
           address: '',
-          consumer_no: 1
+          consumer_no: 1,
+          group_id: ''
         }
       },
       msgData2: {
