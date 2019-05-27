@@ -14,6 +14,11 @@ class CONSTANT {
     'DATABASE': 2,
     'API': 3
   }
+  tableCategory = {
+    'WORK': 1,
+    'DIM': 2,
+    'DICT': 3
+  }
   dmTypeList = [
     {
       label: 'BDP同步客户端',
