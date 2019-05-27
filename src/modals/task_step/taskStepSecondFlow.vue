@@ -41,6 +41,54 @@
           </div>
           <div class="filter-body" :class="{'hide-body': filterToogle}">
             <Tabs size="small" v-model="tabName1">
+              <TabPane label="条件筛选" name="conditionRule">
+                <div class="filter-con-head">
+                  <div class="filter-toa">
+                    <label class="filter-title">满足下列</label>
+                    <el-select class="filter-head-select" v-model="chooseFilterType">
+                      <el-option v-for="item in CONSTANT.tsFilterTypeList" :key="item.value" :value="item.value" :label="item.name"></el-option>
+                    </el-select>
+                  </div>
+                  <el-button class="filter-btn" icon="el-icon-plus" circle type="primary" @click="addTaskFilter()" />
+                </div>
+                <div class="filter-con-body">
+                  <div class="filter-item" v-for="(item, index) in filterList" :key="index">
+                    <div class="title-box">
+                      <span>{{(tableMap[item.field_id]) ? (tableMap[item.field_id].alias || tableMap[item.field_id].name) : ''}}</span>
+                      &nbsp;
+                      <span v-show="item.op !== 'range'">{{utils.getTaskOp(item.op)}}</span>
+                      &nbsp;
+                      <span v-show="item.op !== 'range'">{{item.value || ''}}</span>
+                      &nbsp;
+                      <span v-show="item.op === 'range'">
+                        <span v-if="item.value && item.value[0] && item.value[1]">
+                          在{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}~{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之间
+                        </span>
+                        <span v-else-if="item.value && item.value[0]">
+                          从{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}开始
+                        </span>
+                        <span v-else-if="item.value && item.value[1]">
+                          在{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之前
+                        </span>
+                      </span>
+                    </div>
+                    <div class="op-box">
+                      <span class="icon icon-edit" @click="editFilter(item, index)"></span>
+                      <el-popover
+                        placement="top"
+                        width="160"
+                        v-model="item.deleteModal">
+                        <p>确定删除该条匹配规则么？</p>
+                        <div style="text-align: right; margin: 0">
+                          <el-button size="mini" type="text" @click="item.deleteModal = false">取消</el-button>
+                          <el-button type="primary" size="mini" @click="deleteFilter(item, index)">确定</el-button>
+                        </div>
+                        <div slot="reference" class="icon icon-del" @click.native="item.deleteModal = true"></div>
+                      </el-popover>
+                    </div>
+                  </div>
+                </div>
+              </TabPane>
               <TabPane label="字典翻译" name="dictionaryRule">
                 <div class="dict-table-header">
                   <span @click="showFlowDictTable" class="table-selection">选择字典表</span>
@@ -94,54 +142,6 @@
                         <span @click="addTransRow(index)" class="el-icon-plus"></span>
                         <span v-show="translateRules.length > 1" @click="removeTransRow(index)" class="el-icon-minus"></span>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </TabPane>
-              <TabPane label="条件筛选" name="conditionRule">
-                <div class="filter-con-head">
-                  <div class="filter-toa">
-                    <label class="filter-title">满足下列</label>
-                    <el-select class="filter-head-select" v-model="chooseFilterType">
-                      <el-option v-for="item in CONSTANT.tsFilterTypeList" :key="item.value" :value="item.value" :label="item.name"></el-option>
-                    </el-select>
-                  </div>
-                  <el-button class="filter-btn" icon="el-icon-plus" circle type="primary" @click="addTaskFilter()" />
-                </div>
-                <div class="filter-con-body">
-                  <div class="filter-item" v-for="(item, index) in filterList" :key="index">
-                    <div class="title-box">
-                      <span>{{(tableMap[item.field_id]) ? (tableMap[item.field_id].alias || tableMap[item.field_id].name) : ''}}</span>
-                      &nbsp;
-                      <span v-show="item.op !== 'range'">{{utils.getTaskOp(item.op)}}</span>
-                      &nbsp;
-                      <span v-show="item.op !== 'range'">{{item.value || ''}}</span>
-                      &nbsp;
-                      <span v-show="item.op === 'range'">
-                        <span v-if="item.value && item.value[0] && item.value[1]">
-                          在{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}~{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之间
-                        </span>
-                        <span v-else-if="item.value && item.value[0]">
-                          从{{utils.momentDate(new Date(item.value[0]).getTime(), 'date_time')}}开始
-                        </span>
-                        <span v-else-if="item.value && item.value[1]">
-                          在{{utils.momentDate(new Date(item.value[1]).getTime(), 'date_time')}}之前
-                        </span>
-                      </span>
-                    </div>
-                    <div class="op-box">
-                      <span class="icon icon-edit" @click="editFilter(item, index)"></span>
-                      <el-popover
-                        placement="top"
-                        width="160"
-                        v-model="item.deleteModal">
-                        <p>确定删除该条匹配规则么？</p>
-                        <div style="text-align: right; margin: 0">
-                          <el-button size="mini" type="text" @click="item.deleteModal = false">取消</el-button>
-                          <el-button type="primary" size="mini" @click="deleteFilter(item, index)">确定</el-button>
-                        </div>
-                        <div slot="reference" class="icon icon-del" @click.native="item.deleteModal = true"></div>
-                      </el-popover>
                     </div>
                   </div>
                 </div>
@@ -306,7 +306,7 @@ export default {
   data () {
     return {
       tbId: undefined,
-      tabName1: 'dictionaryRule',
+      tabName1: 'conditionRule',
       tabName2: 'relevanceTab',
       filterText: '',
       dataTableTag: {
