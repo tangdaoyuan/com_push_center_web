@@ -79,7 +79,7 @@ export default {
         id: this.$store.state.task.taskId
       }
 
-      // console.log(pushData)
+      console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
 
       service.then(res => {
