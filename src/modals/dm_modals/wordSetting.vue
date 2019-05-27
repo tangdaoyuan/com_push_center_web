@@ -1,5 +1,5 @@
 <template>
-  <Modal class="ws-modal-main" v-model="value" :mask-closable="false">
+  <Modal class="ws-modal-main" v-model="value" :closable="false" :mask-closable="false">
     <div class="ws-header" slot="header">
       <span>字段设置</span>
       <Icon type="md-close" @click="close" />

@@ -1,5 +1,6 @@
 <template>
-  <Modal class="cnf-modal-main" v-model="value">
+  <Modal class="cnf-modal-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>创建文件夹</span>
       <Icon type="md-close" @click="close" />

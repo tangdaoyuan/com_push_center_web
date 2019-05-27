@@ -1,5 +1,6 @@
 <template>
-  <Modal class="nd-modal-main" v-model="value">
+  <Modal class="nd-modal-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>推送通道详情</span>
       <Icon type="md-close" @click="close" />

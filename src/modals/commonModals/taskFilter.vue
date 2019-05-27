@@ -1,5 +1,7 @@
 <template>
   <Modal class="tf-modal"
+    :mask-closable="false"
+    :closable="false"
     v-model="value">
     <div class="tf-header" slot="header">
       <span>配置匹配规则</span>

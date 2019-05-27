@@ -1,5 +1,5 @@
 <template>
-  <Modal class="dm-main-detail" v-model="value">
+  <Modal class="dm-main-detail" :mask-closable="false" :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>{{`${detailListInfo.dataSource.name} -- 详情信息`}}</span>
       <Icon type="md-close" @click="back($event)" />
@@ -38,6 +38,10 @@
              <div v-if="isFlow" class="con-item">
               <span>Kafka地址</span>
               <span>{{detailListInfo.dataSource.address}}</span>
+            </div>
+            <div v-if="isFlow" class="con-item">
+              <span>Group.Id</span>
+              <span>{{detailListInfo.dataSource.group_id}}</span>
             </div>
              <div v-if="isFlow" class="con-item">
               <span>线程数量</span>

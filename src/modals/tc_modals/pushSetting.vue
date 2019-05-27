@@ -1,5 +1,6 @@
 <template>
-  <Modal class="ps-modal-main" v-model="value">
+  <Modal class="ps-modal-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>提示</span>
       <Icon type="md-close" @click="close" />

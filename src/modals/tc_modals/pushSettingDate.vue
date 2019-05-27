@@ -1,5 +1,6 @@
 <template>
-  <Modal class="psd-modal-main" v-model="value">
+  <Modal class="psd-modal-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>定时推送</span>
       <Icon type="md-close" @click="close" />
