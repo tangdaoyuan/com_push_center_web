@@ -808,10 +808,20 @@ export default {
         this.$message.error('请配置全局条件')
         return
       }
-      if (!this.relevanceRules[0].origin_field_id || !this.relevanceRules[0].target_field_id) {
-        this.$message.error('请选择条件碰撞规则!')
-        return
+      if (this.targetTableData.id) {
+        if (!this.relevanceRules[0].origin_field_id || !this.relevanceRules[0].target_field_id) {
+          this.$message.error('请选择条件碰撞规则!')
+          return
+        }
+        this.saveOrEditSubmit()
+      } else {
+        this.$confirm('未选择纬度表，可能引起爆炸式推送或系统崩溃，确认继续？')
+          .then(_ => {
+            this.saveOrEditSubmit()
+          })
       }
+    },
+    saveOrEditSubmit () {
       if (this.filterList && this.filterList.length > 0) {
         this.filterList = this.filterList.map(item => {
           return {

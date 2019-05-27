@@ -55,6 +55,10 @@ class CONSTANT {
     {
       label: 'Hive',
       value: 9
+    },
+    {
+      label: 'DataHub',
+      value: 10
     }
   ]
   SYS_TYPE = 1

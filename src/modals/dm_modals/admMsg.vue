@@ -203,7 +203,8 @@ export default {
           params: {
             topic: this.dataSource.topic,
             address: this.dataSource.address,
-            consumer_no: this.dataSource.consumer_no
+            consumer_no: this.dataSource.consumer_no,
+            group_id: this.dataSource.group_id
           }
         }
         this.setting.forEach(item => {
