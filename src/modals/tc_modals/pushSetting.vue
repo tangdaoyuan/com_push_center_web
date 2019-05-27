@@ -34,7 +34,8 @@ export default {
     value: Boolean,
     list: Array,
     type: String,
-    putData: Object
+    putData: Object,
+    taskStep: Number
   },
   data () {
     return {
@@ -94,8 +95,28 @@ export default {
             }
           }
         }
+
+        let fieldList = []
+        if (this.$store.state.task.tableData) {
+          if (this.taskStep === this.CONSTANT.taskStep.USER) {
+            if (this.$store.getters.taskData) {
+              fieldList = this.$store.getters.taskData.output_fields
+            } else if (this.$store.getters.outputFields) {
+              fieldList = this.$store.getters.outputFields
+            }
+            fieldList = fieldList.map(item => {
+              return {
+                ...item,
+                id: item.id || item.field_id,
+                name: item.name || item.field_name
+              }
+            })
+          } else {
+            fieldList = this.$store.state.task.tableData.title_list
+          }
+        }
         window.$(this.$refs.at_box).suggest('@', {
-          data: (this.$store.state.task.tableData ? this.$store.state.task.tableData.title_list : []).map(item => {
+          data: fieldList.map(item => {
             return {
               ...item,
               text: item.name,
