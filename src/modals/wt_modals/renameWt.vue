@@ -1,5 +1,6 @@
 <template>
-  <Modal class="rnwt-modal-main" v-model="value">
+  <Modal class="rnwt-modal-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>编辑工作表</span>
       <Icon type="md-close" @click="close"/>

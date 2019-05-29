@@ -1,7 +1,9 @@
 <template>
   <Modal class="add-task-user"
     title="配置推送用户规则"
-    v-model="value">
+    v-model="value"
+    :mask-closable="false"
+    :closable="false">
     <div class="step-push-body">
       <div class="step-header">
         <span>当下列条件满足时发送消息</span>

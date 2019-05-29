@@ -1,5 +1,5 @@
 <template>
-  <Modal class="ct-modal-main" v-model="value">
+  <Modal class="ct-modal-main" :mask-closable="false" :closable="false" v-model="value">
     <div class="ct-header" slot="header">
       <span>增量设置</span>
       <Icon type="md-close" @click="close" />

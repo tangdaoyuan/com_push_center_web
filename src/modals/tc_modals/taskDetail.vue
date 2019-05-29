@@ -46,7 +46,7 @@
             </div>
           </div>
         </div>
-        <div class="td-body-item">
+        <div class="td-body-item" v-if="detail.target_type === 1">
           <div class="item-header">
             <i></i>
             <span>任务字段</span>
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        <div class="td-body-item">
+        <div class="td-body-item" v-if="detail.target_type === 1">
           <div class="item-header">
             <i></i>
             <span>推送规则</span>
@@ -120,7 +120,7 @@
             </div>
           </div>
         </div>
-        <div class="td-body-item">
+        <div class="td-body-item" v-if="detail.target_type === 1">
           <div class="item-header">
             <i></i>
             <span>关注用户</span>
@@ -142,7 +142,7 @@
             </div>
           </div>
         </div>
-        <div class="td-body-item">
+        <div class="td-body-item" v-if="detail.target_type === 1">
           <div class="item-header">
             <i></i>
             <span>推送通道</span>
@@ -173,6 +173,92 @@
                     {{utils.momentDate(item.start_time, 'data_h_time_h')}}-{{utils.momentDate(item.end_time, 'data_h_time_h')}}
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+         <div class="td-body-item" v-if="detail.target_type !== 1">
+          <div class="item-header">
+            <i></i>
+            <span>条件碰撞规则</span>
+          </div>
+          <div class="item-main">
+            <div class="item-box stream" v-for="(stream, index) in detail.stream_rules" :key="index">
+              <div class="item-title">{{detail.name}} - {{stream.table_name}}:</div>
+              <div class="item-con" v-for="(item, index) in stream.relevance_rules" :key="index">
+                <span>{{item.origin_field_name}}等于{{item.target_field_name}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="td-body-item" v-if="detail.target_type !== 1">
+          <div class="item-header">
+            <i></i>
+            <span>数据筛选规则</span>
+          </div>
+          <div class="item-main">
+            <div class="item-box stream" v-for="(stream, index) in detail.stream_rules" :key="index">
+              <div class="item-title">{{detail.name}} - {{stream.table_name}}:</div>
+              <div class="item-con" v-for="(item, index) in stream.filter_list" :key="index">
+                <span>{{item.field_name}}等于{{item.value}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="td-body-item" v-if="detail.target_type !== 1">
+          <div class="item-header">
+            <i></i>
+            <span>连接配置</span>
+          </div>
+          <div class="item-main" v-if="detail.target_type === 3">
+            <div class="item-box">
+              <div class="item-title">API地址</div>
+              <div class="item-con">
+                <span>{{detail.api.url}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="item-main" v-if="detail.target_type === 2">
+            <div class="item-box">
+              <div class="item-title">数据库种类</div>
+              <div class="item-con">
+                <span>{{detail.database.type === 1?'mysql':'oracle'}}</span>
+              </div>
+            </div>
+            <div class="item-box">
+              <div class="item-title">数据库地址</div>
+              <div class="item-con">
+                <span>{{detail.database.host}}</span>
+              </div>
+            </div>
+            <div class="item-box">
+              <div class="item-title">数据库端口</div>
+              <div class="item-con">
+                <span>{{detail.database.port}}</span>
+              </div>
+            </div>
+            <div class="item-box">
+              <div class="item-title">用户名</div>
+              <div class="item-con">
+                <span>{{detail.database.username}}</span>
+              </div>
+            </div>
+             <div class="item-box">
+              <div class="item-title">数据库名</div>
+              <div class="item-con">
+                <span>{{detail.database.database}}</span>
+              </div>
+            </div>
+            <div class="item-box">
+              <div class="item-title">表名</div>
+              <div class="item-con">
+                <span>{{detail.database.username}}</span>
+              </div>
+            </div>
+             <div class="item-box">
+              <div class="item-title">字段映射</div>
+              <div class="item-con">
+                <span v-for="(item, index) in mappingFields" :key="index">{{item.field_name}}-{{item.targetName}}</span>
               </div>
             </div>
           </div>
@@ -220,6 +306,7 @@ export default {
   data () {
     return {
       dic_name: '',
+      mappingFields: [],
       detail: {
         task_fields: {
           alarm_fields: [],
@@ -279,7 +366,19 @@ export default {
       }).then(res => {
         if (res.status === 0) {
           this.detail = res.data
+          if (this.detail.target_type === 2) {
+            this.calMappingFields()
+          }
         }
+      })
+    },
+    calMappingFields () {
+      let targetList = Object.keys(this.detail.database.field_mapping)
+      this.mappingFields = this.detail.output_fields.filter((item) => {
+        return targetList.includes(item.field_id)
+      })
+      this.mappingFields.forEach(item => {
+        item.targetName = this.detail.database.field_mapping[item.field_id]
       })
     },
     back (e) {

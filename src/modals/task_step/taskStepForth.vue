@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 3">
+  <div class="step-body" v-show="step === 3 && (taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER)">
     <task-user-push
       v-model="taskUserModal"
       @changePushUserList="changePushUserList"
@@ -74,7 +74,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -410,7 +411,9 @@ export default {
   },
   watch: {
     step () {
-      if (this.step === 3) {
+      if (this.step === 3 &&
+        (this.taskStep === this.CONSTANT.taskStep.USER ||
+        this.taskStep === this.CONSTANT.taskStep.NORMAL)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

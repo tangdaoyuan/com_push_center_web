@@ -20,13 +20,17 @@
             <div class="item-body">
               <div class="item-form">
                 <label class="item-form-title">数据源</label>
-                <el-select class="item-select" v-model="oracleData.type" disabled filterable>
+                <el-select class="item-select" v-model="dmType" disabled filterable>
                   <el-option v-for="item in CONSTANT.dmTypeList" :value="item.value" :key="item.value" :label="item.label"></el-option>
                 </el-select>
               </div>
               <div class="item-form">
                 <label class="item-form-title"><span>*</span>数据源名称</label>
                 <Input class="item-input" v-model="oracleData.name" :maxlength="16" />
+              </div>
+              <div class="item-form" v-if="isFlow">
+                <label class="item-form-title"><span>*</span>线程数量</label>
+                <InputNumber class="item-input" v-model="oracleData.params.consumer_no" :min="0"  ></InputNumber>
               </div>
               <div class="item-form-area">
                 <Input class="item-input" v-model="oracleData.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200" />
@@ -94,7 +98,7 @@
         </div>
       </div>
       <div class="adm-step-oracle adm-step2" v-show="currentStep === 1">
-        <word-setting :datas="chooseWords" :dataSchema="oracleSchema" @finish="finishWordSetting" v-model="wsModal" />
+        <word-setting :datas="chooseWords" :dataSchema="oracleSchema" @finish="finishWordSetting" @close="closeWordSetting"  v-model="wsModal" />
         <div class="step-body">
           <div class="item-body">
             <div class="item-form item-form1">
@@ -137,7 +141,7 @@
             <div class="item-form form-select" v-show="oracleData2.params.is_timed_sync">
               <label class="item-form-title">增量更新字段</label>
               <el-select v-model="oracleData2.params.increment_field" class="item-select">
-                <el-option v-for="(item, index) in oracleSchema.fields" :value="item.name" :key="index" :label="item.name"></el-option>
+                <el-option v-for="(item, index) in chooseFields" :value="item.name" :key="index" :label="item.name"></el-option>
               </el-select>
               <label class="mark">(增量更新字段只支持索引字段)</label>
             </div>
@@ -165,17 +169,23 @@
 export default {
   props: {
     value: Boolean,
-    oracleId: String
+    oracleId: String,
+    isFlow: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
   },
   data () {
     return {
       currentStep: 0,
       chooseWords: [],
+      chooseFields: [],
       mysqlSchema: {},
       oracleList: {},
       wsModal: false,
       oracleData: {
-        type: 5,
         name: '',
         desc: '',
         params: {
@@ -185,7 +195,8 @@ export default {
           username: '',
           password: '',
           database: '',
-          table: ''
+          table: '',
+          consumer_no: 1
         }
       },
       oracleData2: {
@@ -217,9 +228,17 @@ export default {
       serveType: 'SID'
     }
   },
+  computed: {
+    dmType () {
+      return this.isFlow ? 8 : 5
+    }
+  },
   methods: {
     close () {
       this.$emit('close')
+    },
+    closeWordSetting () {
+      this.wsModal = false
     },
     changeStep (step) {
       if (this.oracleId) {
@@ -264,7 +283,7 @@ export default {
           }
           this.editData2 = {
             tb_id: res.data.table_id,
-            type: 5,
+            type: this.dmType,
             ds_id: this.oracleList.id
           }
         }
@@ -274,6 +293,7 @@ export default {
       }).then(res => {
         if (res.status === 0) {
           this.oracleSchema = res.data.schema
+          this.chooseFields = this.oracleSchema.fields
           this.oracleSchema.fields.forEach(item => {
             this.chooseWords.push(item.name)
           })
@@ -335,11 +355,10 @@ export default {
           this.$message.error('数据库端口号不能为空')
           return
         }
-
         if (this.oracleId) {
           this.dmService.editApiData({
             ...putData,
-            params: undefined,
+            type: this.dmType,
             id: this.oracleList.id
           }).then(res => {
             if (res.status === 0) {
@@ -349,9 +368,13 @@ export default {
             }
           })
         } else {
-          this.dmService.saveMsgTmpData(putData).then(res => {
+          this.dmService.saveMsgTmpData({
+            ...putData,
+            type: this.dmType
+          }).then(res => {
             if (res.status === 0) {
               this.oracleSchema = res.data.schema
+              this.chooseFields = this.oracleSchema.fields
               this.oracleSchema.fields.forEach(item => {
                 this.chooseWords.push(item.name)
               })
@@ -369,7 +392,7 @@ export default {
     },
     finishOracle () {
       const putData = {
-        type: 5,
+        type: this.dmType,
         temp_id: this.oracleData2.temp_id,
         params: {}
       }
@@ -387,13 +410,23 @@ export default {
       } else {
         putData.params.is_timed_sync = false
       }
+      if (putData.params.period === null) {
+        this.$message.error('请选择更新频率')
+        return
+      }
+      if (!putData.params.increment_field) {
+        this.$message.error('请选择更新字段')
+        return
+      }
       if (this.oracleId) {
         this.editData2.params = putData.params
         this.dmService.saveEditData(this.editData2).then(res => {
           if (res.status === 0) {
             this.$message.success('编辑数据源成功')
             this.$emit('refresh')
-            this.close()
+            setTimeout(() => {
+              this.close()
+            }, 300)
           } else {
             this.$message.error(res.msg)
           }
@@ -411,7 +444,7 @@ export default {
     },
     finishWordSetting (data) {
       this.sync_fields = data.sync_fields
-      // this.chooseWords = data.sync_fields
+      this.chooseFields = data.fields
     },
     filedSetting () {
       this.wsModal = true

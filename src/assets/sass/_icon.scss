@@ -32,34 +32,77 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/logout.png');
 }
 
+@mixin icon-edit {
+  @include icon;
+  background-image: url('#{$root_url}/icon_edit.png');
+}
+
+@mixin icon-file {
+  @include icon;
+  background-image: url('#{$root_url}/icon_file.png');
+  
+}
+@mixin icon-del {
+  @include icon;
+  background-image: url('#{$root_url}/icon_del.png');
+}
+
+@mixin yellow-dot {
+  @include icon;
+  background-image: url('#{$root_url}/yellow_dot.png');
+}
+
+@mixin red-dot {
+  @include icon;
+  background-image: url('#{$root_url}/red_dot.png')
+}
+
+@mixin blue-dot {
+  @include icon;
+  background-image: url('#{$root_url}/blue_dot.png');
+}
+
+@mixin green-dot {
+  @include icon;
+  background-image: url('#{$root_url}/green_dot.png')
+}
+
 @mixin li-h {
   @include bg;
   background-image: url('#{$root_url}/li_h.png');
 }
 
-@mixin adm-item1 {
+@mixin adm_client {
   @include icon;
-  background-image: url('#{$root_url}/adm_pic1.png');
+  background-image: url('#{$root_url}/adm_client.png');
 }
 
-@mixin adm-item2 {
+@mixin adm_api {
   @include icon;
-  background-image: url('#{$root_url}/adm_pic2.png');
+  background-image: url('#{$root_url}/adm_api.png');
 }
 
-@mixin adm-item3 {
+@mixin adm_msg {
   @include icon;
-  background-image: url('#{$root_url}/adm_pic3.png');
+  background-image: url('#{$root_url}/adm_msg.png');
 }
 
-@mixin adm-item4 {
+@mixin adm_oracle {
   @include icon;
-  background-image: url('#{$root_url}/adm_pic4.png');
+  background-image: url('#{$root_url}/adm_oracle.png');
 }
 
-@mixin adm-item5 {
+@mixin adm_mysql {
   @include icon;
-  background-image: url('#{$root_url}/adm_pic5.png');
+  background-image: url('#{$root_url}/adm_mysql.png');
+}
+@mixin adm_hive {
+  @include icon;
+  background-image: url('#{$root_url}/adm_hive.png');
+}
+@mixin adm_kafka {
+  @include icon;
+  background-image: url('#{$root_url}/adm_kafka.png');
 }
 
 @mixin refresh {
@@ -107,6 +150,15 @@ $root_url: '../imgs';
   background-image: url('#{$root_url}/file_oracle.png');
 }
 
+@mixin file-hive-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_hive.png');
+}
+
+@mixin file-kafka-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_kafka.png');
+}
 @mixin more-icon {
   @include icon;
   background-image: url('#{$root_url}/more.png');

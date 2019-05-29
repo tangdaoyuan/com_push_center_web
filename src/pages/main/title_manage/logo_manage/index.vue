@@ -102,8 +102,14 @@ export default {
     },
     delLogo (row) {
       this.$confirm(`确认删除该LOGO?`).then(_ => {
-        // TODO
-        // const params = {}
+        this.tmService.delTitleOrLogo({
+          id: row.id
+        }).then(res => {
+          if (res.status === 0) {
+            this.$message.success('LOGO删除成功')
+            this.search()
+          }
+        })
       })
     },
     search () {

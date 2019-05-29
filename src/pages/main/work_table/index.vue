@@ -33,7 +33,17 @@
       <div class="wt-left-header">
         <Menu mode="horizontal" theme="light" :active-name="chooseMenu">
           <MenuItem name="table" @click.native="changeMenu($event, 'table')">
-            <span>工作表</span>
+            <Dropdown>
+              <a href="javascript:void(0)">
+                <span>{{chooseTableType}}</span>
+                <Icon type="ios-arrow-down"></Icon>
+              </a>
+              <DropdownMenu slot="list">
+                <DropdownItem @click.native="changeTableType($event, 1)">工作表</DropdownItem>
+                <DropdownItem @click.native="changeTableType($event, 2)">纬度表</DropdownItem>
+                <DropdownItem @click.native="changeTableType($event, 3)">字典表</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </MenuItem>
           <MenuItem name="data" @click.native="changeMenu($event, 'data')">
             <span>数据源</span>
@@ -173,6 +183,7 @@ export default {
       uploadStep: '0',
       tableType: 'prew',
       chooseMenu: 'table',
+      chooseTableType: '工作表',
       treeList: [],
       chooseTag: [],
       folderList: [],
@@ -251,6 +262,30 @@ export default {
     },
     closeCnFile () {
       this.modals.cnfModal = false
+    },
+    changeTableType (e, type) {
+      e.stopPropagation()
+      this.wtService.getFolder({
+        category: type
+      }).then(res => {
+        if (res.status === 0) {
+          this.chooseTableType = ['', '工作表', '纬度表', '字典表'][type]
+          this.treeList = res.data
+          if (this.chooseItemId) {
+            this.wtService.getTableItem({
+              id: this.chooseItemId
+            }).then(res => {
+              if (res.status === 0) {
+                this.chooseItem = res.data
+                this.chooseTag = [this.chooseItemId]
+                this.searchData()
+              }
+            })
+          } else {
+            this.chooseTag = []
+          }
+        }
+      })
     },
     closeDefile () {
       this.modals.dfModal = false
@@ -387,53 +422,67 @@ export default {
           'selected': data.id === this.chooseTag[0]
         }
       }
-      const drop = h('el-dropdown', {
-        nativeOn: {
-          click: (e) => {
-            e.stopPropagation()
-          }
+
+      const drop = h('el-menu', {
+        props: {
+          collapse: true
+        },
+        class: {
+          '"el-menu-vertical': true
         }
       },
       [
-        h('a', {
-          'class': {
-            'more-btn': true
+        h('el-submenu', {
+          props: {
+            index: '1'
           }
-        },
-        [
-          h('i', {
-            'class': {
-              'more': true
-            }
-          })
-        ]),
-        h('el-dropdown-menu', {
-          slot: 'dropdown'
-        },
-        [
-          (this.chooseMenu === 'table' && this.utils.getType(data.id) === 'folder') ? (h('el-dropdown-item', {
-            domProps: {
-              innerHTML: '置顶'
-            },
-            nativeOn: {
-              click: (e) => {
-                e.stopPropagation()
-                this.wtService.saveFolder({
-                  id: data.id,
-                  is_top: 1
-                }).then(res => {
-                  if (res.status === 0) {
-                    this.$message({
-                      message: '置顶成功',
-                      type: 'success'
-                    })
-                    this.init()
-                  }
-                })
+        }, [
+          h('template', {
+            slot: 'title'
+          }, [
+            h('a', {
+              'class': {
+                'more-btn': true
               }
-            }
-          })) : (''),
-          h('el-dropdown-item', {
+            }, [
+              h('i', {
+                'class': {
+                  'more': true
+                }
+              })
+            ])
+          ]),
+          (this.chooseMenu === 'table' && this.utils.getType(data.id) === 'folder') ? (
+            h('el-menu-item', {
+              props: {
+                index: '1-1'
+              },
+              domProps: {
+                innerHTML: '置顶'
+              },
+              nativeOn: {
+                click: (e) => {
+                  e.stopPropagation()
+                  this.wtService.saveFolder({
+                    id: data.id,
+                    is_top: 1
+                  }).then(res => {
+                    if (res.status === 0) {
+                      this.$message({
+                        message: '置顶成功',
+                        type: 'success'
+                      })
+                      this.init()
+                    }
+                  })
+                }
+              }
+            })
+          ) : (''),
+          h('el-menu-item', {
+            props: {
+              index: '1-2'
+            },
             domProps: {
               innerHTML: '重命名'
             },
@@ -463,7 +512,10 @@ export default {
               }
             }
           }),
-          (this.chooseMenu !== 'table') ? ('') : (h('el-dropdown-item', {
+          (this.chooseMenu !== 'table') ? ('') : (h('el-menu-item', {
+            props: {
+              index: '1-3'
+            },
             domProps: {
               innerHTML: '移动至'
             },
@@ -474,7 +526,99 @@ export default {
               }
             }
           })),
-          h('el-dropdown-item', {
+          h('el-submenu', {
+            props: {
+              index: '1-4'
+            }
+          },
+          [
+            h('span', {
+              slot: 'title',
+              domProps: {
+                innerHTML: '选择分类'
+              }
+            }), [
+              h('el-menu-item', {
+                props: {
+                  index: '1-4-1'
+                },
+                domProps: {
+                  innerHTML: '工作表'
+                },
+                nativeOn: {
+                  click: e => {
+                    e.stopPropagation()
+                    this.wtService.saveTable({
+                      tb_id: data.id,
+                      table_name: data.name,
+                      category: 1
+                    }).then(res => {
+                      if (res.status === 0) {
+                        this.$message.success('分类设置成功')
+                        this.init()
+                      } else {
+                        this.$message.error(res.msg || '分类设置失败')
+                      }
+                    })
+                  }
+                }
+              }),
+              h('el-menu-item', {
+                props: {
+                  index: '1-4-2'
+                },
+                domProps: {
+                  innerHTML: '维度表'
+                },
+                nativeOn: {
+                  click: e => {
+                    e.stopPropagation()
+                    this.wtService.saveTable({
+                      tb_id: data.id,
+                      table_name: data.name,
+                      category: 2
+                    }).then(res => {
+                      if (res.status === 0) {
+                        this.$message.success('分类设置成功')
+                        this.init()
+                      } else {
+                        this.$message.error(res.msg || '分类设置失败')
+                      }
+                    })
+                  }
+                }
+              }),
+              h('el-menu-item', {
+                props: {
+                  index: '1-4-3'
+                },
+                domProps: {
+                  innerHTML: '字典表'
+                },
+                nativeOn: {
+                  click: e => {
+                    e.stopPropagation()
+                    this.wtService.saveTable({
+                      tb_id: data.id,
+                      table_name: data.name,
+                      category: 3
+                    }).then(res => {
+                      if (res.status === 0) {
+                        this.$message.success('分类设置成功')
+                        this.init()
+                      } else {
+                        this.$message.error(res.msg || '分类设置失败')
+                      }
+                    })
+                  }
+                }
+              })
+            ]
+          ]),
+          h('el-menu-item', {
+            props: {
+              index: '1-5'
+            },
             domProps: {
               innerHTML: '删除'
             },
@@ -500,12 +644,13 @@ export default {
               'folder': this.utils.getType(data.id) === 'folder' || this.utils.getType(data.id) === 'ds',
               'file': this.utils.getType(data.id) === 'field',
               'file-ds': this.utils.getType(data.id) === 'field' && data.type === 1,
-              'file-aggr': this.utils.getType(data.id) === 'field' && data.type === 2,
+              'file-aggr': this.utils.getType(data.id) === 'field' && (data.type === 2),
               'file-public': this.utils.getType(data.id) === 'field' && data.type === 3,
               'file-excel': this.utils.getType(data.id) === 'field' && data.type === 4,
-              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 5,
-              'file-oracle': this.utils.getType(data.id) === 'field' && data.type === 6
-
+              'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
+              'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6,
+              'file-kafka': this.utils.getType(data.id) === 'field' && data.type === 7,
+              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9
             }
           }),
           h('span', {

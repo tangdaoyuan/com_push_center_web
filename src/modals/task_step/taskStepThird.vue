@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 2">
+  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER)">
     <div class="ts-field-step">
       <div class="ts-item item1">
         <div class="item-header">
@@ -19,7 +19,7 @@
             @end="moveEnd">
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item">
@@ -66,7 +66,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList1"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -125,7 +125,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList2"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -183,7 +183,7 @@
             <transition-group name="no" tag="ul">
               <li v-for="(item, index) in tbList3"
                 :class="{'empty': !item.id}"
-                :key="index"
+                :key="item.id"
                 @mousemove="detailHover = index"
                 @mouseout="detailHover = ''">
                 <div class="drag-item push-order" v-show="item.id">
@@ -241,7 +241,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   computed: {
     dragOptions () {
@@ -303,7 +304,24 @@ export default {
         }
       })
       if (this.$store.state.task.tableData) {
-        this.tbList = this.$store.state.task.tableData.title_list
+        if (this.taskStep === this.CONSTANT.taskStep.USER) {
+          let fieldList = []
+          if (this.$store.getters.taskData) {
+            fieldList = this.$store.getters.taskData.output_fields
+          } else if (this.$store.getters.outputFields) {
+            fieldList = this.$store.getters.outputFields
+          }
+          this.tbList = fieldList.map(item => {
+            return {
+              ...item,
+              id: item.id || item.field_id,
+              name: item.name || item.field_name
+            }
+          })
+        } else {
+          this.tbList = this.$store.state.task.tableData.title_list
+        }
+        console.log('tbList', this.tbList)
         if (this.$store.state.task.taskData) {
           this.initEdit()
         }
@@ -392,6 +410,7 @@ export default {
       })
     },
     moveEnd (evt) {
+      let self = this
       this.isDragging = false
       if (this.tbList1.length > 1) {
         this.tbList1.forEach((item, index) => {
@@ -399,7 +418,7 @@ export default {
             this.tbList1.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList1[index] = { ...this.tbList1[index], display_type: 1 }
+            self.tbList1[index] = { ...self.tbList1[index], display_type: 1 }
           }
         })
       }
@@ -413,10 +432,10 @@ export default {
       if (this.tbList3.length > 1) {
         this.tbList3.forEach((item, index) => {
           if (!item.id) {
-            this.tbList3.splice(index, 1)
+            self.tbList3.splice(index, 1)
           }
           if (!item.display_type) {
-            this.tbList3[index] = { ...this.tbList3[index], display_type: 1 }
+            self.tbList3[index] = { ...self.tbList3[index], display_type: 1 }
           }
         })
       }
@@ -594,6 +613,7 @@ export default {
           this[`tbTemp${tb_type}`] = JSON.parse(JSON.stringify(this[`tbList${tb_type}`]))
           break
       }
+      console.log('tbList3', this.tbList3)
     },
     closeSetDict () {
       this.$store.commit('resetDictConfig')
@@ -791,7 +811,9 @@ export default {
   },
   watch: {
     step () {
-      if (this.step === 2) {
+      if (this.step === 2 &&
+        (this.taskStep === this.CONSTANT.taskStep.NORMAL ||
+          this.taskStep === this.CONSTANT.taskStep.USER)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

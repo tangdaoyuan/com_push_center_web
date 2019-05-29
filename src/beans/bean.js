@@ -1,4 +1,24 @@
 class CONSTANT {
+  tableType = {
+    'NORMAL': 1,
+    'FLOW': 2
+  }
+  pushType = {
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
+  }
+  taskStep = {
+    'NORMAL': 0,
+    'USER': 1,
+    'DATABASE': 2,
+    'API': 3
+  }
+  tableCategory = {
+    'WORK': 1,
+    'DIM': 2,
+    'DICT': 3
+  }
   dmTypeList = [
     {
       label: 'BDP同步客户端',
@@ -23,6 +43,22 @@ class CONSTANT {
     {
       label: 'MySql',
       value: 6
+    },
+    {
+      label: 'Kafka',
+      value: 7
+    },
+    {
+      label: 'Oracle(流式)',
+      value: 8
+    },
+    {
+      label: 'Hive',
+      value: 9
+    },
+    {
+      label: 'DataHub',
+      value: 10
     }
   ]
   SYS_TYPE = 1

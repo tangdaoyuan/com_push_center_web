@@ -1,5 +1,6 @@
 <template>
-  <Modal class="nwd-main" v-model="value">
+  <Modal class="nwd-main" :mask-closable="false"
+    :closable="false" v-model="value">
     <div class="modal-header" slot="header">
       <span>{{`${chooseItem.name} -- ${utils.getNwMatch(showMenu)}`}}</span>
       <Icon type="md-close" @click="back($event)" />

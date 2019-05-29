@@ -55,7 +55,7 @@ export default {
       })
     })
   },
-  beforeCreate () {
+  mounted () {
     const params = {
       sys_type: this.CONSTANT.SYS_TYPE
     }

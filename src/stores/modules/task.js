@@ -12,7 +12,9 @@ const state = {
   userDicMap: null,
   fieldData: null,
   fieldConfig: null,
-  dictConfig: null
+  dictConfig: null,
+  outputFields: [],
+  schemaFields: []
 }
 
 const actions = {
@@ -37,7 +39,6 @@ const actions = {
       tcService.getTaskEditDetail(data).then(res => {
         if (res.status === 0) {
           commit('setTaskEditData', res.data.task)
-
           resolve()
         }
       })
@@ -72,7 +73,17 @@ const actions = {
   }
 }
 
-const getters = {}
+const getters = {
+  taskData: function (state) {
+    return state.taskData
+  },
+  outputFields: function (state) {
+    return state.outputFields
+  },
+  schemaFields: function (state) {
+    return state.schemaFields
+  }
+}
 
 const mutations = {
   setTaskId: (state, id) => {
@@ -104,6 +115,18 @@ const mutations = {
   },
   setUserMapDic: (state, data) => {
     state.userDicMap = data
+  },
+  setOutputFields: (state, data) => {
+    state.outputFields = data
+  },
+  setSchemaFields: (state, data) => {
+    state.schemaFields = data
+  },
+  resetOutputFields: (state, data) => {
+    state.outputFields = []
+  },
+  resetSchemaFields: (state, data) => {
+    state.schemaFields = []
   },
   resetFieldData: (state) => {
     [

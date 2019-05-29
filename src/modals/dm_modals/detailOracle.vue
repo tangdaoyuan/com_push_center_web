@@ -1,7 +1,7 @@
 <template>
-  <Modal class="dm-main-detail" v-model="value">
+  <Modal class="dm-main-detail" :mask-closable="false" :closable="false" v-model="value">
     <div class="modal-header" slot="header">
-      <span>{{`${detailOracleList.name} -- 详情信息`}}</span>
+      <span>{{`${ detailOracleList.name} -- 详情信息`}}</span>
       <Icon type="md-close" @click="back($event)" />
     </div>
     <div class="md-con">
@@ -29,7 +29,7 @@
             </div>
             <div class="con-item">
               <span>数据库类型</span>
-              <span>{{(detailOracleList.type === 5) ? ('Oracle') : ('MySql')}}</span>
+              <span>{{detailOracleList.type === 6 ? ' MySql' : 'Oracle' }}</span>
             </div>
             <div class="con-item">
               <span>服务器</span>
@@ -46,6 +46,10 @@
             <div class="con-item">
               <span>数据库</span>
               <span>{{detailOracleList.database}}</span>
+            </div>
+            <div v-if="isFlow"  class="con-item">
+              <span>线程数量</span>
+              <span>{{detailOracleList.consumer_no}}</span>
             </div>
           </div>
         </div>
@@ -93,11 +97,19 @@
 export default {
   props: {
     value: Boolean,
-    detailID: String
+    detailID: String,
+    isFlow: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
   },
   data () {
     return {
-      detailOracleList: {}
+      detailOracleList: {
+        name: ''
+      }
     }
   },
   methods: {

@@ -100,9 +100,14 @@ export default {
     },
     delTitle (row) {
       this.$confirm(`确认删除标题 ${row.title} 吗`).then(res => {
-        if (res.status === 0) {
-          this.$message.error('功能对接中ing...')
-        }
+        this.tmService.delTitleOrLogo({
+          id: row.id
+        }).then(res => {
+          if (res.status === 0) {
+            this.$message.success('标题删除成功')
+            this.search()
+          }
+        })
       })
     },
     search () {

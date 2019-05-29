@@ -1,6 +1,7 @@
 <template>
   <div class="step-body" v-show="step === 4">
     <push-setting
+      :task-step="taskStep"
       :list="choosePushMsgList"
       :putData="tdPutData"
       @changeSetting="changeMsgSetting"
@@ -78,7 +79,8 @@
 <script>
 export default {
   props: {
-    step: Number
+    step: Number,
+    taskStep: Number
   },
   data () {
     return {
@@ -110,7 +112,23 @@ export default {
       const pro = []
 
       if (this.$store.state.task.tableData) {
-        this.tbList = this.$store.state.task.tableData
+        if (this.taskStep === this.CONSTANT.taskStep.USER) {
+          let fieldList = []
+          if (this.$store.getters.taskData) {
+            fieldList = this.$store.getters.taskData.output_fields
+          } else if (this.$store.getters.outputFields) {
+            fieldList = this.$store.getters.outputFields
+          }
+          this.tbList = fieldList.map(item => {
+            return {
+              ...item,
+              id: item.id || item.field_id,
+              name: item.name || item.field_name
+            }
+          })
+        } else {
+          this.tbList = this.$store.state.task.tableData.title_list
+        }
       } else {
         this.sValue = (() => {
           if (!this.$store.state.task.taskData.msg_notify && this.$store.state.task.taskData.msg_notify !== 0) {
