@@ -103,7 +103,7 @@
               <span>Kafka</span>
             </div>
           </div>
-           <div class="adm-item-box" @click="chooseType($event, 'datahub')">
+           <!-- <div class="adm-item-box" @click="chooseType($event, 'datahub')">
             <div class="h-bg">
               <div class="add"></div>
             </div>
@@ -113,7 +113,7 @@
             <div class="item-title">
               <span>Datahub</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
