@@ -26,6 +26,9 @@ export default class Img {
           case 'Kafka':
             this.img = require(`@/assets/imgs/dm-kafka.png`)
             break
+          case 'Datahub流式数据源':
+            this.img = require(`@/assets/imgs/dm-datahub.png`)
+            break
           case 'Oracle流式数据源':
             this.img = require(`@/assets/imgs/dm-oracle.png`)
             break

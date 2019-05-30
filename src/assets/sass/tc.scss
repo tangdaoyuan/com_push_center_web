@@ -269,6 +269,9 @@
                     &.file-kafka {
                       @include file-kafka-icon;
                     }
+                    &.file-datahub {
+                      @include file-datahub-icon;
+                    }
                   }
 
                   span {
@@ -1351,6 +1354,9 @@
                 }
                 &.file-kafka {
                   @include file-kafka-icon;
+                }
+                &.file-datahub {
+                  @include file-datahub-icon;
                 }
               }
 
