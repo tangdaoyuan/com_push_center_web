@@ -66,7 +66,7 @@
                 <label class="item-form-title"><span>*</span>Topic</label>
                 <Input class="item-input right" :maxlength="16"
                 :disabled="msgId !== ''"
-                v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
+                v-model="msgData1.params.topic"/>
               </div>
               <div class="item-form" v-if="isFlow">
                 <label class="item-form-title"><span>*</span>Kafak地址</label>
