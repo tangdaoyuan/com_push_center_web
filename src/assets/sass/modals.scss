@@ -2712,3 +2712,24 @@
     }
   }
 }
+
+.add-system-modal {
+  .refresh {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: -22px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    margin-right: 3px;
+    cursor: pointer;
+    @include refresh;
+
+    & + .ivu-icon {
+      font-size: 18px;
+      color: #8E8E91;
+      cursor: pointer;
+    }
+  }
+}
