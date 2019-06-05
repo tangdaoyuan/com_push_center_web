@@ -64,7 +64,7 @@
               </div>
               <div class="item-form">
                 <label class="item-form-title"><span>*</span>Topic</label>
-                <Input class="item-input right" :maxlength="16"
+                <Input class="item-input right"
                 :disabled="msgId !== ''"
                 v-model="msgData1.params.topic"/>
               </div>
