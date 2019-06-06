@@ -50,9 +50,10 @@
           label="操作"
           width="180">
           <template slot-scope="scope">
-            <div>
+            <div class="op-box">
               <el-button type="text" @click="deleteSystem($event, scope.row)">删除</el-button>
               <el-button type="text" @click="changeState($event, scope.row)">{{scope.row.status===0?'开启':'禁用'}}</el-button>
+              <el-button type="text" @click="copySecretId($event, scope.row)">复制Key</el-button>
             </div>
           </template>
         </el-table-column>
@@ -88,6 +89,26 @@ export default {
     },
     addSystem () {
       this.modals.addSystem = true
+    },
+    copySecretId (e, item) {
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', item.secret_key)
+      input.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        this.$message({
+          type: 'success',
+          message: '复制成功!'
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '该浏览器不支持，请手动复制!'
+        })
+      }
+      // 删除'虚拟'DOM
+      document.body.removeChild(input)
     },
     deleteSystem (e, item) {
       this.$Modal.confirm({

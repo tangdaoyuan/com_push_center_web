@@ -37,6 +37,7 @@
       </div>
       <task-step-first
         :task-step="taskStep"
+        :sys-type="sysType"
         @refresh="refresh"
         :step="currentStep"
         @next="next"/>
@@ -88,7 +89,8 @@
 <script>
 export default {
   props: {
-    value: Boolean
+    value: Boolean,
+    sysType: Number
   },
   data () {
     return {
@@ -149,7 +151,7 @@ export default {
           this.$store.dispatch('getEditDetail', {
             id: this.$store.state.task.taskId
           }).then((data) => {
-            this.currentStep = 1
+            this.currentStep = this.sysType === 0 ? 1 : 0
             console.log(this.utils.getTaskStep(data.table_type, data.target_type))
             this.taskStep = this.utils.getTaskStep(data.table_type, data.target_type)
           })
