@@ -16,6 +16,7 @@
         <el-table-column
           prop="name"
           show-overflow-tooltip
+          width="180"
           label="系统名称"
          >
         </el-table-column>
@@ -28,7 +29,7 @@
         <el-table-column
           label="创建时间"
           show-overflow-tooltip
-          width="180">
+          width="160">
           <template slot-scope="scope">
             <div>
               {{utils.momentDate(scope.row.create_time, 'date_time')}}
@@ -38,7 +39,7 @@
         <el-table-column
           label="状态"
           show-overflow-tooltip
-          width="180">
+          width="80">
           <template slot-scope="scope">
             <div>
               {{scope.row.status===1?'已启用':'已禁用'}}
