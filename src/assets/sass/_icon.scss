@@ -166,6 +166,10 @@ $root_url: '../imgs';
   @include icon;
   background-image: url('#{$root_url}/file_datahub.png');
 }
+@mixin file-set-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_set.png');
+}
 @mixin more-icon {
   @include icon;
   background-image: url('#{$root_url}/more.png');

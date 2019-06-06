@@ -272,6 +272,9 @@
                     &.file-datahub {
                       @include file-datahub-icon;
                     }
+                    &.file-set {
+                      @include file-set-icon;
+                    }
                   }
 
                   span {
@@ -1357,6 +1360,9 @@
                 }
                 &.file-datahub {
                   @include file-datahub-icon;
+                }
+                &.file-set {
+                  @include file-set-icon;
                 }
               }
 
