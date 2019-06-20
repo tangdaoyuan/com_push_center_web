@@ -13,7 +13,12 @@
       :table-map="tableMap"
       @ok="addFilter"
       @close="closeTaskFilter" />
-    <task-fav-user short-type="short" v-model="taskFavUserModal" @saveFav="saveFav"/>
+    <task-fav-user
+      short-type="short"
+      v-model="taskFavUserModal"
+      :fav-list="favUserList"
+      @close="closeFav"
+      @saveFav="saveFav"/>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="back($event)"/>
       <span>新建快捷任务</span>
@@ -408,6 +413,9 @@ export default {
     },
     deleteFavUser (index) {
       this.favUserList.splice(index, 1)
+    },
+    closeFav () {
+      this.taskFavUserModal = false
     },
     saveFav (data) {
       this.favUserList = data
