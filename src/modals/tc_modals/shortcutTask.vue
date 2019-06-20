@@ -13,7 +13,12 @@
       :table-map="tableMap"
       @ok="addFilter"
       @close="closeTaskFilter" />
-    <task-fav-user short-type="short" v-model="taskFavUserModal" @saveFav="saveFav"/>
+    <task-fav-user
+      short-type="short"
+      :fav-list="favUserList"
+      v-model="taskFavUserModal"
+      @close="closeFav"
+      @saveFav="saveFav"/>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="back($event)"/>
       <span>新建快捷任务</span>
@@ -79,7 +84,7 @@
                   </div>
                 </div>
                 <div class="item-input-box">
-                  <Input type="textarea" class="item-textarea" v-model="putData.task_describe" placeholder="请输入说明"></Input>
+                  <Input type="textarea" class="item-textarea" v-model="putData.task_describe" placeholder="请输入说明"/>
                   <label>最多支持200字输入</label>
                 </div>
               </div>
@@ -408,6 +413,9 @@ export default {
     },
     deleteFavUser (index) {
       this.favUserList.splice(index, 1)
+    },
+    closeFav () {
+      this.taskFavUserModal = false
     },
     saveFav (data) {
       this.favUserList = data
