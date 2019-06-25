@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1 && taskStep === CONSTANT.taskStep.NORMAL">
+  <div class="step-body" v-show="step === 1 && taskStep > CONSTANT.taskStep.API">
     <task-filter
       v-model="taskFilterModal"
       :choose-index="chooseIndex"
@@ -304,6 +304,7 @@ export default {
       this.$emit('prev')
     },
     next () {
+      console.log(this.tbId)
       if (!this.tbId) {
         this.$message.error('请选择工作表!')
         return

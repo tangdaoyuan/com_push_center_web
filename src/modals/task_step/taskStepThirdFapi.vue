@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 2 && taskStep === CONSTANT.taskStep.API">
+  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.API || this.taskStep === this.CONSTANT.taskStep.N_API)">
     <div class="flow-api-main">
       <div class="api-header">
         <span>连接配置</span>
@@ -95,7 +95,8 @@ export default {
   watch: {
     step () {
       if (this.step === 2 &&
-        this.taskStep === this.CONSTANT.taskStep.API) {
+        (this.taskStep === this.CONSTANT.taskStep.API ||
+        this.taskStep === this.CONSTANT.taskStep.N_API)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

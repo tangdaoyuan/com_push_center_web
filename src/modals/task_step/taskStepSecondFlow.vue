@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 1 && taskStep !== CONSTANT.taskStep.NORMAL">
+  <div class="step-body" v-show="step === 1 && taskStep <= CONSTANT.taskStep.API">
     <task-filter
       v-model="modals.taskFilterModal"
       :choose-index="chooseIndex"
@@ -895,7 +895,6 @@ export default {
         output_fields: outputFields
       }
 
-      console.log(putData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep2(putData) : this.tcService.saveTask1Seting(putData)
       service.then(res => {
         if (res.status === 0) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER)">
+  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.USER || taskStep === CONSTANT.taskStep.N_USER)">
     <div class="ts-field-step">
       <div class="ts-item item1">
         <div class="item-header">
@@ -304,7 +304,7 @@ export default {
         }
       })
       if (this.$store.state.task.tableData) {
-        if (this.taskStep === this.CONSTANT.taskStep.USER) {
+        if (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER) {
           let fieldList = []
           if (this.$store.getters.taskData) {
             fieldList = this.$store.getters.taskData.output_fields
@@ -812,8 +812,7 @@ export default {
   watch: {
     step () {
       if (this.step === 2 &&
-        (this.taskStep === this.CONSTANT.taskStep.NORMAL ||
-          this.taskStep === this.CONSTANT.taskStep.USER)) {
+        (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

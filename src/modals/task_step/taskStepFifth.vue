@@ -112,7 +112,7 @@ export default {
       const pro = []
 
       if (this.$store.state.task.tableData) {
-        if (this.taskStep === this.CONSTANT.taskStep.USER) {
+        if (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER) {
           let fieldList = []
           if (this.$store.getters.taskData) {
             fieldList = this.$store.getters.taskData.output_fields
