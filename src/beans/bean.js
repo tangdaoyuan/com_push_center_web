@@ -9,7 +9,9 @@ class CONSTANT {
     'API': 3
   }
   taskStep = {
-    'NORMAL': 0,
+    'N_USER': 4,
+    'N_DATABASE': 5,
+    'N_API': 6,
     'USER': 1,
     'DATABASE': 2,
     'API': 3

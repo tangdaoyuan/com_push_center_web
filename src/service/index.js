@@ -13,7 +13,7 @@ class Axios {
   static getAxios () {
     if (!this.axios) {
       this.axios = axios
-      this.axios.defaults.timeout = 45000
+      this.axios.defaults.timeout = 100000
       this.axios.interceptors.request.use(config => {
         if (VueCookies.get('pc_token')) {
           config.headers.Authorization = 'Bearer ' + VueCookies.get('pc_token')

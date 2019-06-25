@@ -56,6 +56,14 @@ class Utils {
     const CONSTANT = Vue.prototype.CONSTANT
 
     if (tableType === CONSTANT.tableType.NORMAL) {
+      switch (targetType) {
+        case CONSTANT.pushType.USER:
+          return CONSTANT.taskStep.N_USER
+        case CONSTANT.pushType.DATABASE:
+          return CONSTANT.taskStep.N_DATABASE
+        case CONSTANT.pushType.API:
+          return CONSTANT.taskStep.N_API
+      }
       return CONSTANT.taskStep.NORMAL
     } else if (tableType === CONSTANT.tableType.FLOW) {
       switch (targetType) {

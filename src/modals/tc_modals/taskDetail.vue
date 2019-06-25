@@ -83,8 +83,8 @@
               <div class="item-con">
                 <div v-for="(item, index) in n.push_target" :key="index">
                   <span>{{item.field_name}}</span>
-                  <span v-show="!item.op || item.op !== 'task_type_choosed'">等于</span>
-                  <span v-show="item.op && item.op === 'task_type_choosed'">等于并向下检索</span>
+                  <span v-show="!item.op || item.op !== 'like'">等于</span>
+                  <span v-show="item.op && item.op === 'like'">等于并向下检索</span>
                   <span>{{item.target.match_desc}}</span>
                 </div>
               </div>

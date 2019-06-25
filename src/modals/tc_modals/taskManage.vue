@@ -14,24 +14,24 @@
             title="创建基本信息"
             @click.native="editStep($event, 0)" content=""></Step>
           <Step
-            v-if="taskStep === CONSTANT.taskStep.NORMAL"
+            v-if="taskStep > CONSTANT.taskStep.API"
             title="选择工作表"
             @click.native="editStep($event, 1)" content=""></Step>
           <Step
-            v-if="taskStep != CONSTANT.taskStep.NORMAL"
+            v-if="taskStep <= CONSTANT.taskStep.API"
             title="设置任务字段"
             @click.native="editStep($event, 1)" content=""></Step>
           <Step
             title="设置推送信息"
             @click.native="editStep($event, 2)" content=""></Step>
           <Step
-            v-if="taskStep === CONSTANT.taskStep.DATABASE"
+            v-if="taskStep === CONSTANT.taskStep.DATABASE || taskStep === CONSTANT.taskStep.N_DATABASE"
             title="设置字段映射" @click.native="editStep($event, 3)" content=""></Step>
           <Step
-            v-if="taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER"
+            v-if="taskStep === CONSTANT.taskStep.USER || taskStep === CONSTANT.taskStep.N_USER"
             title="设置推送用户" @click.native="editStep($event, 3)" content=""></Step>
           <Step
-            v-if="taskStep === CONSTANT.taskStep.NORMAL || taskStep === CONSTANT.taskStep.USER"
+            v-if="taskStep === CONSTANT.taskStep.USER || taskStep === CONSTANT.taskStep.N_USER"
             title="设置推送通道" @click.native="editStep($event, 4)" content=""></Step>
         </Steps>
       </div>
@@ -47,7 +47,9 @@
         @next="next" @prev="prev"/>
       <task-step-second-flow
         :task-step="taskStep"
-        @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next" @prev="prev"/>
       <task-step-third
         :task-step="taskStep"
         @refresh="refresh"
@@ -67,7 +69,11 @@
         @next="next"
         @prev="prev"
         @finish="finish"/>
-      <task-step-forth :task-step="taskStep" @refresh="refresh" :step="currentStep" @next="next" @prev="prev"/>
+      <task-step-forth
+        :task-step="taskStep"
+        @refresh="refresh"
+        :step="currentStep"
+        @next="next" @prev="prev"/>
       <task-step-forth-fsys
         :task-step="taskStep"
         @refresh="refresh"
