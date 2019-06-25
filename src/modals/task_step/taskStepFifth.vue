@@ -295,6 +295,8 @@ export default {
           }
           pushOverData[item] = this.tdPutData[item]
           pushOverData[item].channel_id_list = tmp
+        } else {
+          this.tdPutData[item] = {}
         }
       })
 

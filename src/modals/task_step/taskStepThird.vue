@@ -406,7 +406,7 @@ export default {
     moveStart (evt, data) {
       this.isDragging = true
       this.tbList.forEach(item => {
-        item.display_type = undefined
+        item.display_type = 1
       })
     },
     moveEnd (evt) {
@@ -457,6 +457,18 @@ export default {
         }
         return true
       })]
+
+      this.tbList1.forEach(item => {
+        if (!item.display_type) {
+          item.display_type = 1
+        }
+      })
+
+      this.tbList3.forEach(item => {
+        if (!item.display_type) {
+          item.display_type = 1
+        }
+      })
 
       this.tbTemp2 = JSON.parse(JSON.stringify(this.tbList2))
     },

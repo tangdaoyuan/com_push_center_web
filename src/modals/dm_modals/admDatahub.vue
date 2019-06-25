@@ -2,7 +2,7 @@
   <Modal class="manage-modal task-manage" v-model="value" fullscreen>
     <div class="manage-header" slot="header">
       <Icon type="md-arrow-round-back" @click="cancel()"/>
-      <span>{{(msgId) ? ('编辑') : ('新增')}}{{isFlow?'Kafka':'消息'}}队列</span>
+      <span>{{(msgId) ? ('编辑') : ('新增')}}DataHub数据源</span>
     </div>
     <div class="manage-body">
       <div class="step-box">
@@ -33,10 +33,6 @@
                 <label class="item-form-title"><span>*</span>数据源名称</label>
                 <Input class="item-input" v-model="msgData1.name" :maxlength="16" />
               </div>
-              <div class="item-form" v-if="isFlow">
-                <label class="item-form-title">线程数量</label>
-                <InputNumber class="item-input" v-model="msgData1.params.consumer_no" :min="0"  ></InputNumber>
-              </div>
               <div class="item-form-area">
                 <Input class="item-input" v-model="msgData1.desc" type="textarea" placeholder="请输入数据源描述" :maxlength="200" />
               </div>
@@ -50,35 +46,30 @@
               连接配置
             </div>
             <div class="item-body">
-              <div class="item-form" v-show="false">
-                <label class="item-form-title">Access Key</label>
-                <Input class="item-input right" disabled v-model="ak" placeholder="点击刷新按钮自动生成" />
-                <i></i>
-                <Icon type="ios-copy" @click="copyKey($event, 'Access Key', ak)" />
-              </div>
-              <div class="item-form" v-show="false">
-                <label class="item-form-title">Secret Key</label>
-                <Input class="item-input right" disabled v-model="sk" placeholder="点击刷新按钮自动生成" />
-                <i></i>
-                <Icon type="ios-copy" @click="copyKey($event, 'Secret Key', sk)" />
-              </div>
               <div class="item-form">
                 <label class="item-form-title"><span>*</span>Topic</label>
+                <Input class="item-input right" :maxlength="16"
+                :disabled="msgId !== ''"
+                v-model="msgData1.params.topic" placeholder="5-16字母加数字组合" />
+              </div>
+              <div class="item-form">
+                <label class="item-form-title"><span>*</span>AccessId</label>
                 <Input class="item-input right"
                 :disabled="msgId !== ''"
-                v-model="msgData1.params.topic"/>
+                v-model="msgData1.params.access_id"/>
               </div>
-              <div class="item-form" v-if="isFlow">
-                <label class="item-form-title"><span>*</span>Kafak地址</label>
+              <div class="item-form">
+                <label class="item-form-title"><span>*</span>AccessKey</label>
                 <Input class="item-input right"
                 :disabled="msgId !== ''"
-                v-model="msgData1.params.address"/>
+                v-model="msgData1.params.access_key"/>
               </div>
-              <div class="item-form" v-if="isFlow">
-                <label class="item-form-title">Group.Id</label>
+              <div class="item-form">
+                <label class="item-form-title"><span>*</span>Project</label>
                 <Input class="item-input right"
-                v-model="msgData1.params.group_id"
-                placeholder="如不填，系统默认生成" />
+                :disabled="msgId !== ''"
+                v-model="msgData1.params.project"
+                />
               </div>
             </div>
           </div>
@@ -134,13 +125,7 @@ import { setTimeout } from 'timers'
 export default {
   props: {
     value: Boolean,
-    msgId: String,
-    isFlow: {
-      type: Boolean,
-      default () {
-        return false
-      }
-    }
+    msgId: String
   },
   data () {
     return {
@@ -150,33 +135,23 @@ export default {
       tbID: '',
       dataSource: {},
       setting: [],
+      dmType: 10,
       msgData1: {
         name: '',
         desc: '',
         params: {
           topic: '',
-          address: '',
-          consumer_no: 1,
-          group_id: ''
+          project: '',
+          access_key: '',
+          access_id: ''
         }
       },
       msgData2: {
         temp_id: '',
         params: {
-          table_fields: [
-            // {
-            //   name: '',
-            //   type: 1,
-            //   id: ''
-            // }
-          ]
+          table_fields: []
         }
       }
-    }
-  },
-  computed: {
-    dmType () {
-      return this.isFlow ? 7 : 2
     }
   },
   methods: {
@@ -202,9 +177,9 @@ export default {
           type: this.dmType,
           params: {
             topic: this.dataSource.topic,
-            address: this.dataSource.address,
-            consumer_no: this.dataSource.consumer_no,
-            group_id: this.dataSource.group_id
+            project: this.dataSource.project,
+            access_key: this.dataSource.access_key,
+            access_id: this.dataSource.access_id
           }
         }
         this.setting.forEach(item => {

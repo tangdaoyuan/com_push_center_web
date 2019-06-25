@@ -15,6 +15,12 @@
         <span>对应工作表</span>
         <span>{{detail.table_name}}</span>
       </div>
+      <div v-if='detail.model_id' class="td-body-header">
+        <span>模型Id</span>
+        <span>{{detail.model_id}}</span>
+        <span>模型名称</span>
+        <span>{{detail.model_name}}</span>
+      </div>
       <div class="td-body-main">
         <div class="td-body-item">
           <div class="item-header">

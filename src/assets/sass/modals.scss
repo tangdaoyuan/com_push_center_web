@@ -309,6 +309,12 @@
                   &.file-kafka {
                     @include file-kafka-icon;
                   }
+                  &.file-datahub {
+                    @include file-datahub-icon;
+                  }
+                  &.file-set {
+                    @include file-set-icon;
+                  }
                 }
 
                 span {
@@ -1714,6 +1720,12 @@
                     &.file-kafka {
                       @include file-kafka-icon;
                     }
+                    &.file-datahub {
+                      @include file-datahub-icon;
+                    }
+                    &.file-set {
+                      @include file-set-icon;
+                    }
                   }
 
                   span {
@@ -2707,6 +2719,27 @@
       .el-select {
         width: calc(100% - 100px);
       }
+    }
+  }
+}
+
+.add-system-modal {
+  .refresh {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: -22px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    margin-right: 3px;
+    cursor: pointer;
+    @include refresh;
+
+    & + .ivu-icon {
+      font-size: 18px;
+      color: #8E8E91;
+      cursor: pointer;
     }
   }
 }

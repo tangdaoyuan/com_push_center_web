@@ -77,6 +77,7 @@
     <task-manage
       @refresh="refresh"
       @close="closeTaskManage"
+      :sys-type="sysType"
       v-model="modals.taskManageModal" />
     <shortcut-task
       @goTaskSet="addPush"
@@ -98,6 +99,7 @@ export default {
   data () {
     return {
       detailId: '',
+      sysType: 0,
       task_data: [],
       chooseTask: {},
       statistics: {},
@@ -201,6 +203,7 @@ export default {
     editTask (e, item) {
       e.stopPropagation()
       this.$store.commit('setTaskId', item.data.id)
+      this.sysType = item.data.sys_type
       this.modals.taskManageModal = true
     },
     searchStatusCount () {

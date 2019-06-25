@@ -103,6 +103,17 @@
               <span>Kafka</span>
             </div>
           </div>
+           <div class="adm-item-box" @click="chooseType($event, 'datahub')">
+            <div class="h-bg">
+              <div class="add"></div>
+            </div>
+            <div class="item-icon">
+              <i class="datahub"></i>
+            </div>
+            <div class="item-title">
+              <span>Datahub</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -112,6 +123,7 @@
     <adm-msg v-model="modals.admMsgModal" :msg-id="dataID" @close="closeAdmMsg" :is-flow="isFlow.msg"/>
     <adm-api v-model="modals.admApiModal" :api-item="apiData" @close="closeAdmApi" />
     <adm-hive v-model="modals.admHiveModal" :hive-id="dataID"  @close="closeAdmHive" />
+    <adm-datahub v-model="modals.admDatahubModal" :msg-id="dataID" @close="closeAdmDatahub"/>
   </div>
 </template>
 <script>
@@ -127,7 +139,8 @@ export default {
         admOracleModal: false,
         admMsgModal: false,
         admApiModal: false,
-        admHiveModal: false
+        admHiveModal: false,
+        admDatahubModal: false
       },
       isFlow: {
         oracle: false,
@@ -154,6 +167,9 @@ export default {
     closeAdmHive () {
       this.modals.admHiveModal = false
     },
+    closeAdmDatahub () {
+      this.modals.admDatahubModal = false
+    },
     chooseType (e, type, subType) {
       switch (type) {
         case 'syncbdp':
@@ -175,6 +191,9 @@ export default {
           break
         case 'hive':
           this.modals.admHiveModal = true
+          break
+        case 'datahub':
+          this.modals.admDatahubModal = true
           break
       }
     },

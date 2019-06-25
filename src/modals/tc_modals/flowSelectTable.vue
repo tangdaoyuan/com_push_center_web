@@ -115,7 +115,9 @@ export default {
               'file-oracle': this.utils.getType(data.id) === 'field' && (data.type === 5 || data.type === 8),
               'file-mysql': this.utils.getType(data.id) === 'field' && data.type === 6,
               'file-kafka': this.utils.getType(data.id) === 'field' && data.type === 7,
-              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9
+              'file-hive': this.utils.getType(data.id) === 'field' && data.type === 9,
+              'file-datahub': this.utils.getType(data.id) === 'field' && data.type === 10,
+              'file-set': this.utils.getType(data.id) === 'field' && data.type === 0
             }
           }),
           h('span', {

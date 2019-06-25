@@ -62,6 +62,7 @@
           <el-dropdown-item  @click.native="chooseMenu($event, 'role', 'none')">角色管理</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'rt', 'none')">权限字典</el-dropdown-item>
           <el-dropdown-item  @click.native="chooseMenu($event, 'tm/lm', 'none')">页面设置</el-dropdown-item>
+          <el-dropdown-item  @click.native="chooseMenu($event, 'authority', 'none')">系统授权</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="setting">
