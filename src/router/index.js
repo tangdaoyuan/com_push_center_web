@@ -12,6 +12,7 @@ import tc from '@/pages/main/task_config'
 import dictionary from '@/pages/main/dictionary_manage'
 import root from '@/pages/main/root_manage'
 import role from '@/pages/main/role_manage'
+import authority from '@/pages/main/authority_manage'
 import rt from '@/pages/main/root_dic'
 const tm = () => import('@/pages/main/title_manage')
 const lm = () => import('@/pages/main/title_manage/logo_manage')
@@ -102,6 +103,11 @@ export default new Router({
               component: titlem
             }
           ]
+        },
+        {
+          path: '/authority',
+          name: 'authority',
+          component: authority
         }
       ]
     }

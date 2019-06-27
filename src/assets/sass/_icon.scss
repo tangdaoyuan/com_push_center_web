@@ -104,7 +104,10 @@ $root_url: '../imgs';
   @include icon;
   background-image: url('#{$root_url}/adm_kafka.png');
 }
-
+@mixin adm_datahub {
+  @include icon;
+  background-image: url('#{$root_url}/adm_datahub.png');
+}
 @mixin refresh {
   @include icon;
   background-image: url('#{$root_url}/refresh.png');
@@ -158,6 +161,14 @@ $root_url: '../imgs';
 @mixin file-kafka-icon {
   @include icon;
   background-image: url('#{$root_url}/file_kafka.png');
+}
+@mixin file-datahub-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_datahub.png');
+}
+@mixin file-set-icon {
+  @include icon;
+  background-image: url('#{$root_url}/file_set.png');
 }
 @mixin more-icon {
   @include icon;

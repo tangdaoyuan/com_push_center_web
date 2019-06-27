@@ -158,7 +158,7 @@
       // flex-direction: column;
       padding-top:0.5rem;
       .adm-type-title {
-        width: 780px;
+        width: 980px;
         margin: 0 auto;
         // flex: 0.3;
         height:4rem;
@@ -174,11 +174,12 @@
         }
       }
       .adm-step-box {
-        width: 100%;       
+        width: 980px;  
+        margin: 0 auto;     
         background-color: #fff;
         // flex:1;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         flex-wrap: wrap;
   
@@ -261,6 +262,9 @@
             }
             i.kafka {
               @include adm-kafka;
+            }
+            i.datahub {
+              @include adm-datahub;
             }
 
           }

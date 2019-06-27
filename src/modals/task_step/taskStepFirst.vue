@@ -3,7 +3,8 @@
     <div class="add-task-step">
       <div class="np-item">
         <span class="item-title">推送名称</span>
-        <Input class="item-con" v-model="taskData.name" type="text" :maxlength="16" />
+        <Input class="item-con" v-model="taskData.name" type="text"
+        :disabled="sysType===1" :maxlength="16" />
       </div>
       <div class="np-item">
         <span class="item-title">推送分类</span>
@@ -47,7 +48,8 @@
 export default {
   props: {
     step: Number,
-    taskStep: Number
+    taskStep: Number,
+    sysType: Number
   },
   data () {
     return {

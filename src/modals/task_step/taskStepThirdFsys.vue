@@ -90,7 +90,7 @@
           <input v-model.number="taskData.port" type="number"  min="1" required>
         </div>
         <div class="item r-span">
-          <i class="red-dot"></i>
+          <!-- <i class="red-dot"></i> -->
           <span>起止时间</span>
         </div>
         <div class="item">
@@ -211,10 +211,10 @@ export default {
         this.$message.error('数据表名不能为空')
         return
       }
-      if (!this.taskData.start_time || !this.taskData.end_time) {
-        this.$message.error('起止时间不能为空')
-        return
-      }
+      // if (!this.taskData.start_time || !this.taskData.end_time) {
+      //   this.$message.error('起止时间不能为空')
+      //   return
+      // }
       let extraData = {}
       if (this.taskData.type === 2) {
         if (!this.oracleData.server_type.value) {
