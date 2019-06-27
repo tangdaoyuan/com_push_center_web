@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 3 && taskStep === CONSTANT.taskStep.DATABASE">
+  <div class="step-body" v-show="step === 3 && (taskStep === CONSTANT.taskStep.DATABASE || taskStep === CONSTANT.taskStep.N_DATABASE)">
     <div class="flow-mapping-main">
       <div class="mapping-header">
         <span>映射配置</span>
@@ -140,7 +140,8 @@ export default {
   watch: {
     step () {
       if (this.step === 3 &&
-        this.taskStep === this.CONSTANT.taskStep.DATABASE) {
+        (this.taskStep === this.CONSTANT.taskStep.DATABASE ||
+        this.taskStep === this.CONSTANT.taskStep.N_DATABASE)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

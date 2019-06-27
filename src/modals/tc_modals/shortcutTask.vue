@@ -84,7 +84,7 @@
                   </div>
                 </div>
                 <div class="item-input-box">
-                  <Input type="textarea" class="item-textarea" v-model="putData.task_describe" placeholder="请输入说明"></Input>
+                  <Input type="textarea" class="item-textarea" v-model="putData.task_describe" placeholder="请输入说明"/>
                   <label>最多支持200字输入</label>
                 </div>
               </div>

@@ -30,7 +30,7 @@
           <Radio :label="2" :disabled="editStatus">流式工作表</Radio>
         </RadioGroup>
       </div>
-      <div class="np-item" v-show="taskData.table_type > 1">
+      <div class="np-item">
         <span class="item-title radio-title">选择推送对象</span>
         <RadioGroup v-model="taskData.target_type">
           <Radio :label="1" :disabled="editStatus">推送用户</Radio>
