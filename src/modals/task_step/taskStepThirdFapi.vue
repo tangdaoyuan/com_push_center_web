@@ -27,6 +27,16 @@
             end-placeholder="结束日期">
           </el-date-picker>
         </div>
+         <div class="item r-span">
+          <span>消息模板</span>
+        </div>
+        <div class="item">
+          <textarea class="at-box" ref="at_box" cols="30" rows="10" @change="msgChange" v-model="taskData.msg" >
+          </textarea>
+           <div class="at-tips" :class="{'error': isError}">
+          最多支持200字输入
+        </div>
+        </div>
       </div>
     </div>
     <div class="step-footer">
@@ -44,10 +54,12 @@ export default {
   data () {
     return {
       date: null,
+      isError: false,
       taskData: {
         url: '',
         start_time: undefined,
-        end_time: undefined
+        end_time: undefined,
+        msg: ''
       }
     }
   },
@@ -57,6 +69,20 @@ export default {
         this.taskData = { ...this.$store.getters.taskData.api }
         this.date = [new Date(this.taskData.start_time), new Date(this.taskData.end_time)]
       }
+
+      let fieldList = []
+      if (this.$store.state.task.tableData) {
+        fieldList = this.$store.state.task.tableData.title_list
+      }
+      window.$(this.$refs.at_box).suggest('@', {
+        data: fieldList.map(item => {
+          return {
+            ...item,
+            text: item.name,
+            value: item.name
+          }
+        })
+      })
     },
     changeDate (dates) {
       if (dates) {
@@ -72,14 +98,23 @@ export default {
         this.$message.error('API地址不可为空')
         return
       }
+
+      if (!this.taskData.msg) {
+        this.$message.error('消息模板不能为空')
+        return null
+      }
+      if (this.taskData.msg.length > 200) {
+        this.isError = true
+        return null
+      } else {
+        this.isError = false
+      }
       const pushData = {
         api: {
           ...this.taskData
         },
         id: this.$store.state.task.taskId
       }
-
-      console.log(pushData)
       const service = this.$store.state.task.taskData ? this.tcService.editStep3ByDBorAPI(pushData) : this.tcService.saveTask3SettingByDBorAPI(pushData)
 
       service.then(res => {
@@ -90,6 +125,12 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    msgChange (val) {
+      if (!this.taskData.msg) {
+        this.taskData.msg = '您有一条预警消息，请注意查收！'
+      }
+      console.log(this.taskData.msg)
     }
   },
   watch: {
