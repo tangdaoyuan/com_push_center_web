@@ -304,7 +304,7 @@ export default {
         }
       })
       if (this.$store.state.task.tableData) {
-        if (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER) {
+        if (this.taskStep === this.CONSTANT.taskStep.USER) {
           let fieldList = []
           if (this.$store.getters.taskData) {
             fieldList = this.$store.getters.taskData.output_fields
@@ -811,8 +811,7 @@ export default {
   },
   watch: {
     step () {
-      if (this.step === 2 &&
-        (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER)) {
+      if (this.step === 2 && (this.taskStep === this.CONSTANT.taskStep.USER || this.taskStep === this.CONSTANT.taskStep.N_USER)) {
         this.init()
       } else if (this.step === -1) {
         Object.assign(this.$data, this.$options.data())

@@ -15,8 +15,8 @@
       @close="closeTaskFilter" />
     <task-fav-user
       short-type="short"
-      v-model="taskFavUserModal"
       :fav-list="favUserList"
+      v-model="taskFavUserModal"
       @close="closeFav"
       @saveFav="saveFav"/>
     <div class="manage-header" slot="header">

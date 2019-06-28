@@ -1,5 +1,5 @@
 <template>
-  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.API || this.taskStep === this.CONSTANT.taskStep.N_API)">
+  <div class="step-body" v-show="step === 2 && (taskStep === CONSTANT.taskStep.API || taskStep === CONSTANT.taskStep.N_API)">
     <div class="flow-api-main">
       <div class="api-header">
         <span>连接配置</span>

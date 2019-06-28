@@ -61,10 +61,18 @@ export default {
 
       if (this.$store.getters.taskData) {
         const taskData = this.$store.getters.taskData
-        fieldList = taskData.output_fields
+        if (this.taskStep === this.CONSTANT.taskStep.N_DATABASE) {
+          fieldList = this.$store.state.task.tableData.title_list
+        } else {
+          fieldList = taskData.output_fields
+        }
         fieldMapping = taskData.database.field_mapping
       } else if (this.$store.getters.outputFields) {
-        fieldList = this.$store.getters.outputFields
+        if (this.taskStep === this.CONSTANT.taskStep.N_DATABASE) {
+          fieldList = this.$store.state.task.tableData.title_list
+        } else {
+          fieldList = this.$store.getters.outputFields
+        }
       }
       this.outputFields = fieldList.map(item => {
         const extraData = {
