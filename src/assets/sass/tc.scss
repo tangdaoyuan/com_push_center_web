@@ -1502,6 +1502,26 @@
     height: calc(100% - 120px);
     background-color: #fff;
     grid: auto 32px 32px/100px 400px;
+
+    .at-box {
+      margin-top: 110px;
+      height: 120px;
+      width: 89%;
+      border: 1px solid rgba(41, 121, 255, 0.5);
+      line-height: 20px;
+      padding: 10px;
+      resize: none;
+      opacity: .8;
+    }
+    
+    .at-tips {
+      display: block;
+      text-align: right;
+      line-height: 26px;
+      &.error {
+        color: #E45151;
+      }
+    }
   }
 }
 .flow-sys-main {
