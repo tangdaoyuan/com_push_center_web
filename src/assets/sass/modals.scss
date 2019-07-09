@@ -2429,6 +2429,42 @@
   }
 }
 
+.set-translate-mdoal {
+  .table-panel {
+    width: 100%;
+    display: grid;
+    grid: auto/1fr 40px 1fr 50px;
+    align-items: center;
+    justify-items: center;
+
+    .select-box {
+      width: 100%;
+      grid-column: 1/5;
+      display: grid;
+      grid: auto/1fr 50px 1fr 1fr 50px;
+      align-items: center;
+      justify-items: center;
+      
+      .select {
+        width: 100%;
+        padding: 0 4px;
+      }
+      .op-box {
+        & > span {
+          font-weight: bold;
+          &:last-child {
+            margin-left: 12px;
+          }
+          &.el-icon-plus,
+          &.el-icon-minus {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
 .tfu-modal {
   .modal-body {
     width: 100%;

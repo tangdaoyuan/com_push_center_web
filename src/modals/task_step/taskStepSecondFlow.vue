@@ -92,59 +92,20 @@
               <TabPane label="字典翻译" name="dictionaryRule">
                 <div class="dict-table-header">
                   <span @click="showFlowDictTable" class="table-selection">选择字典表</span>
-                  <div v-show="dictTableData.id" class="table-item">
-                    <span class="item-title">{{ dictTableData.name }}</span>
-                    <span @click="resetDictTable" class="el-icon-close item-del"></span>
+                  <div v-for="(val, key, ind) in dictTableData" :key="ind"
+                    v-show="key"
+                    class="table-item">
+                    <span @click="showSetTrans(key)" class="item-title">{{ val.name }}</span>
+                    <span @click="removeDictTable(key)" class="el-icon-close item-del"></span>
                   </div>
-                  <span
+                  <!-- <span
                     v-show="dictTableData.id"
                     @click="showFlowDataTable(CONSTANT.tableCategory.DICT)"
                     class="table-preview">
                     数据预览
-                  </span>
+                  </span> -->
                 </div>
-                <div class="dict-table-body">
-                  <div class="table-panel">
-                    <div class="select-box"
-                      v-for="(row, index) in translateRules"
-                      :key="index">
-                      <el-select class="select"
-                        @change="translateRuleChange(row, index)"
-                        v-model="translateRules[index].source_field_id">
-                        <el-option
-                          v-for="item in tableData.title_list"
-                          :key="item.id"
-                          :value="item.id"
-                          :label="item.alias || item.name">
-                        </el-option>
-                      </el-select>
-                      <span class="equal">等于</span>
-                      <el-select class="select"
-                        @change="translateRuleChange(row, index)"
-                        v-model="translateRules[index].dictionary_field_id">
-                        <el-option
-                          v-for="item in dictTableData.title_list"
-                          :key="item.id"
-                          :value="item.id"
-                          :label="item.alias || item.name">
-                        </el-option>
-                      </el-select>
-                      <el-select class="select"
-                        @change="translateRuleChange(row, index)"
-                        v-model="translateRules[index].display_field_id">
-                        <el-option
-                          v-for="item in dictTableData.title_list"
-                          :key="item.id"
-                          :value="item.id"
-                          :label="item.alias || item.name"></el-option>
-                      </el-select>
-                      <div class="op-box">
-                        <span @click="addTransRow(index)" class="el-icon-plus"></span>
-                        <span v-show="translateRules.length > 1" @click="removeTransRow(index)" class="el-icon-minus"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div class="dict-table-body"></div>
               </TabPane>
             </Tabs>
           </div>
@@ -265,6 +226,14 @@
               <span class="output-con">{{item.alias || item.name}}</span>
               <span @click="removeOutputField(index, item.table_id)" class="el-icon-close hide"></span>
             </div>
+            <div
+              v-for="(item, index) in outputFields.dictionaries"
+              :key="item.id"
+              class="output-field">
+              <span class="dot" :class="outputFieldDot(item.table_id)"></span>
+              <span class="output-con">{{item.alias || item.name}}</span>
+              <span @click="removeTransOutputField(index, item.table_id)" class="el-icon-close hide"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -273,6 +242,14 @@
       <el-button v-show="!$store.state.task.taskData" @click="prev()">上一步</el-button>
       <el-button type="primary" @click="next()">{{$store.state.task.taskData ? '完成修改' : '下一步'}}</el-button>
     </div>
+    <set-trans
+      v-model="modals.setTrans"
+      @close="closeSetTrans"
+      @ok="saveTransRules"
+      :tableId="selectedDictTable.id"
+      :table-title-list="tableData.title_list"
+      :dict-title-list="selectedDictTable.title_list"
+      :translate-rules="translateRules[selectedDictTable.id]"></set-trans>
     <flow-data-table
       v-model="modals.flowDataTable"
       @close="closeFlowDataTable"
@@ -318,7 +295,8 @@ export default {
         flowSelectTable: false,
         flowDictTable: false,
         taskFilterModal: false,
-        addFieldOutput: false
+        addFieldOutput: false,
+        setTrans: false
       },
       treeList: [],
       chooseTag: [],
@@ -345,11 +323,12 @@ export default {
           }
         ]
       },
-      dictTableData: {
+      selectedDictTable: {
         id: undefined,
         name: '',
         title_list: []
       },
+      dictTableData: {},
       chooseFilter: {},
       filterList: [],
       relevanceRules: [
@@ -358,13 +337,7 @@ export default {
           target_field_id: ''
         }
       ],
-      translateRules: [
-        {
-          source_field_id: '',
-          dictionary_field_id: '',
-          display_field_id: ''
-        }
-      ],
+      translateRules: {},
       outputFields: {
         sources: [],
         targets: [],
@@ -374,47 +347,6 @@ export default {
     }
   },
   methods: {
-    showFlowDataTable (tableCategory) {
-      if (tableCategory === this.CONSTANT.tableCategory.DIM) {
-        [
-          this.dataTableTag.id,
-          this.dataTableTag.name
-        ] = [
-          this.targetTableData.id,
-          this.targetTableData.name
-        ]
-      } else if (tableCategory === this.CONSTANT.tableCategory.DICT) {
-        [
-          this.dataTableTag.id,
-          this.dataTableTag.name
-        ] = [
-          this.dictTableData.id,
-          this.dictTableData.name
-        ]
-      }
-      this.modals.flowDataTable = true
-    },
-    closeFlowDataTable () {
-      this.modals.flowDataTable = false
-    },
-    showFlowSelectTable () {
-      this.modals.flowSelectTable = true
-    },
-    closeFlowSelectTable () {
-      this.modals.flowSelectTable = false
-    },
-    showFlowDictTable () {
-      this.modals.flowDictTable = true
-    },
-    closeFlowDictTable () {
-      this.modals.flowDictTable = false
-    },
-    closeTaskFilter () {
-      this.modals.taskFilterModal = false
-    },
-    closeOutputField () {
-      this.modals.addFieldOutput = false
-    },
     init () {
       if (!this.treeList || this.treeList.length === 0) {
         this.wtService.getFolder().then(res => {
@@ -529,7 +461,6 @@ export default {
         }
       }
     },
-    changeTab (tab, event) {},
     changeField (fieldId) {
       let chooseField = this.targetTableData.title_list.find((item) => {
         return fieldId === item.id
@@ -549,27 +480,9 @@ export default {
         }
       }
     },
-    addTransRow (index) {
-      if (index >= 0) {
-        const data = this.translateRules[index]
-        if (data.source_field_id && data.dictionary_field_id && data.display_field_id) {
-          this.translateRules.splice(
-            index + 1,
-            0,
-            this.$options.data().translateRules[0])
-        } else {
-          this.$message.error('请先完成当前字典规则')
-        }
-      }
-    },
-    removeTransRow (index) {
-      if (this.translateRules.length > 1) {
-        this.translateRules.splice(index, 1)
-      } else {
-        this.resetTranslateRules()
-      }
-      // cascade delete
-      this.outputFields.dictionaries.splice(index, 1)
+    showSetTrans (key) {
+      this.selectedDictTable = this.dictTableData[key]
+      this.showSetTransModal()
     },
     removeTransRowById (dictionaries) {
       const rules = []
@@ -579,6 +492,10 @@ export default {
         })
       })
       this.translateRules = rules
+    },
+    saveTransRules (rules, tableId) {
+      this.translateRules[tableId] = rules
+      // Update OutputFields dictionaries
     },
     addRelRow (index) {
       this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
@@ -611,23 +528,20 @@ export default {
         this.$message.error('字典表与工作表重复')
         return
       }
-      this.resetDictTable()
-      this.resetTranslateRules()
-      this.dictTableData = {
-        ...this.$options.data().dictTableData,
-        ...dictTableData
+
+      if (this.dictTableData[dictTableData.id]) {
+        this.$message.error('字典表已经存在')
+        return
       }
-      this.outputFields.dictionaries = []
+
+      this.dictTableData[dictTableData.id] = dictTableData
       this.closeFlowDictTable()
     },
     resetTargetTable () {
       Object.assign(this.targetTableData, this.$options.data().targetTableData)
       this.outputFields.targets = []
     },
-    resetDictTable () {
-      Object.assign(this.dictTableData, this.$options.data().dictTableData)
-      this.outputFields.dictionaries = []
-    },
+    removeDictTable () {},
     addOutputField () {
       if (this.tableData.title_list.length ||
         this.targetTableData.title_list.length) {
@@ -658,19 +572,20 @@ export default {
       this.outputFields.sources = sources
       this.outputFields.targets = targets
       this.outputFields.dictionaries = dictionaries
-      this.removeTransRowById(dictionaries)
+      // this.removeTransRowById(dictionaries)
       this.closeOutputField()
     },
-    removeOutputField (index) {
+    removeOutputField (index, table_id) {
       const s_len = this.outputFields.sources.length
       const t_len = this.outputFields.targets.length
       if (index <= s_len - 1) {
         this.outputFields.sources.splice(index, 1)
       } else if (index <= s_len + t_len - 1) {
         this.outputFields.targets.splice(index - s_len, 1)
-      } else {
-        this.removeTransRow(index - s_len - t_len, 1)
       }
+    },
+    removeTransOutputField (index, table_id) {
+      this.removeTransRow(index)
     },
     choose (node) {
       if (this.$store.state.task.taskData) {
@@ -712,15 +627,6 @@ export default {
         {
           origin_field_id: '',
           target_field_id: ''
-        }
-      ]
-    },
-    resetTranslateRules () {
-      this.translateRules = [
-        {
-          source_field_id: '',
-          dictionary_field_id: '',
-          display_field_id: ''
         }
       ]
     },
@@ -924,11 +830,60 @@ export default {
         case this.tbId:
           return 'y-dot'
       }
+    },
+    showFlowDataTable (tableCategory) {
+      if (tableCategory === this.CONSTANT.tableCategory.DIM) {
+        [
+          this.dataTableTag.id,
+          this.dataTableTag.name
+        ] = [
+          this.targetTableData.id,
+          this.targetTableData.name
+        ]
+      } else if (tableCategory === this.CONSTANT.tableCategory.DICT) {
+        [
+          this.dataTableTag.id,
+          this.dataTableTag.name
+        ] = [
+          this.dictTableData.id,
+          this.dictTableData.name
+        ]
+      }
+      this.modals.flowDataTable = true
+    },
+    closeFlowDataTable () {
+      this.modals.flowDataTable = false
+    },
+    showFlowSelectTable () {
+      this.modals.flowSelectTable = true
+    },
+    showFlowDictTable () {
+      this.modals.flowDictTable = true
+    },
+    showSetTransModal () {
+      this.modals.setTrans = true
+    },
+    closeFlowSelectTable () {
+      this.modals.flowSelectTable = false
+    },
+    closeFlowDictTable () {
+      this.modals.flowDictTable = false
+    },
+    closeTaskFilter () {
+      this.modals.taskFilterModal = false
+    },
+    closeOutputField () {
+      this.modals.addFieldOutput = false
+    },
+    closeSetTrans () {
+      this.modals.setTrans = false
     }
   },
   computed: {
     getOutputFields () {
-      return this.outputFields.sources.concat(this.outputFields.targets).concat(this.outputFields.dictionaries)
+      return this.outputFields.sources
+        .concat(this.outputFields.targets)
+        // .concat(this.outputFields.dictionaries)
     }
   },
   watch: {
