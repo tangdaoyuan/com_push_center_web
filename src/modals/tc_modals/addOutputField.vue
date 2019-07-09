@@ -174,7 +174,12 @@ export default {
       this.$emit('close')
     },
     ok () {
-      this.$emit('ok', this.triggerList.map(item => item.id))
+      this.$emit('ok', this.triggerList.map(item => {
+        return {
+          'id': item.id,
+          'table_id': item.table_id
+        }
+      }))
     },
     search () {
 
@@ -222,7 +227,7 @@ export default {
             return {
               ...item,
               key: item.id,
-              label: item.alias || item.name,
+              label: item.name || item.alias,
               isChoose: false
             }
           })

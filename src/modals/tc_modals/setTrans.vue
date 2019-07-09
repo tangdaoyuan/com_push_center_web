@@ -102,14 +102,29 @@ export default {
       this.$emit('close')
     },
     ok () {
-      this.$emit('ok', this.rules, this.tableId)
+      const dictionaries = []
+      for (let rule of this.rules) {
+        if (!rule.source_field_id || !rule.dictionary_field_id || !rule.display_field_id) continue
+
+        this.dictTitleList.forEach((item) => {
+          if (item.id && item.id === rule.display_field_id) {
+            dictionaries.push({ ...item })
+          }
+        })
+      }
+
+      this.$emit('ok', this.rules, dictionaries, this.tableId)
       this.$emit('close')
     }
   },
   watch: {
     value () {
       if (this.value) {
-        this.rules = this.translateRules || this.resetRules()
+        if (!this.translateRules || this.translateRules.length <= 0) {
+          this.rules = this.resetRules()
+          return
+        }
+        this.rules = this.translateRules
       } else {
         this.rules = this.resetRules()
       }
