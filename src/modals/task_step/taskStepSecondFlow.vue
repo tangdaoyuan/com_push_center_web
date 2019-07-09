@@ -227,7 +227,7 @@
               <span @click="removeOutputField(index, item.table_id)" class="el-icon-close hide"></span>
             </div>
             <div
-              v-for="(item) in flatDict(outputFields.dictionaries)"
+              v-for="(item) in getFlatDict"
               :key="item.id"
               class="output-field">
               <span class="dot" :class="outputFieldDot(item.table_id)"></span>
@@ -881,14 +881,14 @@ export default {
     closeSetTrans () {
       this.modals.setTrans = false
     },
-    flatDict (dicts) {
-      let list = []
-      Object.keys(dicts)
-        .forEach(key => {
-          list = list.concat(dicts[key])
-        })
-      return list
-    },
+    // flatDict (dicts) {
+    //   let list = []
+    //   Object.keys(dicts)
+    //     .forEach(key => {
+    //       list = list.concat(dicts[key])
+    //     })
+    //   return list
+    // },
     getSelectOutputFields () {
       let list = []
       list = this.outputFields.sources
@@ -905,6 +905,14 @@ export default {
     getOutputFields () {
       return this.outputFields.sources
         .concat(this.outputFields.targets)
+    },
+    getFlatDict () {
+      let list = []
+      Object.keys(this.outputFields.dictionaries)
+        .forEach(key => {
+          list = list.concat(this.outputFields.dictionaries[key])
+        })
+      return list
     }
   },
   watch: {
