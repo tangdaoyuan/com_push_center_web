@@ -404,33 +404,50 @@ export default {
         }
 
         if (taskData.translate_rules && taskData.translate_rules.length > 0) {
-          const translateRules = taskData.translate_rules
-          this.dictTableData.id = translateRules[0].table_id
-          this.dictTableData.name = translateRules[0].table_name
+          const translateRules = {}
+          const dictTableData = {}
+          taskData.translate_rules.forEach(rule => {
+            if (!dictTableData[rule.table_id]) {
+              [
+                dictTableData['id'],
+                dictTableData['name']
+              ] = [
+                rule.table_id,
+                rule.table_name
+              ]
+            }
+            if (!translateRules[rule.table_id]) {
+              translateRules[rule.table_id] = []
+            }
+            translateRules[rule.table_id].push({ ...rule })
+          })
 
           this.translateRules = translateRules
 
-          this.wtService.getprewData({
-            page_no: 1,
-            page_size: 100,
-            tb_id: this.dictTableData.id
-          }).then(res => {
-            if (res.status === 0) {
-              [
-                this.dictTableData.title_list,
-                this.dictTableData.data_list
-              ] = [
-                res.data.title_list,
-                res.data.data_list
-              ]
-            }
-          })
+          for (let key in dictTableData) {
+            this.wtService.getprewData({
+              page_no: 1,
+              page_size: 100,
+              tb_id: key
+            }).then(res => {
+              if (res.status === 0) {
+                [
+                  this.dictTableData[key].title_list,
+                  this.dictTableData[key].data_list
+                ] = [
+                  res.data.title_list,
+                  res.data.data_list
+                ]
+              }
+            })
+          }
         }
 
         if (taskData.output_fields) {
           const sources = []
           const targets = []
           const dictionaries = []
+
           taskData.output_fields.forEach(item => {
             if (item.table_id === this.tbId) {
               sources.push({
@@ -447,13 +464,17 @@ export default {
               })
             }
           })
-          this.translateRules.forEach(item => {
-            dictionaries.push({
+
+          for (let key in this.translateRules) {
+            if (!dictionaries[key]) dictionaries[key] = []
+
+            const item = this.translateRules[key]
+            dictionaries[key].push({
               id: item.display_field_id,
               name: item.display_field_name,
               table_id: item.table_id
             })
-          })
+          }
 
           this.outputFields.sources = sources
           this.outputFields.targets = targets
