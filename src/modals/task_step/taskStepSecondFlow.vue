@@ -95,15 +95,10 @@
                   <div v-for="(val, key, ind) in dictTableData" :key="ind"
                     v-show="key"
                     class="table-item">
-                    <span @click="showSetTrans(key)" class="item-title">{{ val.name }}</span>
+                    <span @click="showFlowDataTable(CONSTANT.tableCategory.DICT, val)" class="item-title">{{ val.name }}</span>
+                    <span @click="showSetTrans(key)" class="el-icon-edit-outline item-del"></span>
                     <span @click="removeDictTable(key)" class="el-icon-close item-del"></span>
                   </div>
-                  <!-- <span
-                    v-show="dictTableData.id"
-                    @click="showFlowDataTable(CONSTANT.tableCategory.DICT)"
-                    class="table-preview">
-                    数据预览
-                  </span> -->
                 </div>
                 <div class="dict-table-body"></div>
               </TabPane>
@@ -483,7 +478,6 @@ export default {
           this.outputFields.sources = sources
           this.outputFields.targets = targets
 
-          console.log(dictionaries)
           this.outputFields.dictionaries = dictionaries
         }
       }
@@ -842,7 +836,6 @@ export default {
         if (res.status === 0) {
           this.$message.success('保存成功')
           this.$store.commit('setOutputFields', storeOutputFields)
-          console.log(this.$store.state.task.taskData)
           if (!this.$store.state.task.taskData) {
             this.$emit('next', 1)
           } else {
@@ -864,7 +857,7 @@ export default {
           return 'y-dot'
       }
     },
-    showFlowDataTable (tableCategory) {
+    showFlowDataTable (tableCategory, obj) {
       if (tableCategory === this.CONSTANT.tableCategory.DIM) {
         [
           this.dataTableTag.id,
@@ -878,8 +871,8 @@ export default {
           this.dataTableTag.id,
           this.dataTableTag.name
         ] = [
-          this.dictTableData.id,
-          this.dictTableData.name
+          obj.id,
+          obj.name
         ]
       }
       this.modals.flowDataTable = true

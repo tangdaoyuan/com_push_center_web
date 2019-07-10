@@ -664,8 +664,10 @@
                 .item-title {
                   color: #F5A623;
                   margin-right: 4px;
+                  cursor: pointer;
                 }
                 .item-del {
+                  padding-left: 4px;
                   cursor: pointer;
                 }
               }
