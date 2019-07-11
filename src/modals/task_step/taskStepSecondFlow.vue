@@ -93,11 +93,20 @@
                 <div class="dict-table-header">
                   <span @click="showFlowDictTable" class="table-selection">选择字典表</span>
                   <div v-for="(val, key, ind) in dictTableData" :key="ind"
-                    v-show="key"
-                    class="table-item">
-                    <span @click="showFlowDataTable(CONSTANT.tableCategory.DICT, val)" class="item-title">{{ val.name }}</span>
-                    <span @click="showSetTrans(key)" class="el-icon-edit-outline item-del"></span>
-                    <span @click="removeDictTable(key)" class="el-icon-close item-del"></span>
+                    v-show="key">
+                    <el-popover
+                        placement="bottom"
+                        width="200"
+                        v-model="val.visible">
+                        <div class="btn-group">
+                          <el-button type="primary" size="mini" @click="showSetTrans(key);val.visible = false">编辑</el-button>
+                          <el-button type="primary" size="mini" @click="showFlowDataTable(CONSTANT.tableCategory.DICT, val);val.visible = false">预览</el-button>
+                          <el-button type="danger" size="mini" @click="removeDictTable(key);val.visible = false">删除</el-button>
+                        </div>
+                        <div slot="reference" class="table-item">
+                          <span @click.native="val.visible = true" class="item-title">{{ val.name }}</span>
+                        </div>
+                      </el-popover>
                   </div>
                 </div>
                 <div class="dict-table-body"></div>

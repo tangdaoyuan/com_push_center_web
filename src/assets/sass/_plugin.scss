@@ -468,3 +468,11 @@ fieldset[disabled] .ivu-input {
 .el-tooltip__popper.is-dark {
   margin-left:20px;
 }
+
+.el-popper {
+  .btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
