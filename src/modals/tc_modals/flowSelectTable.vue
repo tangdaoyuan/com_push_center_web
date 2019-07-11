@@ -75,15 +75,15 @@ export default {
       }
     },
     choose (node) {
-      if (this.$store.state.task.taskData) {
-        this.$message.warning('编辑过程中不允许更换数据表')
-      } else {
-        if (this.utils.getType(node.id) === 'field') {
-          this.chooseTag = [node.id]
-          this.params.id = node.id
-          this.params.name = node.name
-        }
+      // if (this.$store.state.task.taskData) {
+      //   this.$message.warning('编辑过程中不允许更换数据表')
+      // } else {
+      if (this.utils.getType(node.id) === 'field') {
+        this.chooseTag = [node.id]
+        this.params.id = node.id
+        this.params.name = node.name
       }
+      // }
     },
     filterNode (value, data) {
       if (!value) return true
