@@ -503,7 +503,12 @@ export default {
     },
     saveTransRules (rules, dicts, tableId) {
       this.translateRules[tableId] = rules
-      this.$set(this.outputFields.dictionaries, tableId, dicts)
+      const dictionaries = {
+        ...this.outputFields.dictionaries,
+        [tableId]: dicts
+      }
+      this.outputFields.dictionaries = dictionaries
+      // this.$set(this.outputFields.dictionaries, tableId, dicts)
     },
     addRelRow (index) {
       this.relevanceRules.splice(index + 1, 0, this.$options.data().relevanceRules[0])
@@ -600,10 +605,13 @@ export default {
       }
     },
     removeTransOutputField (id, table_id) {
-      this.$set(this.outputFields.dictionaries,
-        table_id,
-        this.outputFields.dictionaries[table_id].filter((item) => item.id !== id)
-      )
+      const dictionaries = {
+        ...this.outputFields.dictionaries,
+        [table_id]: this.outputFields.dictionaries[table_id].filter((item) => item.id !== id)
+      }
+
+      this.outputFields.dictionaries = dictionaries
+
       this.$set(this.translateRules,
         table_id,
         this.translateRules[table_id].filter((item) => item.display_field_id !== id)
@@ -936,6 +944,7 @@ export default {
         .forEach(key => {
           list = list.concat(this.outputFields.dictionaries[key])
         })
+
       return list
     }
   },
